@@ -23,12 +23,24 @@ namespace MichaelsDataManipulator
         public double maximum;
         public double minimum;
 
+        public int Count
+        {
+            get
+            {
+                return time_data.Count;
+            }
+        }
+
+
         public CDataFile(string file_name )
         {
             this.filename = file_name;
             Read();
-            FilterData();
 
+            if (Count > 0)
+            {
+                FilterData();
+            }
         }
 
         public int GetIndexForTime(double time)
@@ -57,39 +69,54 @@ namespace MichaelsDataManipulator
                 // the end of the file is reached. 
                 while ((line = sr.ReadLine()) != null)
                 {
-                    string[] tokens = line.Split('\t');
-
-                    if (tokens[6] != "NULL" && tokens[7] != "NULL" && tokens[8] != "NULL")
+                    if (line != "")
                     {
-                        double seconds_since_1_1_1970 = double.Parse(tokens[0]);
 
-                        UnitsNet.Duration time = UnitsNet.Duration.FromSeconds(seconds_since_1_1_1970);
+                        string[] tokens = line.Split('\t');
 
-                        time_data.Add(time.Seconds);
+                        if (tokens[6] != "NULL" && tokens[7] != "NULL" && tokens[8] != "NULL")
+                        {
+                            try
+                            {
 
-                        time += UnitsNet.Duration.FromYears(1970);
+                                double seconds_since_1_1_1970 = double.Parse(tokens[0]);
 
-                        double years = time.Years;
+                                UnitsNet.Duration time = UnitsNet.Duration.FromSeconds(seconds_since_1_1_1970);
 
-                        TimeSpan time_stamp = time.ToTimeSpan();
+                                
 
-                        DateTime date_time = new DateTime((long)(time.Nanoseconds * 0.01));
+                                time += UnitsNet.Duration.FromYears(1970);
 
-                        double tail_speed_ft_min = 0;
-                        double mid_speed_ft_min = 0;
-                        double head_speed_ft_min = 0;
+                                double years = time.Years;
+
+                                TimeSpan time_stamp = time.ToTimeSpan();
+
+                                DateTime date_time = new DateTime((long)(time.Nanoseconds * 0.01));
+
+                                double tail_speed_ft_min = 0;
+                                double mid_speed_ft_min = 0;
+                                double head_speed_ft_min = 0;
 
 
-                        tail_speed_ft_min = double.Parse(tokens[6]);
-                        mid_speed_ft_min = double.Parse(tokens[7]);
-                        head_speed_ft_min = double.Parse(tokens[8]);
+                                tail_speed_ft_min = double.Parse(tokens[6]);
+                                mid_speed_ft_min = double.Parse(tokens[7]);
+                                head_speed_ft_min = double.Parse(tokens[8]);
 
-                        time_stamp_data.Add(date_time);
+                                if (tail_speed_ft_min > 10 && mid_speed_ft_min > 10 && head_speed_ft_min > 10)
+                                {
+                                    time_data.Add(time.Seconds);
+                                    time_stamp_data.Add(date_time);
 
-                        tail_speed.Add(Speed.FromFeetPerSecond(tail_speed_ft_min / 60).MetersPerSecond);
-                        mid_speed.Add(Speed.FromFeetPerSecond(mid_speed_ft_min / 60).MetersPerSecond);
-                        head_speed.Add(Speed.FromFeetPerSecond(head_speed_ft_min / 60).MetersPerSecond);
+                                    tail_speed.Add(Speed.FromFeetPerSecond(tail_speed_ft_min / 60).MetersPerSecond);
+                                    mid_speed.Add(Speed.FromFeetPerSecond(mid_speed_ft_min / 60).MetersPerSecond);
+                                    head_speed.Add(Speed.FromFeetPerSecond(head_speed_ft_min / 60).MetersPerSecond);
+                                }
+                            }
+                            catch
+                            {
 
+                            }
+                        }
                     }
                 }
             }
@@ -206,20 +233,32 @@ namespace MichaelsDataManipulator
         {
             List<int> events = new List<int>();
 
+            int max=0;
+
             for (int i = 0; i < time_data.Count; i++)
             {
 
+                if (events.Count > 0)
+                {
+                    max = events.Max();
+                }
+
+
                 if (head_speed[i] > trigger_high || head_speed[i] < trigger_low)
                 {
-                    events.Add(i);
+
+                    if (max + 100 < i)
+                        events.Add(i);
                 }
                 if (mid_speed[i] > trigger_high || mid_speed[i] < trigger_low)
                 {
-                    events.Add(i);
+                    if (max + 100 < i)
+                        events.Add(i);
                 }
                 if (tail_speed[i] > trigger_high || tail_speed[i] < trigger_low)
                 {
-                    events.Add(i);
+                    if (max + 100 < i)
+                        events.Add(i);
                 }
             }
             return events;

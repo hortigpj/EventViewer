@@ -71,20 +71,33 @@ namespace MichaelsDataManipulator
             string[] file_names = Directory.GetFiles(path, "*.bin", SearchOption.AllDirectories);
 
 
+            float i = 0;
             foreach (string file_name in file_names)
             {
                 Debug.WriteLine("reading:" + file_name);
 
-                data_files.Add(new CDataFile(file_name));
+                CDataFile data_file = new CDataFile(file_name);
 
-                radListView_data_files.Items.Add(file_name);
+                float progress = ++i / (float)file_names.Count();
 
-                if (file_name.Contains("Fake Data"))
+                radProgressBar_ReadData.Value1 = (int)(progress * 100);
+
+                if (data_file.Count > 0)
                 {
-                    for (int i = 1000; i < 1200; i++)
-                    {
-                        data_files.Last().head_speed[i] = Speed.FromFeetPerSecond(200 / 60).MetersPerSecond;
-                    }
+                    data_files.Add(data_file);
+
+                    radListView_data_files.Items.Add(Path.GetFileName(file_name));
+
+                    Application.DoEvents();
+
+                    //if (file_name.Contains("Fake Data"))
+                    //{
+                    //    for (int i = 1000; i < 1200; i++)
+                    //    {
+                    //        data_files.Last().head_speed[i] = Speed.FromFeetPerSecond(200 / 60).MetersPerSecond;
+                    //    }
+                    //}
+
                 }
             }
 
@@ -97,7 +110,7 @@ namespace MichaelsDataManipulator
 
 
             Debug.WriteLine("Read Data");
-            ReadData(path + "\\DATA");
+            ReadData(path + "\\DATA\\TEST");
 
             ignore_events = false;
             radListView_data_files.SelectedIndex = 0;
@@ -117,9 +130,9 @@ namespace MichaelsDataManipulator
 
             n_max = n_index + (int)radSpinEditor_index_plus.Value; 
 
-            if (n_max > data_file.time_data.Count)
+            if (n_max > data_file.Count)
             {
-                n_max = data_file.time_data.Count;
+                n_max = data_file.Count-1;
             }
 
         }
@@ -250,6 +263,7 @@ namespace MichaelsDataManipulator
                 horizontalAxis.Minimum = data_file.time_data[n_min];
                 horizontalAxis.Maximum = data_file.time_data[n_max];
 
+                radSpinEditor_size.Value = (decimal)data_file.Count;
                 radSpinEditor_average.Value = (decimal)   Speed.FromMetersPerSecond(data_file.average).FeetPerSecond*60;
                 radSpinEditor_maximum.Value = (decimal)Speed.FromMetersPerSecond(data_file.maximum).FeetPerSecond * 60;
                 radSpinEditor_minimum.Value = (decimal)Speed.FromMetersPerSecond(data_file.minimum).FeetPerSecond * 60;
@@ -279,6 +293,8 @@ namespace MichaelsDataManipulator
             horizontalAxis.Minimum = data_file.time_data[n_min];
             horizontalAxis.Maximum = data_file.time_data[n_max];
 
+            CreateChart(data_file);
+
         }
 
         private void radSpinEditor_index_plus_ValueChanged(object sender, EventArgs e)
@@ -298,11 +314,20 @@ namespace MichaelsDataManipulator
         {
             ignore_events = true;
 
+            radListView_events.Items.Clear();
+
             double trigger_high = Speed.FromFeetPerSecond((double)radSpinEditor_event_trigger_high.Value / 60).MetersPerSecond;
             double trigger_low = Speed.FromFeetPerSecond((double)radSpinEditor_event_trigger_low.Value / 60).MetersPerSecond;
 
+            float i=0;
+
             foreach (CDataFile data_file in data_files)
             {
+
+                float progress = ++i / (float)data_files.Count();
+                
+                radProgressBar_events.Value1 = (int)(progress * 100);
+
                 List<int> events = data_file.FindEvent(trigger_high, trigger_low);
                 
                 foreach (int ev in events)
@@ -311,11 +336,14 @@ namespace MichaelsDataManipulator
                     radListView_events.Items.Add(item);
 
                     item[0] = ev.ToString();
-                    item[1] = data_file.filename;
+                    item[1] = Path.GetFileName(data_file.filename);
 
                     item.Tag = data_file;
 
+                    Application.DoEvents();
                 }
+
+                
             }
 
             ignore_events = false;
@@ -361,6 +389,11 @@ namespace MichaelsDataManipulator
                     }
                 }
             }
+        }
+
+        private void radListView_events_ItemMouseClick(object sender, ListViewItemEventArgs e)
+        {
+            radListView_events_SelectedItemChanged(null, null);
         }
     }
 }

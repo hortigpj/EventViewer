@@ -61,6 +61,10 @@
             this.radSpinEditor_maximum = new Telerik.WinControls.UI.RadSpinEditor();
             this.radLabel8 = new Telerik.WinControls.UI.RadLabel();
             this.radSpinEditor_event_trigger_low = new Telerik.WinControls.UI.RadSpinEditor();
+            this.radProgressBar_ReadData = new Telerik.WinControls.UI.RadProgressBar();
+            this.radProgressBar_events = new Telerik.WinControls.UI.RadProgressBar();
+            this.radLabel9 = new Telerik.WinControls.UI.RadLabel();
+            this.radSpinEditor_size = new Telerik.WinControls.UI.RadSpinEditor();
             ((System.ComponentModel.ISupportInitialize)(this.radChartView_speed_over_time)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
@@ -91,6 +95,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_maximum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_event_trigger_low)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_events)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_size)).BeginInit();
             this.SuspendLayout();
             // 
             // radChartView_speed_over_time
@@ -174,7 +182,7 @@
             this.radListView_data_files.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radListView_data_files.Location = new System.Drawing.Point(3, 3);
             this.radListView_data_files.Name = "radListView_data_files";
-            this.radListView_data_files.Size = new System.Drawing.Size(288, 319);
+            this.radListView_data_files.Size = new System.Drawing.Size(288, 295);
             this.radListView_data_files.TabIndex = 3;
             this.radListView_data_files.Text = "radListView1";
             this.radListView_data_files.SelectedItemChanged += new System.EventHandler(this.radListView_data_files_SelectedItemChanged);
@@ -232,7 +240,7 @@
             0,
             0});
             this.radSpinEditor_index_minus.Minimum = new decimal(new int[] {
-            1000,
+            10000,
             0,
             0,
             -2147483648});
@@ -269,7 +277,7 @@
             0});
             this.radSpinEditor_index_plus.Location = new System.Drawing.Point(282, 3);
             this.radSpinEditor_index_plus.Maximum = new decimal(new int[] {
-            1000,
+            10000,
             0,
             0,
             0});
@@ -330,13 +338,15 @@
             // 
             this.radLabel4.Location = new System.Drawing.Point(3, 3);
             this.radLabel4.Name = "radLabel4";
-            this.radLabel4.Size = new System.Drawing.Size(47, 18);
+            this.radLabel4.Size = new System.Drawing.Size(26, 18);
             this.radLabel4.TabIndex = 4;
-            this.radLabel4.Text = "Average";
+            this.radLabel4.Text = "Size";
             // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Controls.Add(this.radLabel4);
+            this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_size);
+            this.flowLayoutPanel2.Controls.Add(this.radLabel9);
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_average);
             this.flowLayoutPanel2.Controls.Add(this.radLabel6);
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_minimum);
@@ -354,7 +364,7 @@
             // 
             // radLabel5
             // 
-            this.radLabel5.Location = new System.Drawing.Point(496, 3);
+            this.radLabel5.Location = new System.Drawing.Point(634, 3);
             this.radLabel5.Name = "radLabel5";
             this.radLabel5.Size = new System.Drawing.Size(99, 18);
             this.radLabel5.TabIndex = 4;
@@ -363,7 +373,7 @@
             // radSpinEditor_average
             // 
             this.radSpinEditor_average.DecimalPlaces = 2;
-            this.radSpinEditor_average.Location = new System.Drawing.Point(56, 3);
+            this.radSpinEditor_average.Location = new System.Drawing.Point(194, 3);
             this.radSpinEditor_average.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -378,7 +388,7 @@
             // radSpinEditor_event_trigger_high
             // 
             this.radSpinEditor_event_trigger_high.DecimalPlaces = 2;
-            this.radSpinEditor_event_trigger_high.Location = new System.Drawing.Point(601, 3);
+            this.radSpinEditor_event_trigger_high.Location = new System.Drawing.Point(739, 3);
             this.radSpinEditor_event_trigger_high.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -411,15 +421,19 @@
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Controls.Add(this.radListView_data_files, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.radListView_events, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.radListView_events, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.radProgressBar_ReadData, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.radProgressBar_events, 0, 3);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(1115, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowCount = 4;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(294, 650);
             this.tableLayoutPanel3.TabIndex = 7;
             // 
@@ -434,15 +448,16 @@
             this.radListView_events.ItemSpacing = -1;
             this.radListView_events.Location = new System.Drawing.Point(3, 328);
             this.radListView_events.Name = "radListView_events";
-            this.radListView_events.Size = new System.Drawing.Size(288, 319);
+            this.radListView_events.Size = new System.Drawing.Size(288, 295);
             this.radListView_events.TabIndex = 4;
             this.radListView_events.Text = "radListView_events";
             this.radListView_events.ViewType = Telerik.WinControls.UI.ListViewType.DetailsView;
             this.radListView_events.SelectedItemChanged += new System.EventHandler(this.radListView_events_SelectedItemChanged);
+            this.radListView_events.ItemMouseClick += new Telerik.WinControls.UI.ListViewItemEventHandler(this.radListView_events_ItemMouseClick);
             // 
             // radLabel6
             // 
-            this.radLabel6.Location = new System.Drawing.Point(162, 3);
+            this.radLabel6.Location = new System.Drawing.Point(300, 3);
             this.radLabel6.Name = "radLabel6";
             this.radLabel6.Size = new System.Drawing.Size(54, 18);
             this.radLabel6.TabIndex = 4;
@@ -451,7 +466,7 @@
             // radSpinEditor_minimum
             // 
             this.radSpinEditor_minimum.DecimalPlaces = 2;
-            this.radSpinEditor_minimum.Location = new System.Drawing.Point(222, 3);
+            this.radSpinEditor_minimum.Location = new System.Drawing.Point(360, 3);
             this.radSpinEditor_minimum.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -465,7 +480,7 @@
             // 
             // radLabel7
             // 
-            this.radLabel7.Location = new System.Drawing.Point(328, 3);
+            this.radLabel7.Location = new System.Drawing.Point(466, 3);
             this.radLabel7.Name = "radLabel7";
             this.radLabel7.Size = new System.Drawing.Size(56, 18);
             this.radLabel7.TabIndex = 4;
@@ -474,7 +489,7 @@
             // radSpinEditor_maximum
             // 
             this.radSpinEditor_maximum.DecimalPlaces = 2;
-            this.radSpinEditor_maximum.Location = new System.Drawing.Point(390, 3);
+            this.radSpinEditor_maximum.Location = new System.Drawing.Point(528, 3);
             this.radSpinEditor_maximum.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -488,7 +503,7 @@
             // 
             // radLabel8
             // 
-            this.radLabel8.Location = new System.Drawing.Point(707, 3);
+            this.radLabel8.Location = new System.Drawing.Point(845, 3);
             this.radLabel8.Name = "radLabel8";
             this.radLabel8.Size = new System.Drawing.Size(96, 18);
             this.radLabel8.TabIndex = 4;
@@ -497,7 +512,7 @@
             // radSpinEditor_event_trigger_low
             // 
             this.radSpinEditor_event_trigger_low.DecimalPlaces = 2;
-            this.radSpinEditor_event_trigger_low.Location = new System.Drawing.Point(809, 3);
+            this.radSpinEditor_event_trigger_low.Location = new System.Drawing.Point(947, 3);
             this.radSpinEditor_event_trigger_low.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -517,6 +532,47 @@
             0,
             0,
             0});
+            // 
+            // radProgressBar_ReadData
+            // 
+            this.radProgressBar_ReadData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 304);
+            this.radProgressBar_ReadData.Name = "radProgressBar_ReadData";
+            this.radProgressBar_ReadData.Size = new System.Drawing.Size(288, 18);
+            this.radProgressBar_ReadData.TabIndex = 5;
+            this.radProgressBar_ReadData.Text = "Read Progress";
+            // 
+            // radProgressBar_events
+            // 
+            this.radProgressBar_events.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radProgressBar_events.Location = new System.Drawing.Point(3, 629);
+            this.radProgressBar_events.Name = "radProgressBar_events";
+            this.radProgressBar_events.Size = new System.Drawing.Size(288, 18);
+            this.radProgressBar_events.TabIndex = 6;
+            this.radProgressBar_events.Text = "Event Finding Progress";
+            // 
+            // radLabel9
+            // 
+            this.radLabel9.Location = new System.Drawing.Point(141, 3);
+            this.radLabel9.Name = "radLabel9";
+            this.radLabel9.Size = new System.Drawing.Size(47, 18);
+            this.radLabel9.TabIndex = 4;
+            this.radLabel9.Text = "Average";
+            // 
+            // radSpinEditor_size
+            // 
+            this.radSpinEditor_size.DecimalPlaces = 2;
+            this.radSpinEditor_size.Location = new System.Drawing.Point(35, 3);
+            this.radSpinEditor_size.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.radSpinEditor_size.Name = "radSpinEditor_size";
+            this.radSpinEditor_size.ReadOnly = true;
+            this.radSpinEditor_size.Size = new System.Drawing.Size(100, 20);
+            this.radSpinEditor_size.TabIndex = 5;
+            this.radSpinEditor_size.TabStop = false;
             // 
             // Form1
             // 
@@ -561,6 +617,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_maximum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_event_trigger_low)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_events)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_size)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -596,6 +656,10 @@
         private Telerik.WinControls.UI.RadSpinEditor radSpinEditor_maximum;
         private Telerik.WinControls.UI.RadLabel radLabel8;
         private Telerik.WinControls.UI.RadSpinEditor radSpinEditor_event_trigger_low;
+        private Telerik.WinControls.UI.RadProgressBar radProgressBar_ReadData;
+        private Telerik.WinControls.UI.RadProgressBar radProgressBar_events;
+        private Telerik.WinControls.UI.RadSpinEditor radSpinEditor_size;
+        private Telerik.WinControls.UI.RadLabel radLabel9;
     }
 }
 
