@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MathNet.Numerics.Statistics;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +18,12 @@ namespace MichaelsDataManipulator
 {
     public partial class Form1 : Form
     {
-        List<CDataFile> data_files = new List<CDataFile>();
+
+        SortedList<double, string> events = new SortedList<double, string>();
+
+        List<CEvent> my_events = new List<CEvent>();
+
+        CDataFile data_file = null;
 
         bool ignore_events = true;
 
@@ -27,7 +33,25 @@ namespace MichaelsDataManipulator
         int n_min;
         int n_max;
 
-        int n_index;
+        int _n_index;
+        int n_index
+        {
+            get
+            {
+                return _n_index;
+            }
+            set
+            {
+                _n_index = value;
+
+                ignore_events = true;
+
+                radSpinEditor_index.Value = (decimal)_n_index;
+
+                ignore_events = false;
+            }
+        }
+
 
         public Form1()
         {
@@ -68,39 +92,175 @@ namespace MichaelsDataManipulator
 
         void ReadData(string path)
         {
-            string[] file_names = Directory.GetFiles(path, "*.bin", SearchOption.AllDirectories);
+            String mydocs_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-
-            float i = 0;
-            foreach (string file_name in file_names)
+            using (TextWriter writer = File.CreateText(mydocs_path + "\\eventlog.txt")) 
             {
-                Debug.WriteLine("reading:" + file_name);
 
-                CDataFile data_file = new CDataFile(file_name);
+                string[] file_names = Directory.GetFiles(path, "*.bin", SearchOption.AllDirectories);
 
-                float progress = ++i / (float)file_names.Count();
+                List<string> fn = new List<string>();
+                fn.AddRange(file_names);
 
-                radProgressBar_ReadData.Value1 = (int)(progress * 100);
+                fn.Sort();
 
-                if (data_file.Count > 0)
+                file_names = fn.ToArray();
+
+
+                double accel_filter = (double)radSpinEditor_accel_trigger.Value * 9.81;
+
+                ignore_events = true;
+
+                float i = 0;
+
+                long aver_ticks = 0;
+                long old_ticks = 0;
+
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
+                long start_ticks = stopwatch.ElapsedMilliseconds;
+
+                foreach (string file_name in file_names)
                 {
-                    data_files.Add(data_file);
+                    Debug.WriteLine("reading:" + file_name);
 
-                    radListView_data_files.Items.Add(Path.GetFileName(file_name));
+                    long now_ticks = stopwatch.ElapsedMilliseconds;
 
-                    Application.DoEvents();
+                    long ticks_passed = now_ticks - old_ticks;
 
-                    //if (file_name.Contains("Fake Data"))
-                    //{
-                    //    for (int i = 1000; i < 1200; i++)
-                    //    {
-                    //        data_files.Last().head_speed[i] = Speed.FromFeetPerSecond(200 / 60).MetersPerSecond;
-                    //    }
-                    //}
+                    long ticks_passed_total = now_ticks - start_ticks;
 
+                    old_ticks = now_ticks;
+
+                    aver_ticks += ticks_passed;
+
+                    aver_ticks /= 2;
+
+                    long ticks_total = aver_ticks * file_names.Count();
+
+                    long ticks_left = ticks_total - ticks_passed_total;
+
+                    if (ticks_left < 0)
+                        ticks_left = 0;
+
+                    Duration time_left = Duration.FromMilliseconds((double)(ticks_left));
+                    Duration time_per = Duration.FromMilliseconds((double)(ticks_passed));
+
+
+                    CDataFile data_file = new CDataFile(file_name, accel_filter);
+
+
+                    float progress = ++i / (float)file_names.Count();
+
+                    radProgressBar_ReadData.Value1 = (int)(progress * 100);
+                    radProgressBar_ReadData.Text = i.ToString() + "/" + file_names.Count().ToString() + " "
+                        + ((int)time_left.ToTimeSpan().TotalMinutes).ToString() + " min left" +
+                        " per : " + ((int)time_per.ToTimeSpan().TotalSeconds).ToString() + " sec";
+
+
+                    if (data_file.Count > 0)
+                    {
+
+                        ignore_events = true;
+                        radListView_data_files.Items.Add(Path.GetFileName(file_name));
+                        ignore_events = false;
+
+                        Application.DoEvents();
+
+                        if (data_file.IndexOfSumMaximum >= 0)
+                        {
+                            int i_max = data_file.IndexOfSumMaximum;
+
+                            double std = data_file.std_dev_of_average;
+
+                            double local_max = data_file.local_std_dev.Max();
+
+                            if (local_max > 0.1)
+                            {
+                                Histogram hist = new Histogram(data_file.upper.ToArray(), 10);
+                                Bucket bucket = hist.GetBucketOf(data_file.maximum);
+
+                                double c = bucket.Count;
+
+                                int index_of_local_max = data_file.local_std_dev.IndexOf(local_max);
+                                DateTime time_of_local_max = data_file.time_stamp_data[index_of_local_max];
+
+
+                                CEvent ev0 = new CEvent(
+                                        "Surge",
+                                        data_file.maximum,
+                                        data_file.filename,
+                                        index_of_local_max,
+                                        time_of_local_max,
+                                        bucket.Count);
+
+                                my_events.Add(ev0);
+
+                                writer.WriteLine("Surge");
+                                writer.WriteLine(data_file.filename);
+                                writer.WriteLine(index_of_local_max.ToString());
+                                writer.WriteLine(time_of_local_max.ToString());
+                                
+
+
+
+                                if (data_file.DetectDriveBarSkipping(
+                                    FeetPerMinuteToMetersPerSecond(40),
+                                    FeetPerMinuteToMetersPerSecond(10),
+                                    FeetPerMinuteToMetersPerSecond(40)))
+                                {
+                                    CEvent ev1 = new CEvent(
+                                            "Drivebar",
+                                            data_file.maximum,
+                                            data_file.filename,
+                                            data_file.drive_bar_skipping_index,
+                                            data_file.drive_bar_skipping_date_time,
+                                            0);
+
+                                    my_events.Add(ev1);
+
+                                    writer.WriteLine("Drive Bar");
+                                    writer.WriteLine(data_file.filename);
+                                    writer.WriteLine(data_file.drive_bar_skipping_index.ToString());
+                                    writer.WriteLine(data_file.drive_bar_skipping_date_time.ToString());
+
+
+                                }
+
+                                my_events.Sort((a, b) => a.CompareTo(b));
+
+                                radListView_events.Items.Clear();
+
+                                foreach (CEvent e in my_events)
+                                {
+                                    ListViewDataItem item = new ListViewDataItem();
+                                    radListView_events.Items.Add(item);
+
+                                    item[0] = e.type;
+                                    item[1] = (Speed.FromMetersPerSecond(e.sum_maximum).FeetPerSecond * 60).ToString();
+                                    item[2] = e.qt_rank_add_maximum.ToString();
+                                    item[3] = e.time_of_maximum.ToString();
+                                    item[4] = e.index_of_maximum.ToString();
+                                    item[5] = Path.GetFileName(e.filename);
+                                    item[6] = Path.GetFullPath(e.filename);
+
+                                    item.Tag = e;
+                                }
+
+
+                                Application.DoEvents();
+                            }
+                        }
+
+
+                    }
+
+                    data_file = null;
                 }
+                ignore_events = false;
             }
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -110,7 +270,8 @@ namespace MichaelsDataManipulator
 
 
             Debug.WriteLine("Read Data");
-            ReadData(path + "\\DATA\\TEST");
+            ReadData("F:\\");
+            //ReadData(path + "\\data");
 
             ignore_events = false;
             radListView_data_files.SelectedIndex = 0;
@@ -187,11 +348,6 @@ namespace MichaelsDataManipulator
 
             ScatterLineSeries head_speed_series = new ScatterLineSeries();
 
-            //head_speed_series.BackColor = Color.Red;
-            //head_speed_series.BackColor2 = Color.Red;
-            //head_speed_series.BackColor3 = Color.Red;
-            //head_speed_series.BackColor4 = Color.Red;
-
             head_speed_series.PointSize = new SizeF(2, 2);
             head_speed_series.LegendTitle = "Head Speed";
 
@@ -206,6 +362,75 @@ namespace MichaelsDataManipulator
             head_speed_series.VerticalAxis = verticalAxis;
 
 
+            ScatterLineSeries upper_series = new ScatterLineSeries();
+
+            upper_series.PointSize = new SizeF(2, 2);
+            upper_series.LegendTitle = "Upper Speed";
+            
+            for (int i = n_min; i < n_max; i++)
+            {
+                upper_series.DataPoints.Add(new ScatterDataPoint(data_file.time_data[i], Speed.FromMetersPerSecond(data_file.upper[i]).FeetPerSecond * 60));
+            }
+
+            upper_series.HorizontalAxis = horizontalAxis;
+            upper_series.VerticalAxis = verticalAxis;
+
+
+            ScatterLineSeries lower_series = new ScatterLineSeries();
+
+            lower_series.PointSize = new SizeF(2, 2);
+            lower_series.LegendTitle = "Lower Speed";
+
+            for (int i = n_min; i < n_max; i++)
+            {
+                lower_series.DataPoints.Add(new ScatterDataPoint(data_file.time_data[i], Speed.FromMetersPerSecond(data_file.lower[i]).FeetPerSecond * 60));
+            }
+
+            lower_series.HorizontalAxis = horizontalAxis;
+            lower_series.VerticalAxis = verticalAxis;
+
+
+            ScatterLineSeries running_average_series = new ScatterLineSeries();
+
+            running_average_series.PointSize = new SizeF(2, 2);
+            running_average_series.LegendTitle = "Running Avr. Speed";
+
+            for (int i = n_min; i < n_max; i++)
+            {
+                running_average_series.DataPoints.Add(new ScatterDataPoint(data_file.time_data[i], Speed.FromMetersPerSecond(data_file.running_average[i]).FeetPerSecond * 60));
+            }
+
+            running_average_series.HorizontalAxis = horizontalAxis;
+            running_average_series.VerticalAxis = verticalAxis;
+
+
+            ScatterLineSeries band_width_series = new ScatterLineSeries();
+
+            band_width_series.PointSize = new SizeF(2, 2);
+            band_width_series.LegendTitle = "Band Width";
+
+            for (int i = n_min; i < n_max; i++)
+            {
+                band_width_series.DataPoints.Add(new ScatterDataPoint(data_file.time_data[i], Speed.FromMetersPerSecond(data_file.band_width[i]).FeetPerSecond * 60));
+            }
+
+            band_width_series.HorizontalAxis = horizontalAxis;
+            band_width_series.VerticalAxis = verticalAxis;
+
+            ScatterLineSeries local_std_dev_series = new ScatterLineSeries();
+
+            local_std_dev_series.PointSize = new SizeF(2, 2);
+            local_std_dev_series.LegendTitle = "Band Width";
+
+            for (int i = n_min; i < n_max; i++)
+            {
+                local_std_dev_series.DataPoints.Add(new ScatterDataPoint(data_file.time_data[i], data_file.local_std_dev[i] * 100));
+            }
+
+            local_std_dev_series.HorizontalAxis = horizontalAxis;
+            local_std_dev_series.VerticalAxis = verticalAxis;
+
+
             this.radChartView_speed_over_time.Series.Clear();
             Debug.WriteLine("Adding Series:");
             Debug.WriteLine("tail speed");
@@ -214,6 +439,10 @@ namespace MichaelsDataManipulator
             this.radChartView_speed_over_time.Series.Add(mid_speed_series);
             Debug.WriteLine("head speed");
             this.radChartView_speed_over_time.Series.Add(head_speed_series);
+
+            this.radChartView_speed_over_time.Series.Add(running_average_series);
+            this.radChartView_speed_over_time.Series.Add(band_width_series);
+            this.radChartView_speed_over_time.Series.Add(local_std_dev_series);
 
         }
 
@@ -253,29 +482,12 @@ namespace MichaelsDataManipulator
             if (ignore_events)
                 return;
 
-            if (radListView_data_files.SelectedIndex >= 0)
-            {
-
-                CDataFile data_file = data_files[radListView_data_files.SelectedIndex];
-
-                SetNMinMax(data_file);
-
-                horizontalAxis.Minimum = data_file.time_data[n_min];
-                horizontalAxis.Maximum = data_file.time_data[n_max];
-
-                radSpinEditor_size.Value = (decimal)data_file.Count;
-                radSpinEditor_average.Value = (decimal)   Speed.FromMetersPerSecond(data_file.average).FeetPerSecond*60;
-                radSpinEditor_maximum.Value = (decimal)Speed.FromMetersPerSecond(data_file.maximum).FeetPerSecond * 60;
-                radSpinEditor_minimum.Value = (decimal)Speed.FromMetersPerSecond(data_file.minimum).FeetPerSecond * 60;
-
-                CreateChart(data_file);
-            }
 
         }
 
         private void radSpinEditor_index_minus_ValueChanged(object sender, EventArgs e)
         {
-            CDataFile data_file = data_files[radListView_data_files.SelectedIndex];
+            
 
             SetNMinMax(data_file);
 
@@ -286,7 +498,11 @@ namespace MichaelsDataManipulator
 
         private void radSpinEditor_index_ValueChanged(object sender, EventArgs e)
         {
-            CDataFile data_file = data_files[radListView_data_files.SelectedIndex];
+            if (ignore_events)
+                return;
+
+            n_index = (int)radSpinEditor_index.Value;
+
 
             SetNMinMax(data_file);
 
@@ -295,11 +511,12 @@ namespace MichaelsDataManipulator
 
             CreateChart(data_file);
 
+            ignore_events = false;
+
         }
 
         private void radSpinEditor_index_plus_ValueChanged(object sender, EventArgs e)
         {
-            CDataFile data_file = data_files[radListView_data_files.SelectedIndex];
 
             n_index = (int)radSpinEditor_index.Value;
 
@@ -312,41 +529,6 @@ namespace MichaelsDataManipulator
 
         private void radButton_Find_Events_Click(object sender, EventArgs e)
         {
-            ignore_events = true;
-
-            radListView_events.Items.Clear();
-
-            double trigger_high = Speed.FromFeetPerSecond((double)radSpinEditor_event_trigger_high.Value / 60).MetersPerSecond;
-            double trigger_low = Speed.FromFeetPerSecond((double)radSpinEditor_event_trigger_low.Value / 60).MetersPerSecond;
-
-            float i=0;
-
-            foreach (CDataFile data_file in data_files)
-            {
-
-                float progress = ++i / (float)data_files.Count();
-                
-                radProgressBar_events.Value1 = (int)(progress * 100);
-
-                List<int> events = data_file.FindEvent(trigger_high, trigger_low);
-                
-                foreach (int ev in events)
-                {
-                    ListViewDataItem item = new ListViewDataItem();
-                    radListView_events.Items.Add(item);
-
-                    item[0] = ev.ToString();
-                    item[1] = Path.GetFileName(data_file.filename);
-
-                    item.Tag = data_file;
-
-                    Application.DoEvents();
-                }
-
-                
-            }
-
-            ignore_events = false;
         }
 
         private void radListView_events_SelectedItemChanged(object sender, EventArgs e)
@@ -356,44 +538,55 @@ namespace MichaelsDataManipulator
 
             if (radListView_events.SelectedItem != null)
             {
+                CEvent ev = radListView_events.SelectedItem.Tag as CEvent;
 
-                CDataFile data_file = radListView_events.SelectedItem.Tag as CDataFile;
-
-                if (data_file != null)
+                if (ev != null)
                 {
 
-                    ListViewDataItem item = radListView_events.SelectedItem;
+                    CDataFile data_file = new CDataFile(ev.filename, (double)radSpinEditor_accel_trigger.Value * 9.81);
 
-                    string index = item[0] as string;
+                    if (data_file != null)
+                        {
 
-                    if (index != null)
-                    {
-                        n_index = int.Parse(item[0] as string);
+                            ListViewDataItem item = radListView_events.SelectedItem;
 
-                        ignore_events = true;
+                            string index = item[4] as string;
 
-                        radSpinEditor_index.Value = (decimal)n_index;
+                            if (index != null)
+                            {
+                                n_index = int.Parse(item[4] as string);
 
-                        ignore_events = false;
+                                SetNMinMax(data_file);
 
-                        SetNMinMax(data_file);
+                                horizontalAxis.Minimum = data_file.time_data[n_min];
+                                horizontalAxis.Maximum = data_file.time_data[n_max];
 
-                        horizontalAxis.Minimum = data_file.time_data[n_min];
-                        horizontalAxis.Maximum = data_file.time_data[n_max];
+                                radSpinEditor_average.Value = (decimal)Speed.FromMetersPerSecond(data_file.total_average).FeetPerSecond * 60;
+                                radSpinEditor_maximum.Value = (decimal)Speed.FromMetersPerSecond(data_file.maximum).FeetPerSecond * 60;
+                                radSpinEditor_minimum.Value = (decimal)Speed.FromMetersPerSecond(data_file.minimum).FeetPerSecond * 60;
 
-                        radSpinEditor_average.Value = (decimal)Speed.FromMetersPerSecond(data_file.average).FeetPerSecond * 60;
-                        radSpinEditor_maximum.Value = (decimal)Speed.FromMetersPerSecond(data_file.maximum).FeetPerSecond * 60;
-                        radSpinEditor_minimum.Value = (decimal)Speed.FromMetersPerSecond(data_file.minimum).FeetPerSecond * 60;
+                                CreateChart(data_file);
 
-                        CreateChart(data_file);
+                                Application.DoEvents();
+                            }
+                        }
                     }
-                }
             }
         }
 
         private void radListView_events_ItemMouseClick(object sender, ListViewItemEventArgs e)
         {
             radListView_events_SelectedItemChanged(null, null);
+        }
+
+        private void radLabel10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private double FeetPerMinuteToMetersPerSecond(double ft_per_min)
+        {
+            return Speed.FromFeetPerSecond(ft_per_min / 60).MetersPerSecond;
         }
     }
 }
