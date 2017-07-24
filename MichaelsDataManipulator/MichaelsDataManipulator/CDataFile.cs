@@ -2,17 +2,26 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-
+using System.Windows.Forms;
+using Telerik.Charting;
+using Telerik.WinControls.UI;
 using UnitsNet;
 
 namespace MichaelsDataManipulator
 {
     public class CDataFile 
     {
+        public List<string> time_data = new List<string>();
         public List<DateTime> time_stamp_data = new List<DateTime>();
-        public List<double> time_data = new List<double>();
+        public List<double> relative_time_data = new List<double>();
+
+        public List<double>[] data;
+        public int n_of_data_sets;
+
+
         public List<double> tail_speed = new List<double>();
         public List<double> mid_speed = new List<double>();
         public List<double> head_speed = new List<double>();
@@ -25,23 +34,64 @@ namespace MichaelsDataManipulator
         public List<double> band_width = new List<double>();
         public List<double> local_std_dev = new List<double>();
 
-        public string filename;
-        public double total_average;
-        public double maximum;
-        public double sum_maximum;
-        public double minimum;
-        public double std_dev_of_average;
+        public string filename { get; set; }
+        public double total_average { get; set; }
+        public string total_average_ft_per_min
+        {
+            get
+            {
+                return (Speed.FromMetersPerSecond(total_average).FeetPerSecond * 60).ToString();
+            }
+        }
 
-        public int drive_bar_skipping_index=0;
-        public DateTime drive_bar_skipping_date_time;
+        public double sum_maximum;
+        
+        public double std_dev_of_average { get; set; }
 
         public int Count
         {
             get
             {
-                return time_data.Count;
+                return relative_time_data.Count;
             }
         }
+
+        public double maximum { get; set; }
+        public string maximum_ft_per_min
+        {
+            get
+            {
+                return (Speed.FromMetersPerSecond(maximum).FeetPerSecond * 60).ToString();
+            }
+        }
+
+        public double minimum { get; set; }
+        public string minimum_ft_per_min
+        {
+            get
+            {
+                return (Speed.FromMetersPerSecond(minimum).FeetPerSecond * 60).ToString();
+            }
+        }
+
+        public double LocalStdDevMaximum
+        {
+            get
+            {
+                return local_std_dev.Max();
+            }
+        }
+
+
+        public int IndexOfLocalStdDevMax
+        {
+            get
+            {
+                return local_std_dev.IndexOf(LocalStdDevMaximum);
+            }
+        }
+
+
 
         public int IndexOfSumMaximum
         {
@@ -106,23 +156,102 @@ namespace MichaelsDataManipulator
             }
         }
 
+        public string conveyor
 
-        public CDataFile(string file_name, double accel_trigger )
+        {
+            get
+            {
+                return ""; 
+            }
+
+        }
+
+        public string start_time_code
+        {
+            get
+            {
+                return Math.Floor(double.Parse(time_data[0])).ToString();
+            }
+        }
+
+        public string end_time_code
+        {
+            get
+            {
+                return Math.Floor(double.Parse(time_data.Last())).ToString();
+            }
+        }
+
+        public DateTime start_time_stamp
+        {
+            get
+            {
+                return time_stamp_data.First();
+            }
+        }
+        public DateTime end_time_stamp
+        {
+            get
+            {
+                return time_stamp_data.Last();
+            }
+        }
+
+
+        public string duration
+        {
+            get
+            {
+                return (relative_time_data.Last().ToString());
+            }
+        }
+
+        public string video_time_code
+
+        {
+            get
+            {
+                double seconds = double.Parse(time_data[0]);
+                // mountain time to Greenwich
+
+                seconds += 6 * 60 * 60;
+
+                return Math.Floor(seconds).ToString();
+            }
+        }
+
+
+        public CDataFile(string file_name, int n_of_data_sets, string [] dataset_names)
+        {
+            this.filename = file_name;
+
+            data = new List<double>[n_of_data_sets];
+
+            Read();
+            CreateDerivedData();
+
+
+
+        }
+
+        public CDataFile(string file_name, double accel_trigger)
         {
             this.filename = file_name;
             Read();
 
+
             if (Count > 0)
             {
-                FilterData(accel_trigger);
+                CreateDerivedData();
             }
         }
+
 
         public int GetIndexForTime(double time)
         {
             int index = 0;
 
-            foreach (double t in time_data)
+            foreach (double t in relative_time_data)
             {
                 if (t < time)
                 {
@@ -155,6 +284,8 @@ namespace MichaelsDataManipulator
                             if (tokens[6] != "NULL" && tokens[7] != "NULL" && tokens[8] != "NULL")
                             {
 
+                                
+
                                 double seconds_since_1_1_1970 = double.Parse(tokens[0]);
 
                                 UnitsNet.Duration time = UnitsNet.Duration.FromSeconds(seconds_since_1_1_1970);
@@ -167,7 +298,8 @@ namespace MichaelsDataManipulator
 
                                 DateTime date_time = new DateTime((long)(time.Nanoseconds * 0.01));
 
-                                date_time = date_time.AddYears(1970);
+                                date_time = date_time.AddYears(1969);
+                                date_time = date_time.AddDays(-1);
 
                                 double tail_speed_ft_min = 0;
                                 double mid_speed_ft_min = 0;
@@ -180,7 +312,8 @@ namespace MichaelsDataManipulator
 
                                 if (tail_speed_ft_min > 10 && mid_speed_ft_min > 10 && head_speed_ft_min > 10)
                                 {
-                                    time_data.Add(time.Seconds);
+                                    time_data.Add(tokens[0]);
+                                    relative_time_data.Add(time.Seconds);
                                     time_stamp_data.Add(date_time);
 
                                     tail_speed.Add(Speed.FromFeetPerSecond(tail_speed_ft_min / 60).MetersPerSecond);
@@ -199,33 +332,20 @@ namespace MichaelsDataManipulator
             }
         }
 
-        public void FilterData(double accel_trigger)
+
+
+
+        public void CreateDerivedData()
         {
-            Debug.WriteLine("Filtering Data");
+            double t_min = relative_time_data.Min();
 
-            double t_min = time_data.Min();
-
-            for (int i = 0; i< time_data.Count; i++)
+            for (int i = 0; i < relative_time_data.Count; i++)
             {
-                time_data[i] -= t_min;
+                relative_time_data[i] -= t_min;
             }
-
-            //List<double>[] speed_data = new List<double>[3];
-
-            //speed_data[0] = head_speed.ToList<double>();
-            //speed_data[1] = mid_speed.ToList<double>();
-            //speed_data[2] = tail_speed.ToList<double>();
-
-
-            
-
-            head_speed = FilterSpeedData(time_data, head_speed, accel_trigger);
-            mid_speed = FilterSpeedData(time_data, mid_speed, accel_trigger);
-            tail_speed = FilterSpeedData(time_data, tail_speed, accel_trigger);
-
             total_average = (head_speed.Average() + mid_speed.Average() + tail_speed.Average()) / 3;
 
-            for (int i = 0; i < time_data.Count(); i++)
+            for (int i = 0; i < relative_time_data.Count(); i++)
             {
                 double s = head_speed[i] + tail_speed[i] + mid_speed[i];
 
@@ -234,15 +354,15 @@ namespace MichaelsDataManipulator
                 upper.Add(Math.Max(Math.Max(head_speed[i], mid_speed[i]), tail_speed[i]));
                 lower.Add(Math.Min(Math.Min(head_speed[i], mid_speed[i]), tail_speed[i]));
 
-                average.Add(s/3);
+                average.Add(s / 3);
 
-                
+
             }
 
             double[] std_dev = new double[20];
 
             // running average
-            for (int i = 0; i < time_data.Count(); i++)
+            for (int i = 0; i < relative_time_data.Count(); i++)
             {
 
                 double r_avr_sum = 0;
@@ -270,14 +390,36 @@ namespace MichaelsDataManipulator
                 band_width.Add(upper[i] - lower[i]);
 
                 local_std_dev.Add(ArrayStatistics.StandardDeviation(std_dev));
-                
+
             }
 
             sum_maximum = sum.Max();
-            maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()),tail_speed.Max());
+            maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()), tail_speed.Max());
             minimum = Math.Min(Math.Min(head_speed.Min(), mid_speed.Min()), tail_speed.Min());
 
             std_dev_of_average = ArrayStatistics.StandardDeviation(average.ToArray());
+
+        }
+
+
+        public void FilterData(double accel_trigger)
+        {
+            Debug.WriteLine("Filtering Data");
+
+
+            //List<double>[] speed_data = new List<double>[3];
+
+            //speed_data[0] = head_speed.ToList<double>();
+            //speed_data[1] = mid_speed.ToList<double>();
+            //speed_data[2] = tail_speed.ToList<double>();
+
+
+            
+
+            head_speed = FilterSpeedData(relative_time_data, head_speed, accel_trigger);
+            mid_speed = FilterSpeedData(relative_time_data, mid_speed, accel_trigger);
+            tail_speed = FilterSpeedData(relative_time_data, tail_speed, accel_trigger);
+
         }
 
 
@@ -287,7 +429,7 @@ namespace MichaelsDataManipulator
 
             List<int> bad_values = new List<int>();
 
-            for (int i = 1; i < time_data.Count() - 1; i++)
+            for (int i = 1; i < relative_time_data.Count() - 1; i++)
             {
                 double dt0 = time_list[i] - time_list[i - 1];
                 double dt1 = time_list[i + 1] - time_list[i];
@@ -371,7 +513,7 @@ namespace MichaelsDataManipulator
 
             int max=0;
 
-            for (int i = 0; i < time_data.Count; i++)
+            for (int i = 0; i < relative_time_data.Count; i++)
             {
 
                 if (events.Count > 0)
@@ -401,21 +543,136 @@ namespace MichaelsDataManipulator
         }
 
 
-        public bool DetectDriveBarSkipping(double avr_threshold, double abs_min, double band_width_threshold)
-        {
-            for (int i = 0; i < time_data.Count; i++)
-            {
-                if (running_average[i] < avr_threshold && running_average[i] > abs_min && band_width[i] > band_width_threshold)
-                {
-                    drive_bar_skipping_index = i;
-                    drive_bar_skipping_date_time = time_stamp_data[i];
-                    return true;
-                }
 
+        public void ChartData(RadChartView rad_chart_view, LinearAxis horizontalAxis, LinearAxis verticalAxis, int index , int width)
+        {
+            Debug.WriteLine("Creating chart");
+
+            int max_data_points = width;
+
+            ScatterLineSeries tail_speed_series = new ScatterLineSeries();
+            ScatterLineSeries mid_speed_series = new ScatterLineSeries();
+            ScatterLineSeries head_speed_series = new ScatterLineSeries();
+
+            ScatterLineSeries upper_series = new ScatterLineSeries();
+            ScatterLineSeries lower_series = new ScatterLineSeries();
+
+            ScatterLineSeries running_average_series = new ScatterLineSeries();
+            ScatterLineSeries band_width_series = new ScatterLineSeries();
+            ScatterLineSeries local_std_dev_series = new ScatterLineSeries();
+
+
+            tail_speed_series.HorizontalAxis = horizontalAxis;
+            tail_speed_series.VerticalAxis = verticalAxis;
+            mid_speed_series.HorizontalAxis = horizontalAxis;
+            mid_speed_series.VerticalAxis = verticalAxis;
+            head_speed_series.HorizontalAxis = horizontalAxis;
+            head_speed_series.VerticalAxis = verticalAxis;
+            upper_series.HorizontalAxis = horizontalAxis;
+            upper_series.VerticalAxis = verticalAxis;
+            lower_series.HorizontalAxis = horizontalAxis;
+            lower_series.VerticalAxis = verticalAxis;
+            running_average_series.HorizontalAxis = horizontalAxis;
+            running_average_series.VerticalAxis = verticalAxis;
+            band_width_series.HorizontalAxis = horizontalAxis;
+            band_width_series.VerticalAxis = verticalAxis;
+            local_std_dev_series.HorizontalAxis = horizontalAxis;
+            local_std_dev_series.VerticalAxis = verticalAxis;
+
+
+            tail_speed_series.LegendTitle = "Tail Speed";
+            mid_speed_series.LegendTitle = "Mid Speed";
+            head_speed_series.LegendTitle = "Head Speed";
+            upper_series.LegendTitle = "Upper Speed";
+            lower_series.LegendTitle = "Lower Speed";
+            running_average_series.LegendTitle = "Running Avr. Speed";
+            band_width_series.LegendTitle = "Band Width";
+            local_std_dev_series.LegendTitle = "local Std dev";
+
+            
+
+
+            double t_min = double.MaxValue;
+            double t_max = double.MinValue;
+
+
+            for (int i = 0; i < max_data_points; i++)
+            {
+                int j = index + i;
+
+                if (j>=0 && j < Count)
+                {
+
+                    tail_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed[j]).FeetPerSecond * 60));
+                    mid_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed[j]).FeetPerSecond * 60));
+                    head_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed[j]).FeetPerSecond * 60));
+
+                    upper_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(upper[j]).FeetPerSecond * 60));
+                    lower_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(lower[j]).FeetPerSecond * 60));
+                    running_average_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(running_average[j]).FeetPerSecond * 60));
+                    band_width_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(band_width[j]).FeetPerSecond * 60));
+                    local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(local_std_dev[j]).FeetPerSecond * 60));
+
+                    if (relative_time_data[j] > t_max)
+                    {
+                        t_max = relative_time_data[j];
+                    }
+
+                    if (relative_time_data[j] < t_min)
+                    {
+                        t_min = relative_time_data[j];
+                    }
+                }
             }
-            return false;
+
+            horizontalAxis.Minimum = t_min;
+            horizontalAxis.Maximum = t_max;
+
+            horizontalAxis.MajorStep = 0;
+
+            verticalAxis.Minimum = 0;
+            verticalAxis.Maximum = Speed.FromMetersPerSecond(maximum).FeetPerSecond * 60;
+            verticalAxis.MajorStep = 0;
+
+
+            rad_chart_view.Series.Clear();
+            rad_chart_view.Series.Add(tail_speed_series);
+            rad_chart_view.Series.Add(mid_speed_series);
+            rad_chart_view.Series.Add(head_speed_series);
+
+            
+            rad_chart_view.Series.Add(running_average_series);
+            rad_chart_view.Series.Add(band_width_series);
+            rad_chart_view.Series.Add(local_std_dev_series);
+
+            foreach (ScatterSeries series in rad_chart_view.Series)
+            {
+                series.PointSize = new SizeF(0, 0);
+            }
 
         }
+
+        public void QuickChart(Graphics g)
+        {
+            double t_min = relative_time_data.Min();
+            double t_max = relative_time_data.Max();
+
+            double y_min = 0;
+            double y_max = 200;
+
+            PointF old_point = new PointF(0, 0);
+
+
+            for (int i = 0;i<Count;i++)
+            {
+                double x = relative_time_data[i] - t_min;
+                double y = y_max - head_speed[i];
+            }
+
+
+
+        }
+
 
     }
 }

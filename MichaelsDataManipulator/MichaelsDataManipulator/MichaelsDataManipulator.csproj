@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="Telerik.WinControls, Version=2017.2.613.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="Telerik.WinControls.ChartView, Version=2017.2.613.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
+    <Reference Include="Telerik.WinControls.GridView, Version=2017.2.613.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="Telerik.WinControls.UI, Version=2017.2.613.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="TelerikCommon, Version=2017.2.613.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e" />
     <Reference Include="UnitsNet, Version=3.66.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -57,6 +58,11 @@
   <ItemGroup>
     <Compile Include="CDataFile.cs" />
     <Compile Include="CEvent.cs" />
+    <Compile Include="EventsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EventsDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="EventsDataSet.xsc">
+      <DependentUpon>EventsDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EventsDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EventsDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EventsDataSet.xss">
+      <DependentUpon>EventsDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
