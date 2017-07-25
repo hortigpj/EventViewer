@@ -32,5 +32,27 @@ namespace MichaelsDataManipulator.Properties {
                 return ((string)(this["EventsConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\\\prod\\root\\S_Drive\\USGR-Shared\\Mic" +
+            "haelDeGroot\\Events.accdb")]
+        public string EventsConnectionString1 {
+            get {
+                return ((string)(this["EventsConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\\\prod\\root\\S_Drive\\USGR-Shared\\Mic" +
+            "haelDeGroot\\EventDatabase.accdb")]
+        public string EventDatabaseConnectionString {
+            get {
+                return ((string)(this["EventDatabaseConnectionString"]));
+            }
+        }
     }
 }

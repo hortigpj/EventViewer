@@ -238,25 +238,6 @@ namespace MichaelsDataManipulator
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-            String path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-
-            Debug.WriteLine("Read Data");
-            //ReadData("F:\\DATA");
-            ReadData(path + "\\data");
-
-            ignore_events = false;
-            radListView_data_files.SelectedIndex = 0;
-
-
-            //CreateChart(10,20);
-        }
-
-
-
         private void radListView_data_files_SelectedItemChanged(object sender, EventArgs e)
         {
             if (ignore_events)
@@ -264,8 +245,6 @@ namespace MichaelsDataManipulator
 
 
         }
-
-
 
 
         private void radListView_events_ItemMouseClick(object sender, ListViewItemEventArgs e)
@@ -284,24 +263,42 @@ namespace MichaelsDataManipulator
 
         private void AddEventToDataBase(CEvent ev)
         {
-            eventsDataSet.Events.AddEventsRow(ev.filename,"video filename","conveyor",ev.index_of_event,ev.time_stamp_event,ev.time_of_event_relative_to_start_of_data_file);
-            eventsDataSet.AcceptChanges();
+            EventDatabaseDataSet.EventsRow[] rows =
+                (EventDatabaseDataSet.EventsRow[])  eventDatabaseDataSet.Events.Select("EVENT_INDEX = " + ev.index_of_event + "AND DATA_FILENAME = '"+ev.data_filename + "'");
+
+            if (rows.Count() == 0)
+            {
+                eventDatabaseDataSet.Events.AddEventsRow(ev.filename, ev.data_filename, "video filename", "conveyor", ev.index_of_event, ev.time_stamp_event, ev.time_of_event_relative_to_start_of_data_file, "");
+
+                this.eventsTableAdapter.Update(eventDatabaseDataSet);
+
+                eventDatabaseDataSet.AcceptChanges();
+            }
+
+
         }
 
         private void radGridView_events_SelectionChanged(object sender, EventArgs e)
         {
+            if (ignore_events)
+                return;
+
+
             if (radGridView_events.SelectedRows.Count > 0)
             {
+                Cursor = Cursors.WaitCursor;
 
                 string filename = this.radGridView_events.CurrentRow.Cells[1].Value as string;
 
-                int index = (int)this.radGridView_events.CurrentRow.Cells[4].Value;
+                int index = (int)this.radGridView_events.CurrentRow.Cells[5].Value;
 
                 CDataFile datafile = new CDataFile(filename, 0.5);
 
                 datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, index - chart_sample_size / 2 , chart_sample_size);
 
                 radPropertyGrid1.SelectedObject = datafile;
+
+                Cursor = Cursors.Default;
 
             }
 
@@ -312,5 +309,41 @@ namespace MichaelsDataManipulator
             radGridView_events_SelectionChanged(null, null);
         }
 
+        private void radButton_StartRead_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folder_browser_dialog = new FolderBrowserDialog();
+            
+
+            DialogResult result = folder_browser_dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+
+                Debug.WriteLine("Read Data");
+                //ReadData("F:\\DATA");
+                ReadData(folder_browser_dialog.SelectedPath);
+
+                ignore_events = false;
+                radListView_data_files.SelectedIndex = 0;
+
+
+            }
+
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'eventDatabaseDataSet.Events' table. You can move, or remove it, as needed.
+
+            ignore_events = true;
+            this.eventsTableAdapter.Fill(this.eventDatabaseDataSet.Events);
+            ignore_events = false;
+        }
+
+        private void radGridView_events_LayoutLoaded(object sender, LayoutLoadedEventArgs e)
+        {
+
+        }
     }
 }

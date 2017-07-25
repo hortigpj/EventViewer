@@ -58,10 +58,10 @@
   <ItemGroup>
     <Compile Include="CDataFile.cs" />
     <Compile Include="CEvent.cs" />
-    <Compile Include="EventsDataSet.Designer.cs">
+    <Compile Include="EventDatabaseDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EventsDataSet.xsd</DependentUpon>
+      <DependentUpon>EventDatabaseDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -84,16 +84,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="EventsDataSet.xsc">
-      <DependentUpon>EventsDataSet.xsd</DependentUpon>
+    <None Include="EventDatabaseDataSet.xsc">
+      <DependentUpon>EventDatabaseDataSet.xsd</DependentUpon>
     </None>
-    <None Include="EventsDataSet.xsd">
+    <None Include="EventDatabaseDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>EventsDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>EventDatabaseDataSet.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="EventsDataSet.xss">
-      <DependentUpon>EventsDataSet.xsd</DependentUpon>
+    <None Include="EventDatabaseDataSet.xss">
+      <DependentUpon>EventDatabaseDataSet.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

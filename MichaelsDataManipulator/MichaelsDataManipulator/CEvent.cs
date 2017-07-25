@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,14 @@ namespace MichaelsDataManipulator
     {
 
         public string filename { get; set; }
+        public string data_filename
+        {
+            get
+            {
+                return Path.GetFileName(filename);
+            }
+        }
+
         public int index_of_event { get; set; }
 
         public string time { get; set; }

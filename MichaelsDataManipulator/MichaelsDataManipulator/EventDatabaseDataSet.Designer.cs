@@ -20,9 +20,9 @@ namespace MichaelsDataManipulator {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("EventsDataSet")]
+    [global::System.Xml.Serialization.XmlRootAttribute("EventDatabaseDataSet")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class EventsDataSet : global::System.Data.DataSet {
+    public partial class EventDatabaseDataSet : global::System.Data.DataSet {
         
         private EventsDataTable tableEvents;
         
@@ -30,7 +30,7 @@ namespace MichaelsDataManipulator {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public EventsDataSet() {
+        public EventDatabaseDataSet() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -41,7 +41,7 @@ namespace MichaelsDataManipulator {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected EventsDataSet(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected EventDatabaseDataSet(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -127,7 +127,7 @@ namespace MichaelsDataManipulator {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            EventsDataSet cln = ((EventsDataSet)(base.Clone()));
+            EventDatabaseDataSet cln = ((EventDatabaseDataSet)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -199,9 +199,9 @@ namespace MichaelsDataManipulator {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "EventsDataSet";
+            this.DataSetName = "EventDatabaseDataSet";
             this.Prefix = "";
-            this.Namespace = "http://tempuri.org/EventsDataSet.xsd";
+            this.Namespace = "http://tempuri.org/EventDatabaseDataSet.xsd";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableEvents = new EventsDataTable();
@@ -225,7 +225,7 @@ namespace MichaelsDataManipulator {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            EventsDataSet ds = new EventsDataSet();
+            EventDatabaseDataSet ds = new EventDatabaseDataSet();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -283,6 +283,8 @@ namespace MichaelsDataManipulator {
             
             private global::System.Data.DataColumn columnFILENAME;
             
+            private global::System.Data.DataColumn columnDATA_FILENAME;
+            
             private global::System.Data.DataColumn columnVIDEO_FILENAME;
             
             private global::System.Data.DataColumn columnCONVEYOR;
@@ -292,6 +294,8 @@ namespace MichaelsDataManipulator {
             private global::System.Data.DataColumn columnEVENT_TIME_STAMP;
             
             private global::System.Data.DataColumn columnEVENT_TIME;
+            
+            private global::System.Data.DataColumn columnEVENT_TYPE;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -344,6 +348,14 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DATA_FILENAMEColumn {
+                get {
+                    return this.columnDATA_FILENAME;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn VIDEO_FILENAMEColumn {
                 get {
                     return this.columnVIDEO_FILENAME;
@@ -384,6 +396,14 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn EVENT_TYPEColumn {
+                get {
+                    return this.columnEVENT_TYPE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -419,16 +439,18 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public EventsRow AddEventsRow(string FILENAME, string VIDEO_FILENAME, string CONVEYOR, int EVENT_INDEX, System.DateTime EVENT_TIME_STAMP, double EVENT_TIME) {
+            public EventsRow AddEventsRow(string FILENAME, string DATA_FILENAME, string VIDEO_FILENAME, string CONVEYOR, int EVENT_INDEX, System.DateTime EVENT_TIME_STAMP, double EVENT_TIME, string EVENT_TYPE) {
                 EventsRow rowEventsRow = ((EventsRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         FILENAME,
+                        DATA_FILENAME,
                         VIDEO_FILENAME,
                         CONVEYOR,
                         EVENT_INDEX,
                         EVENT_TIME_STAMP,
-                        EVENT_TIME};
+                        EVENT_TIME,
+                        EVENT_TYPE};
                 rowEventsRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowEventsRow);
                 return rowEventsRow;
@@ -460,11 +482,13 @@ namespace MichaelsDataManipulator {
             internal void InitVars() {
                 this.columnID = base.Columns["ID"];
                 this.columnFILENAME = base.Columns["FILENAME"];
+                this.columnDATA_FILENAME = base.Columns["DATA_FILENAME"];
                 this.columnVIDEO_FILENAME = base.Columns["VIDEO_FILENAME"];
                 this.columnCONVEYOR = base.Columns["CONVEYOR"];
                 this.columnEVENT_INDEX = base.Columns["EVENT_INDEX"];
                 this.columnEVENT_TIME_STAMP = base.Columns["EVENT_TIME_STAMP"];
                 this.columnEVENT_TIME = base.Columns["EVENT_TIME"];
+                this.columnEVENT_TYPE = base.Columns["EVENT_TYPE"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -474,6 +498,8 @@ namespace MichaelsDataManipulator {
                 base.Columns.Add(this.columnID);
                 this.columnFILENAME = new global::System.Data.DataColumn("FILENAME", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFILENAME);
+                this.columnDATA_FILENAME = new global::System.Data.DataColumn("DATA_FILENAME", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDATA_FILENAME);
                 this.columnVIDEO_FILENAME = new global::System.Data.DataColumn("VIDEO_FILENAME", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnVIDEO_FILENAME);
                 this.columnCONVEYOR = new global::System.Data.DataColumn("CONVEYOR", typeof(string), null, global::System.Data.MappingType.Element);
@@ -484,6 +510,8 @@ namespace MichaelsDataManipulator {
                 base.Columns.Add(this.columnEVENT_TIME_STAMP);
                 this.columnEVENT_TIME = new global::System.Data.DataColumn("EVENT_TIME", typeof(double), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEVENT_TIME);
+                this.columnEVENT_TYPE = new global::System.Data.DataColumn("EVENT_TYPE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEVENT_TYPE);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -492,8 +520,10 @@ namespace MichaelsDataManipulator {
                 this.columnID.AllowDBNull = false;
                 this.columnID.Unique = true;
                 this.columnFILENAME.MaxLength = 536870910;
+                this.columnDATA_FILENAME.MaxLength = 536870910;
                 this.columnVIDEO_FILENAME.MaxLength = 536870910;
                 this.columnCONVEYOR.MaxLength = 255;
+                this.columnEVENT_TYPE.MaxLength = 255;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -561,7 +591,7 @@ namespace MichaelsDataManipulator {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                EventsDataSet ds = new EventsDataSet();
+                EventDatabaseDataSet ds = new EventDatabaseDataSet();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -663,6 +693,22 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DATA_FILENAME {
+                get {
+                    try {
+                        return ((string)(this[this.tableEvents.DATA_FILENAMEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DATA_FILENAME\' in table \'Events\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableEvents.DATA_FILENAMEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string VIDEO_FILENAME {
                 get {
                     try {
@@ -743,6 +789,22 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string EVENT_TYPE {
+                get {
+                    try {
+                        return ((string)(this[this.tableEvents.EVENT_TYPEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'EVENT_TYPE\' in table \'Events\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableEvents.EVENT_TYPEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsFILENAMENull() {
                 return this.IsNull(this.tableEvents.FILENAMEColumn);
             }
@@ -751,6 +813,18 @@ namespace MichaelsDataManipulator {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetFILENAMENull() {
                 this[this.tableEvents.FILENAMEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDATA_FILENAMENull() {
+                return this.IsNull(this.tableEvents.DATA_FILENAMEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDATA_FILENAMENull() {
+                this[this.tableEvents.DATA_FILENAMEColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -812,6 +886,18 @@ namespace MichaelsDataManipulator {
             public void SetEVENT_TIMENull() {
                 this[this.tableEvents.EVENT_TIMEColumn] = global::System.Convert.DBNull;
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsEVENT_TYPENull() {
+                return this.IsNull(this.tableEvents.EVENT_TYPEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetEVENT_TYPENull() {
+                this[this.tableEvents.EVENT_TYPEColumn] = global::System.Convert.DBNull;
+            }
         }
         
         /// <summary>
@@ -849,7 +935,7 @@ namespace MichaelsDataManipulator {
         }
     }
 }
-namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
+namespace MichaelsDataManipulator.EventDatabaseDataSetTableAdapters {
     
     
     /// <summary>
@@ -975,15 +1061,17 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
             tableMapping.DataSetTable = "Events";
             tableMapping.ColumnMappings.Add("ID", "ID");
             tableMapping.ColumnMappings.Add("FILENAME", "FILENAME");
+            tableMapping.ColumnMappings.Add("DATA_FILENAME", "DATA_FILENAME");
             tableMapping.ColumnMappings.Add("VIDEO_FILENAME", "VIDEO_FILENAME");
             tableMapping.ColumnMappings.Add("CONVEYOR", "CONVEYOR");
             tableMapping.ColumnMappings.Add("EVENT_INDEX", "EVENT_INDEX");
             tableMapping.ColumnMappings.Add("EVENT_TIME_STAMP", "EVENT_TIME_STAMP");
             tableMapping.ColumnMappings.Add("EVENT_TIME", "EVENT_TIME");
+            tableMapping.ColumnMappings.Add("EVENT_TYPE", "EVENT_TYPE");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Events` WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `Events` WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)) AND ((? = 1 AND `EVENT_TYPE` IS NULL) OR (`EVENT_TYPE` = ?)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_CONVEYOR", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Original, true, null));
@@ -993,28 +1081,35 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_EVENT_TIME_STAMP", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME_STAMP", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TIME_STAMP", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME_STAMP", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_EVENT_TIME", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TIME", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TIME", global::System.Data.OleDb.OleDbType.Single, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_EVENT_TYPE", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TYPE", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TYPE", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.InsertCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO `Events` (`FILENAME`, `VIDEO_FILENAME`, `CONVEYOR`, `EVENT_INDEX`, `E" +
-                "VENT_TIME_STAMP`, `EVENT_TIME`) VALUES (?, ?, ?, ?, ?, ?)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO `Events` (`FILENAME`, `DATA_FILENAME`, `VIDEO_FILENAME`, `CONVEYOR`, " +
+                "`EVENT_INDEX`, `EVENT_TIME_STAMP`, `EVENT_TIME`, `EVENT_TYPE`) VALUES (?, ?, ?, " +
+                "?, ?, ?, ?, ?)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILENAME", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DATA_FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DATA_FILENAME", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("VIDEO_FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "VIDEO_FILENAME", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("CONVEYOR", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_INDEX", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_INDEX", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TIME_STAMP", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME_STAMP", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TIME", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TIME", global::System.Data.OleDb.OleDbType.Single, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TYPE", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE `Events` SET `FILENAME` = ?, `VIDEO_FILENAME` = ?, `CONVEYOR` = ?, `EVENT_INDEX` = ?, `EVENT_TIME_STAMP` = ?, `EVENT_TIME` = ? WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE `Events` SET `FILENAME` = ?, `DATA_FILENAME` = ?, `VIDEO_FILENAME` = ?, `CONVEYOR` = ?, `EVENT_INDEX` = ?, `EVENT_TIME_STAMP` = ?, `EVENT_TIME` = ?, `EVENT_TYPE` = ? WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)) AND ((? = 1 AND `EVENT_TYPE` IS NULL) OR (`EVENT_TYPE` = ?)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILENAME", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DATA_FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DATA_FILENAME", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("VIDEO_FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "VIDEO_FILENAME", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("CONVEYOR", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_INDEX", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_INDEX", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TIME_STAMP", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME_STAMP", global::System.Data.DataRowVersion.Current, false, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TIME", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TIME", global::System.Data.OleDb.OleDbType.Single, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("EVENT_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TYPE", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_CONVEYOR", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_CONVEYOR", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Original, false, null));
@@ -1023,14 +1118,16 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_EVENT_TIME_STAMP", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME_STAMP", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TIME_STAMP", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME_STAMP", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_EVENT_TIME", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Original, true, null));
-            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TIME", global::System.Data.OleDb.OleDbType.Date, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TIME", global::System.Data.OleDb.OleDbType.Single, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TIME", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_EVENT_TYPE", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TYPE", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_EVENT_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "EVENT_TYPE", global::System.Data.DataRowVersion.Original, false, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.OleDb.OleDbConnection();
-            this._connection.ConnectionString = global::MichaelsDataManipulator.Properties.Settings.Default.EventsConnectionString;
+            this._connection.ConnectionString = global::MichaelsDataManipulator.Properties.Settings.Default.EventDatabaseConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1039,8 +1136,8 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT ID, FILENAME, VIDEO_FILENAME, CONVEYOR, EVENT_INDEX, EVENT_TIME_STAMP, EVE" +
-                "NT_TIME FROM Events";
+            this._commandCollection[0].CommandText = "SELECT ID, FILENAME, DATA_FILENAME, VIDEO_FILENAME, CONVEYOR, EVENT_INDEX, EVENT_" +
+                "TIME_STAMP, EVENT_TIME, EVENT_TYPE FROM Events";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -1048,7 +1145,7 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
-        public virtual int Fill(EventsDataSet.EventsDataTable dataTable) {
+        public virtual int Fill(EventDatabaseDataSet.EventsDataTable dataTable) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
@@ -1061,9 +1158,9 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual EventsDataSet.EventsDataTable GetData() {
+        public virtual EventDatabaseDataSet.EventsDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
-            EventsDataSet.EventsDataTable dataTable = new EventsDataSet.EventsDataTable();
+            EventDatabaseDataSet.EventsDataTable dataTable = new EventDatabaseDataSet.EventsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
@@ -1071,14 +1168,14 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(EventsDataSet.EventsDataTable dataTable) {
+        public virtual int Update(EventDatabaseDataSet.EventsDataTable dataTable) {
             return this.Adapter.Update(dataTable);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        public virtual int Update(EventsDataSet dataSet) {
+        public virtual int Update(EventDatabaseDataSet dataSet) {
             return this.Adapter.Update(dataSet, "Events");
         }
         
@@ -1101,7 +1198,7 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_ID, string Original_CONVEYOR, global::System.Nullable<int> Original_EVENT_INDEX, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME_STAMP, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME) {
+        public virtual int Delete(int Original_ID, string Original_CONVEYOR, global::System.Nullable<int> Original_EVENT_INDEX, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME_STAMP, global::System.Nullable<float> Original_EVENT_TIME, string Original_EVENT_TYPE) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_ID));
             if ((Original_CONVEYOR == null)) {
                 this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(1));
@@ -1129,11 +1226,19 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
             }
             if ((Original_EVENT_TIME.HasValue == true)) {
                 this.Adapter.DeleteCommand.Parameters[7].Value = ((object)(0));
-                this.Adapter.DeleteCommand.Parameters[8].Value = ((System.DateTime)(Original_EVENT_TIME.Value));
+                this.Adapter.DeleteCommand.Parameters[8].Value = ((float)(Original_EVENT_TIME.Value));
             }
             else {
                 this.Adapter.DeleteCommand.Parameters[7].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[8].Value = global::System.DBNull.Value;
+            }
+            if ((Original_EVENT_TYPE == null)) {
+                this.Adapter.DeleteCommand.Parameters[9].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[10].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[9].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[10].Value = ((string)(Original_EVENT_TYPE));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1155,42 +1260,54 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(string FILENAME, string VIDEO_FILENAME, string CONVEYOR, global::System.Nullable<int> EVENT_INDEX, global::System.Nullable<global::System.DateTime> EVENT_TIME_STAMP, global::System.Nullable<global::System.DateTime> EVENT_TIME) {
+        public virtual int Insert(string FILENAME, string DATA_FILENAME, string VIDEO_FILENAME, string CONVEYOR, global::System.Nullable<int> EVENT_INDEX, global::System.Nullable<global::System.DateTime> EVENT_TIME_STAMP, global::System.Nullable<float> EVENT_TIME, string EVENT_TYPE) {
             if ((FILENAME == null)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.InsertCommand.Parameters[0].Value = ((string)(FILENAME));
             }
-            if ((VIDEO_FILENAME == null)) {
+            if ((DATA_FILENAME == null)) {
                 this.Adapter.InsertCommand.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(VIDEO_FILENAME));
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(DATA_FILENAME));
             }
-            if ((CONVEYOR == null)) {
+            if ((VIDEO_FILENAME == null)) {
                 this.Adapter.InsertCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(CONVEYOR));
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(VIDEO_FILENAME));
             }
-            if ((EVENT_INDEX.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[3].Value = ((int)(EVENT_INDEX.Value));
-            }
-            else {
+            if ((CONVEYOR == null)) {
                 this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            if ((EVENT_TIME_STAMP.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(EVENT_TIME_STAMP.Value));
+            else {
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(CONVEYOR));
+            }
+            if ((EVENT_INDEX.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((int)(EVENT_INDEX.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
-            if ((EVENT_TIME.HasValue == true)) {
-                this.Adapter.InsertCommand.Parameters[5].Value = ((System.DateTime)(EVENT_TIME.Value));
+            if ((EVENT_TIME_STAMP.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((System.DateTime)(EVENT_TIME_STAMP.Value));
             }
             else {
                 this.Adapter.InsertCommand.Parameters[5].Value = global::System.DBNull.Value;
+            }
+            if ((EVENT_TIME.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[6].Value = ((float)(EVENT_TIME.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[6].Value = global::System.DBNull.Value;
+            }
+            if ((EVENT_TYPE == null)) {
+                this.Adapter.InsertCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[7].Value = ((string)(EVENT_TYPE));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1212,75 +1329,95 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string FILENAME, string VIDEO_FILENAME, string CONVEYOR, global::System.Nullable<int> EVENT_INDEX, global::System.Nullable<global::System.DateTime> EVENT_TIME_STAMP, global::System.Nullable<global::System.DateTime> EVENT_TIME, int Original_ID, string Original_CONVEYOR, global::System.Nullable<int> Original_EVENT_INDEX, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME_STAMP, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME) {
+        public virtual int Update(string FILENAME, string DATA_FILENAME, string VIDEO_FILENAME, string CONVEYOR, global::System.Nullable<int> EVENT_INDEX, global::System.Nullable<global::System.DateTime> EVENT_TIME_STAMP, global::System.Nullable<float> EVENT_TIME, string EVENT_TYPE, int Original_ID, string Original_CONVEYOR, global::System.Nullable<int> Original_EVENT_INDEX, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME_STAMP, global::System.Nullable<float> Original_EVENT_TIME, string Original_EVENT_TYPE) {
             if ((FILENAME == null)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[0].Value = ((string)(FILENAME));
             }
-            if ((VIDEO_FILENAME == null)) {
+            if ((DATA_FILENAME == null)) {
                 this.Adapter.UpdateCommand.Parameters[1].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(VIDEO_FILENAME));
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(DATA_FILENAME));
             }
-            if ((CONVEYOR == null)) {
+            if ((VIDEO_FILENAME == null)) {
                 this.Adapter.UpdateCommand.Parameters[2].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(CONVEYOR));
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(VIDEO_FILENAME));
             }
-            if ((EVENT_INDEX.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(EVENT_INDEX.Value));
-            }
-            else {
+            if ((CONVEYOR == null)) {
                 this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
-            if ((EVENT_TIME_STAMP.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[4].Value = ((System.DateTime)(EVENT_TIME_STAMP.Value));
+            else {
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(CONVEYOR));
+            }
+            if ((EVENT_INDEX.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(EVENT_INDEX.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
-            if ((EVENT_TIME.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[5].Value = ((System.DateTime)(EVENT_TIME.Value));
+            if ((EVENT_TIME_STAMP.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((System.DateTime)(EVENT_TIME_STAMP.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[5].Value = global::System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((int)(Original_ID));
+            if ((EVENT_TIME.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[6].Value = ((float)(EVENT_TIME.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[6].Value = global::System.DBNull.Value;
+            }
+            if ((EVENT_TYPE == null)) {
+                this.Adapter.UpdateCommand.Parameters[7].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(EVENT_TYPE));
+            }
+            this.Adapter.UpdateCommand.Parameters[8].Value = ((int)(Original_ID));
             if ((Original_CONVEYOR == null)) {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[8].Value = global::System.DBNull.Value;
-            }
-            else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_CONVEYOR));
-            }
-            if ((Original_EVENT_INDEX.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[10].Value = ((int)(Original_EVENT_INDEX.Value));
-            }
-            else {
                 this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[10].Value = global::System.DBNull.Value;
             }
-            if ((Original_EVENT_TIME_STAMP.HasValue == true)) {
+            else {
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((string)(Original_CONVEYOR));
+            }
+            if ((Original_EVENT_INDEX.HasValue == true)) {
                 this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[12].Value = ((System.DateTime)(Original_EVENT_TIME_STAMP.Value));
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((int)(Original_EVENT_INDEX.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[11].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[12].Value = global::System.DBNull.Value;
             }
-            if ((Original_EVENT_TIME.HasValue == true)) {
+            if ((Original_EVENT_TIME_STAMP.HasValue == true)) {
                 this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[14].Value = ((System.DateTime)(Original_EVENT_TIME.Value));
+                this.Adapter.UpdateCommand.Parameters[14].Value = ((System.DateTime)(Original_EVENT_TIME_STAMP.Value));
             }
             else {
                 this.Adapter.UpdateCommand.Parameters[13].Value = ((object)(1));
                 this.Adapter.UpdateCommand.Parameters[14].Value = global::System.DBNull.Value;
+            }
+            if ((Original_EVENT_TIME.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[15].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[16].Value = ((float)(Original_EVENT_TIME.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[15].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[16].Value = global::System.DBNull.Value;
+            }
+            if ((Original_EVENT_TYPE == null)) {
+                this.Adapter.UpdateCommand.Parameters[17].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[18].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[17].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(Original_EVENT_TYPE));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
@@ -1390,7 +1527,7 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateUpdatedRows(EventsDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateUpdatedRows(EventDatabaseDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             if ((this._eventsTableAdapter != null)) {
                 global::System.Data.DataRow[] updatedRows = dataSet.Events.Select(null, null, global::System.Data.DataViewRowState.ModifiedCurrent);
@@ -1409,7 +1546,7 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateInsertedRows(EventsDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
+        private int UpdateInsertedRows(EventDatabaseDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allAddedRows) {
             int result = 0;
             if ((this._eventsTableAdapter != null)) {
                 global::System.Data.DataRow[] addedRows = dataSet.Events.Select(null, null, global::System.Data.DataViewRowState.Added);
@@ -1427,7 +1564,7 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private int UpdateDeletedRows(EventsDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
+        private int UpdateDeletedRows(EventDatabaseDataSet dataSet, global::System.Collections.Generic.List<global::System.Data.DataRow> allChangedRows) {
             int result = 0;
             if ((this._eventsTableAdapter != null)) {
                 global::System.Data.DataRow[] deletedRows = dataSet.Events.Select(null, null, global::System.Data.DataViewRowState.Deleted);
@@ -1469,7 +1606,7 @@ namespace MichaelsDataManipulator.EventsDataSetTableAdapters {
         ///</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public virtual int UpdateAll(EventsDataSet dataSet) {
+        public virtual int UpdateAll(EventDatabaseDataSet dataSet) {
             if ((dataSet == null)) {
                 throw new global::System.ArgumentNullException("dataSet");
             }

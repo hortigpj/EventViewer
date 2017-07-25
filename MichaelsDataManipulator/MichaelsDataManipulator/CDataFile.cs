@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.Statistics;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -206,19 +207,15 @@ namespace MichaelsDataManipulator
             }
         }
 
-        public string video_time_code
+        public DateTime video_start_date_time
 
         {
             get
             {
-                double seconds = double.Parse(time_data[0]);
-                // mountain time to Greenwich
-
-                seconds += 6 * 60 * 60;
-
-                return Math.Floor(seconds).ToString();
+                return GetVideoTimeStamp(0);
             }
         }
+
 
 
         public CDataFile(string file_name, int n_of_data_sets, string [] dataset_names)
@@ -283,18 +280,9 @@ namespace MichaelsDataManipulator
 
                             if (tokens[6] != "NULL" && tokens[7] != "NULL" && tokens[8] != "NULL")
                             {
-
-                                
-
                                 double seconds_since_1_1_1970 = double.Parse(tokens[0]);
 
                                 UnitsNet.Duration time = UnitsNet.Duration.FromSeconds(seconds_since_1_1_1970);
-
-                                //time += UnitsNet.Duration.FromYears(1970);
-
-                                double years = time.Years;
-
-                                TimeSpan time_stamp = time.ToTimeSpan();
 
                                 DateTime date_time = new DateTime((long)(time.Nanoseconds * 0.01));
 
@@ -668,10 +656,21 @@ namespace MichaelsDataManipulator
                 double x = relative_time_data[i] - t_min;
                 double y = y_max - head_speed[i];
             }
-
-
-
         }
+
+        public DateTime GetVideoTimeStamp(int i)
+        {
+            DateTime dt = time_stamp_data[i];
+
+            ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
+
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
+            DateTime cstTime = TimeZoneInfo.ConvertTimeFromUtc(dt, cstZone);
+
+            return cstTime;
+        }
+
+
 
 
     }
