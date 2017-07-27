@@ -32,6 +32,22 @@ namespace MichaelsDataManipulator
 
         LinearAxis verticalAxis;
 
+        public double delta_t_min
+        {
+            get
+            {
+                return (double)radSpinEditor_delta_t_min.Value * 60;
+            }
+        }
+        public double delta_t_max
+        {
+            get
+            {
+                return (double)radSpinEditor_delta_t_max.Value * 60;
+            }
+        }
+
+
         public int chart_sample_size
         {
             get
@@ -292,14 +308,27 @@ namespace MichaelsDataManipulator
 
                 int index = (int)this.radGridView_events.CurrentRow.Cells[5].Value;
 
+                
+
                 CDataFile datafile = new CDataFile(filename, 0.5);
+
+
+
 
                 datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, index - chart_sample_size / 2 , chart_sample_size);
 
                 radPropertyGrid1.SelectedObject = datafile;
 
-                Cursor = Cursors.Default;
 
+
+                // create the video list
+
+                double event_time = double.Parse(datafile.time_data[index]);
+
+                ListVideo(event_time, filename);
+
+
+                Cursor = Cursors.Default;
             }
 
         }
@@ -318,7 +347,6 @@ namespace MichaelsDataManipulator
 
             if (result == DialogResult.OK)
             {
-
                 Debug.WriteLine("Read Data");
                 //ReadData("F:\\DATA");
                 ReadData(folder_browser_dialog.SelectedPath);
@@ -343,6 +371,86 @@ namespace MichaelsDataManipulator
 
         private void radGridView_events_LayoutLoaded(object sender, LayoutLoadedEventArgs e)
         {
+
+        }
+
+        private void ListVideo(double event_time, string filename)
+        {
+            this.radListView_video.Items.Clear();
+
+            this.radSpinEditor_event_time_code.Value = (decimal)event_time;
+
+            string path = Path.GetPathRoot(filename);
+
+            string[] file_names = Directory.GetFiles(path + "\\DATA", "*.mp4", SearchOption.AllDirectories);
+
+            foreach (string video_file in file_names)
+            {
+                string fn = Path.GetFileNameWithoutExtension(video_file);
+
+                string[] subs = fn.Split('-');
+
+                if (subs.GetUpperBound(0) == 5)
+                {
+                    string time_code = subs[subs.GetUpperBound(0)];
+
+                    double start_time_of_video = double.Parse(time_code);
+
+                    double time_min = event_time + delta_t_min;
+                    double time_max = event_time + delta_t_max;
+
+                    if ( start_time_of_video > time_min && start_time_of_video < time_max)
+                    {
+                        double event_delta_t = event_time - start_time_of_video;
+
+                        TimeSpan event_delta_time_span = new TimeSpan(0, 0, (int)event_delta_t);
+
+                        ListViewDataItem item = new ListViewDataItem();
+                        this.radListView_video.Items.Add(item);
+                        item.Text = video_file;
+
+                        item[0] = video_file;
+                        item[1] = start_time_of_video.ToString();
+                        item[2] = event_delta_time_span.ToString();
+
+                        //this.radListView_video.Items.Add(video_file, start_time_of_video.ToString(), event_delta_time_span.ToString());
+                    }
+                }
+            }
+
+        }
+
+        private void radSpinEditor_delta_t_min_ValueChanged(object sender, EventArgs e)
+        {
+            radGridView_events_SelectionChanged(null, null);
+        }
+
+        private void radSpinEditor_delta_t_max_ValueChanged(object sender, EventArgs e)
+        {
+            radGridView_events_SelectionChanged(null, null);
+        }
+
+        private void radListView_video_DoubleClick(object sender, EventArgs e)
+        {
+            if (ignore_events)
+                return;
+
+            if (radListView_video.SelectedIndex >= 0)
+            {
+
+                ListViewDataItem item = radListView_video.Items[radListView_video.SelectedIndex];
+
+                string filename = item.Text;
+
+                Process.Start(filename);
+
+
+            }
+
+
+            
+
+
 
         }
     }

@@ -57,6 +57,14 @@ namespace MichaelsDataManipulator
             }
         }
 
+        public double dt
+        {
+            get
+            {
+                return relative_time_data[1];
+            }
+        }
+
         public double maximum { get; set; }
         public string maximum_ft_per_min
         {
