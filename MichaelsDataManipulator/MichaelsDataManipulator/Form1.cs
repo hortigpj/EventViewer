@@ -27,6 +27,15 @@ namespace MichaelsDataManipulator
 
         bool ignore_events = true;
 
+        public string drive_letter
+        {
+            get
+            {
+                return radDropDownList_drive_letters.Text;
+            }
+        }
+
+
         LinearAxis horizontalAxis_seconds;
         LinearAxis horizontalAxis_minutes;
 
@@ -284,7 +293,7 @@ namespace MichaelsDataManipulator
 
             if (rows.Count() == 0)
             {
-                eventDatabaseDataSet.Events.AddEventsRow(ev.filename, ev.data_filename, "video filename", "conveyor", ev.index_of_event, ev.time_stamp_event, ev.time_of_event_relative_to_start_of_data_file, "");
+                eventDatabaseDataSet.Events.AddEventsRow(ev.filename, ev.data_filename, "video filename", ev.conveyor, ev.index_of_event, ev.time_stamp_event, ev.time_of_event_relative_to_start_of_data_file, "");
 
                 this.eventsTableAdapter.Update(eventDatabaseDataSet);
 
@@ -304,29 +313,43 @@ namespace MichaelsDataManipulator
             {
                 Cursor = Cursors.WaitCursor;
 
+                this.radDesktopAlert1.Hide();
+
                 string filename = this.radGridView_events.CurrentRow.Cells[1].Value as string;
+
+
+                string root = Path.GetPathRoot(filename);
+
+                string filename_sans_root = filename.Remove(0, root.Length);
+
+                string changed_filename = drive_letter + filename_sans_root;
+
+                Debug.WriteLine(changed_filename);
+
 
                 int index = (int)this.radGridView_events.CurrentRow.Cells[5].Value;
 
-                
+                if (File.Exists(changed_filename))
+                {
 
-                CDataFile datafile = new CDataFile(filename, 0.5);
+                    CDataFile datafile = new CDataFile(filename, 0.5);
 
+                    datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, index - chart_sample_size / 2, chart_sample_size);
 
+                    radPropertyGrid1.SelectedObject = datafile;
 
+                    // create the video list
 
-                datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, index - chart_sample_size / 2 , chart_sample_size);
+                    double event_time = double.Parse(datafile.time_data[index]);
 
-                radPropertyGrid1.SelectedObject = datafile;
-
-
-
-                // create the video list
-
-                double event_time = double.Parse(datafile.time_data[index]);
-
-                ListVideo(event_time, filename);
-
+                    ListVideo(event_time, filename);
+                }
+                else
+                {
+                    this.radDesktopAlert1.CaptionText = "File Error";
+                    this.radDesktopAlert1.ContentText = "Data file does not exist at indicated path.\nConsider changing the drive letter.";
+                    this.radDesktopAlert1.Show();
+                }
 
                 Cursor = Cursors.Default;
             }
@@ -366,6 +389,15 @@ namespace MichaelsDataManipulator
 
             ignore_events = true;
             this.eventsTableAdapter.Fill(this.eventDatabaseDataSet.Events);
+
+            List<string> drives = GetAvailableDriveLetters();
+
+            foreach (string drive in drives)
+            {
+                radDropDownList_drive_letters.Items.Add(drive);
+            }
+            
+
             ignore_events = false;
         }
 
@@ -393,6 +425,8 @@ namespace MichaelsDataManipulator
                 if (subs.GetUpperBound(0) == 5)
                 {
                     string time_code = subs[subs.GetUpperBound(0)];
+
+                    time_code = time_code.Substring(0, 10);
 
                     double start_time_of_video = double.Parse(time_code);
 
@@ -443,14 +477,28 @@ namespace MichaelsDataManipulator
                 string filename = item.Text;
 
                 Process.Start(filename);
+            }
+        }
 
+        private List<string> GetAvailableDriveLetters()
+        {
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
 
+            List<string> list = new List<string>();
+
+            foreach (DriveInfo d in allDrives)
+            {
+                list.Add(d.Name);
             }
 
+            return list;
+        }
 
-            
+        private void radGridView_events_CellEndEdit(object sender, GridViewCellEventArgs e)
+        {
+            this.eventsTableAdapter.Update(eventDatabaseDataSet);
 
-
+            eventDatabaseDataSet.AcceptChanges();
 
         }
     }

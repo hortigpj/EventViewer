@@ -19,6 +19,18 @@ namespace MichaelsDataManipulator
             }
         }
 
+        public string conveyor
+
+        {
+            get
+            {
+                int i = filename.IndexOf("\\CB");
+
+                return filename.Substring(i + 1, 6);
+            }
+
+        }
+
         public int index_of_event { get; set; }
 
         public string time { get; set; }

@@ -22,6 +22,20 @@ namespace MichaelsDataManipulator
         public List<double>[] data;
         public int n_of_data_sets;
 
+        public int unfiltered_data_points
+        {
+            get;
+            set;
+        }
+
+        public string percentage_of_good_data
+        {
+            get
+            {
+                return (100 * (double)Count / (double)unfiltered_data_points).ToString() + "%";
+            }
+        }
+
 
         public List<double> tail_speed = new List<double>();
         public List<double> mid_speed = new List<double>();
@@ -170,7 +184,9 @@ namespace MichaelsDataManipulator
         {
             get
             {
-                return ""; 
+                int i = filename.IndexOf("\\CB");
+
+                return filename.Substring(i+1,6); 
             }
 
         }
@@ -280,6 +296,7 @@ namespace MichaelsDataManipulator
                 {
                     if (line != "")
                     {
+                        unfiltered_data_points++;
 
                         string[] tokens = line.Split('\t');
 
@@ -306,7 +323,7 @@ namespace MichaelsDataManipulator
                                 mid_speed_ft_min = double.Parse(tokens[7]);
                                 head_speed_ft_min = double.Parse(tokens[6]);
 
-                                if (tail_speed_ft_min > 10 && mid_speed_ft_min > 10 && head_speed_ft_min > 10)
+                                if (tail_speed_ft_min > 0 && mid_speed_ft_min > 0 && head_speed_ft_min > 0)
                                 {
                                     time_data.Add(tokens[0]);
                                     relative_time_data.Add(time.Seconds);
