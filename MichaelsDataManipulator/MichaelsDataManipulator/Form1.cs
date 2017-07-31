@@ -501,5 +501,151 @@ namespace MichaelsDataManipulator
             eventDatabaseDataSet.AcceptChanges();
 
         }
+
+        private void radButton_count_data_points_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog folder_browser_dialog = new FolderBrowserDialog();
+
+
+            DialogResult result = folder_browser_dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                Debug.WriteLine("Count Data");
+                //ReadData("F:\\DATA");
+                CountDataPoints(folder_browser_dialog.SelectedPath);
+
+                ignore_events = false;
+                radListView_data_files.SelectedIndex = 0;
+
+            }
+
+
+        }
+
+        void CountDataPoints(string path)
+        {
+            String mydocs_path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            using (TextWriter writer = File.CreateText(mydocs_path + "\\eventlog.txt"))
+            {
+
+                string[] file_names = Directory.GetFiles(path, "*.bin", SearchOption.AllDirectories);
+
+                List<string> fn = new List<string>();
+                fn.AddRange(file_names);
+
+                fn.Sort();
+
+                file_names = fn.ToArray();
+
+
+                double accel_filter = 0.5 * 9.81;
+
+                double min_start_time_code = double.MaxValue;
+                double max_end_time_code = double.MinValue;
+
+                double min_max_time_span_in_seconds =0;
+
+                long counted_data_points = 0;
+                long expected_data_points = 0;
+
+                ignore_events = true;
+
+                float i = 0;
+
+                long aver_ticks = 0;
+                long old_ticks = 0;
+
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
+                long start_ticks = stopwatch.ElapsedMilliseconds;
+
+                foreach (string file_name in file_names)
+                {
+                    Debug.WriteLine("reading:" + file_name);
+
+                    long now_ticks = stopwatch.ElapsedMilliseconds;
+
+                    long ticks_passed = now_ticks - old_ticks;
+
+                    long ticks_passed_total = now_ticks - start_ticks;
+
+                    old_ticks = now_ticks;
+
+                    aver_ticks += ticks_passed;
+
+                    aver_ticks /= 2;
+
+                    long ticks_total = aver_ticks * file_names.Count();
+
+                    long ticks_left = ticks_total - ticks_passed_total;
+
+                    if (ticks_left < 0)
+                        ticks_left = 0;
+
+                    Duration time_left = Duration.FromMilliseconds((double)(ticks_left));
+                    Duration time_per = Duration.FromMilliseconds((double)(ticks_passed));
+
+
+                    CDataFile data_file = new CDataFile(file_name, accel_filter);
+
+                    float progress = ++i / (float)file_names.Count();
+
+                    radProgressBar_ReadData.Value1 = (int)(progress * 100);
+                    radProgressBar_ReadData.Text = i.ToString() + "/" + file_names.Count().ToString() + " "
+                        + ((int)time_left.ToTimeSpan().TotalMinutes).ToString() + " min left" +
+                        " per : " + ((int)time_per.ToTimeSpan().TotalSeconds).ToString() + " sec";
+
+
+                    if (data_file.Count > 0)
+                    {
+                        counted_data_points += data_file.Count;
+
+                        ignore_events = true;
+                        
+                        ListViewDataItem item = new ListViewDataItem();
+                        radListView_data_files.Items.Add(item);
+
+                        item[0] = file_name;
+                        item[1] = data_file.Count;
+                        item[2] = data_file.LocalStdDevMaximum;
+
+                        if (data_file.start_time_code < min_start_time_code)
+                        {
+                            min_start_time_code = data_file.start_time_code;
+                        }
+                        if (max_end_time_code < data_file.start_time_code + 60*60)
+                        {
+                            max_end_time_code = data_file.start_time_code + 60 * 60;
+                        }
+
+                        min_max_time_span_in_seconds = max_end_time_code - min_start_time_code;
+
+                        expected_data_points = (int)(min_max_time_span_in_seconds * 100);
+
+                        radTextBox_counted_data_points.Text = counted_data_points.ToString();
+
+
+
+                        radTextBox_expected_data_points.Text = expected_data_points.ToString();
+
+                        radTextBox_data_point_ratio.Text = (100 * (double)counted_data_points / (double)expected_data_points).ToString() + "%";
+
+                        ignore_events = false;
+
+                        Application.DoEvents();
+                     
+                    }
+                    data_file = null;
+                }
+                ignore_events = false;
+            }
+
+        }
+
     }
 }

@@ -43,6 +43,9 @@
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn3 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn5 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn4 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 0", "file name");
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn5 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 1", "good data");
+            Telerik.WinControls.UI.ListViewDetailColumn listViewDetailColumn6 = new Telerik.WinControls.UI.ListViewDetailColumn("Column 2", "std dev max value");
             this.radChartView_speed_over_time = new Telerik.WinControls.UI.RadChartView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.radPageView1 = new Telerik.WinControls.UI.RadPageView();
@@ -65,8 +68,6 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.radGridView_events = new Telerik.WinControls.UI.RadGridView();
             this.eventsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.eventDatabaseDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.eventDatabaseDataSet = new MichaelsDataManipulator.EventDatabaseDataSet();
             this.radSplitContainer1 = new Telerik.WinControls.UI.RadSplitContainer();
             this.splitPanel1 = new Telerik.WinControls.UI.SplitPanel();
             this.radPropertyGrid1 = new Telerik.WinControls.UI.RadPropertyGrid();
@@ -77,9 +78,18 @@
             this.radButton_StartRead = new Telerik.WinControls.UI.RadButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.radLabel7 = new Telerik.WinControls.UI.RadLabel();
-            this.eventsTableAdapter = new MichaelsDataManipulator.EventDatabaseDataSetTableAdapters.EventsTableAdapter();
             this.radDropDownList_drive_letters = new Telerik.WinControls.UI.RadDropDownList();
             this.radDesktopAlert1 = new Telerik.WinControls.UI.RadDesktopAlert(this.components);
+            this.radButton_count_data_points = new Telerik.WinControls.UI.RadButton();
+            this.eventDatabaseDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.eventDatabaseDataSet = new MichaelsDataManipulator.EventDatabaseDataSet();
+            this.eventsTableAdapter = new MichaelsDataManipulator.EventDatabaseDataSetTableAdapters.EventsTableAdapter();
+            this.radLabel8 = new Telerik.WinControls.UI.RadLabel();
+            this.radTextBox_counted_data_points = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel9 = new Telerik.WinControls.UI.RadLabel();
+            this.radTextBox_expected_data_points = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel10 = new Telerik.WinControls.UI.RadLabel();
+            this.radTextBox_data_point_ratio = new Telerik.WinControls.UI.RadTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.radChartView_speed_over_time)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
@@ -105,8 +115,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView_events)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView_events.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSetBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).BeginInit();
             this.radSplitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel1)).BeginInit();
@@ -121,6 +129,15 @@
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDropDownList_drive_letters)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton_count_data_points)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSetBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox_counted_data_points)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox_expected_data_points)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox_data_point_ratio)).BeginInit();
             this.SuspendLayout();
             // 
             // radChartView_speed_over_time
@@ -169,7 +186,7 @@
             // radPageViewPage1
             // 
             this.radPageViewPage1.Controls.Add(this.tableLayoutPanel2);
-            this.radPageViewPage1.ItemSize = new System.Drawing.SizeF(102F, 28F);
+            this.radPageViewPage1.ItemSize = new System.Drawing.SizeF(98F, 24F);
             this.radPageViewPage1.Location = new System.Drawing.Point(10, 37);
             this.radPageViewPage1.Name = "radPageViewPage1";
             this.radPageViewPage1.Size = new System.Drawing.Size(881, 849);
@@ -210,10 +227,10 @@
             // radPageViewPage_video
             // 
             this.radPageViewPage_video.Controls.Add(this.tableLayoutPanel5);
-            this.radPageViewPage_video.ItemSize = new System.Drawing.SizeF(45F, 28F);
-            this.radPageViewPage_video.Location = new System.Drawing.Point(10, 37);
+            this.radPageViewPage_video.ItemSize = new System.Drawing.SizeF(41F, 24F);
+            this.radPageViewPage_video.Location = new System.Drawing.Point(10, 33);
             this.radPageViewPage_video.Name = "radPageViewPage_video";
-            this.radPageViewPage_video.Size = new System.Drawing.Size(881, 849);
+            this.radPageViewPage_video.Size = new System.Drawing.Size(881, 853);
             this.radPageViewPage_video.Text = "Video";
             // 
             // tableLayoutPanel5
@@ -228,7 +245,7 @@
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(881, 849);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(881, 853);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
             // flowLayoutPanel1
@@ -242,7 +259,7 @@
             this.flowLayoutPanel1.Controls.Add(this.radSpinEditor_delta_t_max);
             this.flowLayoutPanel1.Controls.Add(this.radLabel5);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 816);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 820);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(875, 30);
             this.flowLayoutPanel1.TabIndex = 0;
@@ -387,7 +404,7 @@
             this.radListView_video.ItemSpacing = -1;
             this.radListView_video.Location = new System.Drawing.Point(3, 3);
             this.radListView_video.Name = "radListView_video";
-            this.radListView_video.Size = new System.Drawing.Size(875, 807);
+            this.radListView_video.Size = new System.Drawing.Size(875, 811);
             this.radListView_video.TabIndex = 0;
             this.radListView_video.ViewType = Telerik.WinControls.UI.ListViewType.DetailsView;
             this.radListView_video.DoubleClick += new System.EventHandler(this.radListView_video_DoubleClick);
@@ -413,7 +430,7 @@
             // 
             this.radGridView_events.AutoSizeRows = true;
             this.radGridView_events.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radGridView_events.Location = new System.Drawing.Point(3, 467);
+            this.radGridView_events.Location = new System.Drawing.Point(3, 480);
             // 
             // 
             // 
@@ -424,49 +441,49 @@
             gridViewDecimalColumn1.HeaderText = "ID";
             gridViewDecimalColumn1.IsAutoGenerated = true;
             gridViewDecimalColumn1.Name = "ID";
-            gridViewDecimalColumn1.Width = 86;
+            gridViewDecimalColumn1.Width = 85;
             gridViewTextBoxColumn1.FieldName = "FILENAME";
             gridViewTextBoxColumn1.HeaderText = "FILENAME";
             gridViewTextBoxColumn1.IsAutoGenerated = true;
             gridViewTextBoxColumn1.Name = "FILENAME";
-            gridViewTextBoxColumn1.Width = 86;
+            gridViewTextBoxColumn1.Width = 85;
             gridViewTextBoxColumn2.FieldName = "DATA_FILENAME";
             gridViewTextBoxColumn2.HeaderText = "DATA_FILENAME";
             gridViewTextBoxColumn2.IsAutoGenerated = true;
             gridViewTextBoxColumn2.Name = "DATA_FILENAME";
-            gridViewTextBoxColumn2.Width = 86;
+            gridViewTextBoxColumn2.Width = 85;
             gridViewTextBoxColumn3.FieldName = "VIDEO_FILENAME";
             gridViewTextBoxColumn3.HeaderText = "VIDEO_FILENAME";
             gridViewTextBoxColumn3.IsAutoGenerated = true;
             gridViewTextBoxColumn3.Name = "VIDEO_FILENAME";
-            gridViewTextBoxColumn3.Width = 86;
+            gridViewTextBoxColumn3.Width = 85;
             gridViewTextBoxColumn4.FieldName = "CONVEYOR";
             gridViewTextBoxColumn4.HeaderText = "CONVEYOR";
             gridViewTextBoxColumn4.IsAutoGenerated = true;
             gridViewTextBoxColumn4.Name = "CONVEYOR";
-            gridViewTextBoxColumn4.Width = 86;
+            gridViewTextBoxColumn4.Width = 85;
             gridViewDecimalColumn2.DataType = typeof(int);
             gridViewDecimalColumn2.FieldName = "EVENT_INDEX";
             gridViewDecimalColumn2.HeaderText = "EVENT_INDEX";
             gridViewDecimalColumn2.IsAutoGenerated = true;
             gridViewDecimalColumn2.Name = "EVENT_INDEX";
-            gridViewDecimalColumn2.Width = 86;
+            gridViewDecimalColumn2.Width = 85;
             gridViewDateTimeColumn1.FieldName = "EVENT_TIME_STAMP";
             gridViewDateTimeColumn1.HeaderText = "EVENT_TIME_STAMP";
             gridViewDateTimeColumn1.IsAutoGenerated = true;
             gridViewDateTimeColumn1.Name = "EVENT_TIME_STAMP";
-            gridViewDateTimeColumn1.Width = 86;
+            gridViewDateTimeColumn1.Width = 85;
             gridViewDecimalColumn3.DataType = typeof(double);
             gridViewDecimalColumn3.FieldName = "EVENT_TIME";
             gridViewDecimalColumn3.HeaderText = "EVENT_TIME";
             gridViewDecimalColumn3.IsAutoGenerated = true;
             gridViewDecimalColumn3.Name = "EVENT_TIME";
-            gridViewDecimalColumn3.Width = 86;
+            gridViewDecimalColumn3.Width = 85;
             gridViewTextBoxColumn5.FieldName = "EVENT_TYPE";
             gridViewTextBoxColumn5.HeaderText = "EVENT_TYPE";
             gridViewTextBoxColumn5.IsAutoGenerated = true;
             gridViewTextBoxColumn5.Name = "EVENT_TYPE";
-            gridViewTextBoxColumn5.Width = 87;
+            gridViewTextBoxColumn5.Width = 86;
             this.radGridView_events.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
             gridViewDecimalColumn1,
             gridViewTextBoxColumn1,
@@ -480,7 +497,7 @@
             this.radGridView_events.MasterTemplate.DataSource = this.eventsBindingSource;
             this.radGridView_events.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.radGridView_events.Name = "radGridView_events";
-            this.radGridView_events.Size = new System.Drawing.Size(788, 427);
+            this.radGridView_events.Size = new System.Drawing.Size(788, 414);
             this.radGridView_events.TabIndex = 7;
             this.radGridView_events.Text = "radGridView1";
             this.radGridView_events.CellEndEdit += new Telerik.WinControls.UI.GridViewCellEventHandler(this.radGridView_events_CellEndEdit);
@@ -491,16 +508,6 @@
             // 
             this.eventsBindingSource.DataMember = "Events";
             this.eventsBindingSource.DataSource = this.eventDatabaseDataSetBindingSource;
-            // 
-            // eventDatabaseDataSetBindingSource
-            // 
-            this.eventDatabaseDataSetBindingSource.DataSource = this.eventDatabaseDataSet;
-            this.eventDatabaseDataSetBindingSource.Position = 0;
-            // 
-            // eventDatabaseDataSet
-            // 
-            this.eventDatabaseDataSet.DataSetName = "EventDatabaseDataSet";
-            this.eventDatabaseDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // radSplitContainer1
             // 
@@ -513,7 +520,7 @@
             // 
             // 
             this.radSplitContainer1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.radSplitContainer1.Size = new System.Drawing.Size(794, 432);
+            this.radSplitContainer1.Size = new System.Drawing.Size(794, 419);
             this.radSplitContainer1.TabIndex = 8;
             this.radSplitContainer1.TabStop = false;
             this.radSplitContainer1.Text = "radSplitContainer1";
@@ -527,7 +534,9 @@
             // 
             // 
             this.splitPanel1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel1.Size = new System.Drawing.Size(395, 432);
+            this.splitPanel1.Size = new System.Drawing.Size(233, 419);
+            this.splitPanel1.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.2050633F, 0F);
+            this.splitPanel1.SizeInfo.SplitterCorrection = new System.Drawing.Size(-162, 0);
             this.splitPanel1.TabIndex = 0;
             this.splitPanel1.TabStop = false;
             this.splitPanel1.Text = "splitPanel1";
@@ -537,20 +546,22 @@
             this.radPropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radPropertyGrid1.Location = new System.Drawing.Point(0, 0);
             this.radPropertyGrid1.Name = "radPropertyGrid1";
-            this.radPropertyGrid1.Size = new System.Drawing.Size(395, 432);
+            this.radPropertyGrid1.Size = new System.Drawing.Size(233, 419);
             this.radPropertyGrid1.TabIndex = 0;
             this.radPropertyGrid1.Text = "radPropertyGrid1";
             // 
             // splitPanel2
             // 
             this.splitPanel2.Controls.Add(this.tableLayoutPanel4);
-            this.splitPanel2.Location = new System.Drawing.Point(399, 0);
+            this.splitPanel2.Location = new System.Drawing.Point(237, 0);
             this.splitPanel2.Name = "splitPanel2";
             // 
             // 
             // 
             this.splitPanel2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.splitPanel2.Size = new System.Drawing.Size(395, 432);
+            this.splitPanel2.Size = new System.Drawing.Size(557, 419);
+            this.splitPanel2.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(0.2050633F, 0F);
+            this.splitPanel2.SizeInfo.SplitterCorrection = new System.Drawing.Size(162, 0);
             this.splitPanel2.TabIndex = 1;
             this.splitPanel2.TabStop = false;
             this.splitPanel2.Text = "splitPanel2";
@@ -562,43 +573,54 @@
             this.tableLayoutPanel4.Controls.Add(this.radListView_data_files, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.radProgressBar_ReadData, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.radButton_StartRead, 0, 2);
+            this.tableLayoutPanel4.Controls.Add(this.radButton_count_data_points, 0, 4);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 4;
+            this.tableLayoutPanel4.RowCount = 5;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(395, 432);
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(557, 419);
             this.tableLayoutPanel4.TabIndex = 5;
             // 
             // radListView_data_files
             // 
+            listViewDetailColumn4.HeaderText = "file name";
+            listViewDetailColumn5.HeaderText = "good data";
+            listViewDetailColumn6.HeaderText = "std dev max value";
+            this.radListView_data_files.Columns.AddRange(new Telerik.WinControls.UI.ListViewDetailColumn[] {
+            listViewDetailColumn4,
+            listViewDetailColumn5,
+            listViewDetailColumn6});
             this.radListView_data_files.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radListView_data_files.ItemSpacing = -1;
             this.radListView_data_files.Location = new System.Drawing.Point(3, 3);
             this.radListView_data_files.Name = "radListView_data_files";
-            this.radListView_data_files.Size = new System.Drawing.Size(389, 386);
+            this.radListView_data_files.Size = new System.Drawing.Size(551, 353);
             this.radListView_data_files.TabIndex = 3;
             this.radListView_data_files.Text = "radListView1";
+            this.radListView_data_files.ViewType = Telerik.WinControls.UI.ListViewType.DetailsView;
             this.radListView_data_files.SelectedItemChanged += new System.EventHandler(this.radListView_data_files_SelectedItemChanged);
             // 
             // radProgressBar_ReadData
             // 
             this.radProgressBar_ReadData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 395);
+            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 362);
             this.radProgressBar_ReadData.Name = "radProgressBar_ReadData";
-            this.radProgressBar_ReadData.Size = new System.Drawing.Size(389, 14);
+            this.radProgressBar_ReadData.Size = new System.Drawing.Size(551, 14);
             this.radProgressBar_ReadData.TabIndex = 5;
             this.radProgressBar_ReadData.Text = "Read Progress";
             // 
             // radButton_StartRead
             // 
             this.radButton_StartRead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radButton_StartRead.Location = new System.Drawing.Point(3, 415);
+            this.radButton_StartRead.Location = new System.Drawing.Point(3, 382);
             this.radButton_StartRead.Name = "radButton_StartRead";
-            this.radButton_StartRead.Size = new System.Drawing.Size(389, 14);
+            this.radButton_StartRead.Size = new System.Drawing.Size(551, 14);
             this.radButton_StartRead.TabIndex = 4;
             this.radButton_StartRead.Text = "Read Data";
             this.radButton_StartRead.Click += new System.EventHandler(this.radButton_StartRead_Click);
@@ -609,10 +631,16 @@
             this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel2.Controls.Add(this.radLabel7);
             this.flowLayoutPanel2.Controls.Add(this.radDropDownList_drive_letters);
+            this.flowLayoutPanel2.Controls.Add(this.radLabel8);
+            this.flowLayoutPanel2.Controls.Add(this.radTextBox_counted_data_points);
+            this.flowLayoutPanel2.Controls.Add(this.radLabel9);
+            this.flowLayoutPanel2.Controls.Add(this.radTextBox_expected_data_points);
+            this.flowLayoutPanel2.Controls.Add(this.radLabel10);
+            this.flowLayoutPanel2.Controls.Add(this.radTextBox_data_point_ratio);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 435);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 422);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(788, 26);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(788, 52);
             this.flowLayoutPanel2.TabIndex = 7;
             // 
             // radLabel7
@@ -622,10 +650,6 @@
             this.radLabel7.Size = new System.Drawing.Size(116, 18);
             this.radLabel7.TabIndex = 0;
             this.radLabel7.Text = "Data Path Drive Letter";
-            // 
-            // eventsTableAdapter
-            // 
-            this.eventsTableAdapter.ClearBeforeFill = true;
             // 
             // radDropDownList_drive_letters
             // 
@@ -643,6 +667,79 @@
             this.radDesktopAlert1.FadeAnimationType = Telerik.WinControls.UI.FadeAnimationType.FadeIn;
             this.radDesktopAlert1.PopupAnimationDirection = Telerik.WinControls.UI.RadDirection.Left;
             this.radDesktopAlert1.PopupAnimationFrames = 10;
+            // 
+            // radButton_count_data_points
+            // 
+            this.radButton_count_data_points.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.radButton_count_data_points.Location = new System.Drawing.Point(3, 402);
+            this.radButton_count_data_points.Name = "radButton_count_data_points";
+            this.radButton_count_data_points.Size = new System.Drawing.Size(551, 14);
+            this.radButton_count_data_points.TabIndex = 6;
+            this.radButton_count_data_points.Text = "Count Datapoints";
+            this.radButton_count_data_points.Click += new System.EventHandler(this.radButton_count_data_points_Click);
+            // 
+            // eventDatabaseDataSetBindingSource
+            // 
+            this.eventDatabaseDataSetBindingSource.DataSource = this.eventDatabaseDataSet;
+            this.eventDatabaseDataSetBindingSource.Position = 0;
+            // 
+            // eventDatabaseDataSet
+            // 
+            this.eventDatabaseDataSet.DataSetName = "EventDatabaseDataSet";
+            this.eventDatabaseDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // eventsTableAdapter
+            // 
+            this.eventsTableAdapter.ClearBeforeFill = true;
+            // 
+            // radLabel8
+            // 
+            this.radLabel8.Location = new System.Drawing.Point(185, 3);
+            this.radLabel8.Name = "radLabel8";
+            this.radLabel8.Size = new System.Drawing.Size(109, 18);
+            this.radLabel8.TabIndex = 2;
+            this.radLabel8.Text = "Counted Data Points";
+            // 
+            // radTextBox_counted_data_points
+            // 
+            this.radTextBox_counted_data_points.Location = new System.Drawing.Point(300, 3);
+            this.radTextBox_counted_data_points.Name = "radTextBox_counted_data_points";
+            this.radTextBox_counted_data_points.ReadOnly = true;
+            this.radTextBox_counted_data_points.Size = new System.Drawing.Size(100, 20);
+            this.radTextBox_counted_data_points.TabIndex = 3;
+            // 
+            // radLabel9
+            // 
+            this.radLabel9.Location = new System.Drawing.Point(406, 3);
+            this.radLabel9.Name = "radLabel9";
+            this.radLabel9.Size = new System.Drawing.Size(112, 18);
+            this.radLabel9.TabIndex = 2;
+            this.radLabel9.Text = "Expected Data Points";
+            // 
+            // radTextBox_expected_data_points
+            // 
+            this.flowLayoutPanel2.SetFlowBreak(this.radTextBox_expected_data_points, true);
+            this.radTextBox_expected_data_points.Location = new System.Drawing.Point(524, 3);
+            this.radTextBox_expected_data_points.Name = "radTextBox_expected_data_points";
+            this.radTextBox_expected_data_points.ReadOnly = true;
+            this.radTextBox_expected_data_points.Size = new System.Drawing.Size(100, 20);
+            this.radTextBox_expected_data_points.TabIndex = 3;
+            // 
+            // radLabel10
+            // 
+            this.radLabel10.Location = new System.Drawing.Point(3, 29);
+            this.radLabel10.Name = "radLabel10";
+            this.radLabel10.Size = new System.Drawing.Size(87, 18);
+            this.radLabel10.TabIndex = 2;
+            this.radLabel10.Text = "Data Point Ratio";
+            // 
+            // radTextBox_data_point_ratio
+            // 
+            this.radTextBox_data_point_ratio.Location = new System.Drawing.Point(96, 29);
+            this.radTextBox_data_point_ratio.Name = "radTextBox_data_point_ratio";
+            this.radTextBox_data_point_ratio.ReadOnly = true;
+            this.radTextBox_data_point_ratio.Size = new System.Drawing.Size(100, 20);
+            this.radTextBox_data_point_ratio.TabIndex = 3;
             // 
             // Form1
             // 
@@ -683,8 +780,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.radGridView_events.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radGridView_events)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSetBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSplitContainer1)).EndInit();
             this.radSplitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitPanel1)).EndInit();
@@ -700,6 +795,15 @@
             this.flowLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDropDownList_drive_letters)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton_count_data_points)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSetBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventDatabaseDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox_counted_data_points)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox_expected_data_points)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radTextBox_data_point_ratio)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -751,6 +855,13 @@
         private Telerik.WinControls.UI.RadLabel radLabel7;
         private Telerik.WinControls.UI.RadDropDownList radDropDownList_drive_letters;
         private Telerik.WinControls.UI.RadDesktopAlert radDesktopAlert1;
+        private Telerik.WinControls.UI.RadButton radButton_count_data_points;
+        private Telerik.WinControls.UI.RadLabel radLabel8;
+        private Telerik.WinControls.UI.RadTextBox radTextBox_counted_data_points;
+        private Telerik.WinControls.UI.RadLabel radLabel9;
+        private Telerik.WinControls.UI.RadTextBox radTextBox_expected_data_points;
+        private Telerik.WinControls.UI.RadLabel radLabel10;
+        private Telerik.WinControls.UI.RadTextBox radTextBox_data_point_ratio;
     }
 }
 

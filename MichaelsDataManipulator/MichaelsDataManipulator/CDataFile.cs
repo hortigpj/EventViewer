@@ -191,19 +191,19 @@ namespace MichaelsDataManipulator
 
         }
 
-        public string start_time_code
+        public double start_time_code
         {
             get
             {
-                return Math.Floor(double.Parse(time_data[0])).ToString();
+                return double.Parse(time_data[0]);
             }
         }
 
-        public string end_time_code
+        public double end_time_code
         {
             get
             {
-                return Math.Floor(double.Parse(time_data.Last())).ToString();
+                return double.Parse(time_data.Last());
             }
         }
 
