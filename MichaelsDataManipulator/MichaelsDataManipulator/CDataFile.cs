@@ -647,8 +647,8 @@ namespace MichaelsDataManipulator
             horizontalAxis.MajorStep = 0;
 
             verticalAxis.Minimum = 0;
-            verticalAxis.Maximum = Speed.FromMetersPerSecond(maximum).FeetPerSecond * 60;
-            verticalAxis.MajorStep = 0;
+            verticalAxis.Maximum = 250;
+            verticalAxis.MajorStep = 50;
 
 
             rad_chart_view.Series.Clear();

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -20,13 +22,51 @@ namespace MichaelsDataManipulator
     public partial class Form1 : Form
     {
 
-        //SortedList<double, string> events = new SortedList<double, string>();
-
-        //List<CEvent> my_events = new List<CEvent>();
-
-//        CDataFile data_file = null;
-
         bool ignore_events = true;
+
+        public CDataFile current_datafile
+        {
+            get; set;
+        }
+
+
+        public int event_file_index
+        {
+            get
+            {
+                if (current_datafile != null)
+                {
+                    int index = (int)this.radGridView_data.CurrentRow.Cells["EVENT_INDEX"].Value;
+
+                    if (index >= 0 && index <current_datafile.n_of_good_data_points)
+                    {
+                        return index;
+                    }
+                }
+
+                return -1;
+            }
+        }
+
+        public int current_file_index
+        {
+            get
+            {
+                radTextBox_position.Text = (radHScrollBar_index.Value * 0.01).ToString();
+
+                return (int)radHScrollBar_index.Value;
+            }
+            set
+            {
+                radHScrollBar_index.Maximum = current_datafile.n_of_good_data_points;
+                radHScrollBar_index.Minimum = 0;
+
+                radHScrollBar_index.Value = value;
+                radTextBox_position.Text = (value * 0.01).ToString();
+            }
+        }
+
+
 
         public List<string> drive_letters
         {
@@ -72,6 +112,7 @@ namespace MichaelsDataManipulator
         {
             get
             {
+                radTextBox_range.Text = (radTrackBar_chart_samples.Value *0.01).ToString();
                 return (int)radTrackBar_chart_samples.Value;
             }
             set
@@ -79,8 +120,6 @@ namespace MichaelsDataManipulator
                 radTrackBar_chart_samples.Value = (float)value;
             }
         }
-
-        dataTableAdapter adapter = new dataTableAdapter();
 
 
         public Form1()
@@ -295,17 +334,17 @@ namespace MichaelsDataManipulator
 
         private void AddEventToDataBase(CEvent ev)
         {
-            EventDatabaseDataSet.EventsRow[] rows =
-                (EventDatabaseDataSet.EventsRow[])  eventDatabaseDataSet.Events.Select("EVENT_INDEX = " + ev.index_of_event + "AND DATA_FILENAME = '"+ev.data_filename + "'");
+            //EventDatabaseDataSet.EventsRow[] rows =
+            //    (EventDatabaseDataSet.EventsRow[])  eventDatabaseDataSet.Events.Select("EVENT_INDEX = " + ev.index_of_event + "AND DATA_FILENAME = '"+ev.data_filename + "'");
 
-            if (rows.Count() == 0)
-            {
-                eventDatabaseDataSet.Events.AddEventsRow(ev.filename, ev.data_filename, "video filename", ev.conveyor, ev.index_of_event, ev.time_stamp_event, ev.time_of_event_relative_to_start_of_data_file, "");
+            //if (rows.Count() == 0)
+            //{
+            //    eventDatabaseDataSet.Events.AddEventsRow(ev.filename, ev.data_filename, "video filename", ev.conveyor, ev.index_of_event, ev.time_stamp_event, ev.time_of_event_relative_to_start_of_data_file, "");
 
-                this.eventsTableAdapter.Update(eventDatabaseDataSet);
+            //    this.eventsTableAdapter.Update(eventDatabaseDataSet);
 
-                eventDatabaseDataSet.AcceptChanges();
-            }
+            //    eventDatabaseDataSet.AcceptChanges();
+            //}
 
 
         }
@@ -348,8 +387,33 @@ namespace MichaelsDataManipulator
             // TODO: This line of code loads data into the 'eventDatabaseDataSet.Events' table. You can move, or remove it, as needed.
 
             ignore_events = true;
-            this.eventsTableAdapter.Fill(this.eventDatabaseDataSet.Events);
-            this.adapter.Fill(simplotDatabaseDataSet.data);
+
+            // do the sql stuff
+
+            //string strConnection = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\\\prod\\root\\S_Drive\\USGR - Shared\\SimPlot DATA\\SimplotDatabase.accdb";
+            //string strConnection = "Data Source=\\\\prod\\root\\S_Drive\\USGR - Shared\\SimPlot DATA\\SimplotDatabase.accdb";
+
+            //SqlConnection con = new SqlConnection(strConnection);
+
+
+            //SqlCommand sqlCmd = new SqlCommand();
+            //sqlCmd.Connection = con;
+            //sqlCmd.CommandType = CommandType.Text;
+            //sqlCmd.CommandText = "Select * from data";
+
+            //SqlDataAdapter sqlDataAdap = new SqlDataAdapter(sqlCmd);
+
+            //DataTable dtRecord = new DataTable();
+            //sqlDataAdap.Fill(dtRecord);
+            //radGridView_data.DataSource = dtRecord;
+
+            
+
+
+
+
+            SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
+            a.Fill(simplotDatabaseDataSet.data);
 
 
             List<string> drives = GetAvailableDriveLetters();
@@ -504,9 +568,9 @@ namespace MichaelsDataManipulator
 
         private void radGridView_events_CellEndEdit(object sender, GridViewCellEventArgs e)
         {
-            this.eventsTableAdapter.Update(eventDatabaseDataSet);
+            //this.eventsTableAdapter.Update(eventDatabaseDataSet);
 
-            eventDatabaseDataSet.AcceptChanges();
+            //eventDatabaseDataSet.AcceptChanges();
 
         }
 
@@ -650,7 +714,7 @@ namespace MichaelsDataManipulator
 
         void PopulateDatabase()
         {
-            simplotDatabaseDataSet.ToString();
+            
 
 
             string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
@@ -817,47 +881,47 @@ namespace MichaelsDataManipulator
                 double window_average_ft_per_min = Speed.FromMetersPerSecond(window_average).FeetPerSecond * 60;
 
 
-                simplotDatabaseDataSet.data.AdddataRow(datafile.filename, datafile.data_filename, "", datafile.conveyor,
-                   index_of_local_max,
-                   datafile.time_stamp_data[index_of_local_max],
-                   datafile.relative_time_data[index_of_local_max],
-                   "",
-                   window_min_ft_per_min,
-                   window_max_ft_per_min,
-                   window_average_ft_per_min,
-                   datafile.local_std_dev.Max(),
-                   datafile.minimum_ft_per_min,
-                   datafile.maximum_ft_per_min,
-                   datafile.total_average_ft_per_min,
-                   datafile.std_dev_of_average,
-                   datafile.n_of_good_data_points,
-                   datafile.n_of_data_points);
-            }
-            else
-            {
-                simplotDatabaseDataSet.data.AdddataRow(filename,Path.GetFileName(filename), "","",
-                   -1,
-                   new DateTime() ,
-                   0,
-                   "",
-                   0,
-                   0,
-                   0,
-                   0,
-                   0,
-                   0,
-                   0,
-                   0,
-                   datafile.n_of_good_data_points,
-                   datafile.n_of_data_points);
+                //    simplotDatabaseDataSet.data.AdddataRow(datafile.filename, datafile.data_filename, "", datafile.conveyor,
+                //       index_of_local_max,
+                //       datafile.time_stamp_data[index_of_local_max],
+                //       datafile.relative_time_data[index_of_local_max],
+                //       "",
+                //       window_min_ft_per_min,
+                //       window_max_ft_per_min,
+                //       window_average_ft_per_min,
+                //       datafile.local_std_dev.Max(),
+                //       datafile.minimum_ft_per_min,
+                //       datafile.maximum_ft_per_min,
+                //       datafile.total_average_ft_per_min,
+                //       datafile.std_dev_of_average,
+                //       datafile.n_of_good_data_points,
+                //       datafile.n_of_data_points);
+                //}
+                //else
+                //{
+                //    simplotDatabaseDataSet.data.AdddataRow(filename,Path.GetFileName(filename), "","",
+                //       -1,
+                //       new DateTime() ,
+                //       0,
+                //       "",
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       datafile.n_of_good_data_points,
+                //       datafile.n_of_data_points);
+
+                //}
+
+                //adapter.Update(simplotDatabaseDataSet);
+
+                //simplotDatabaseDataSet.AcceptChanges();
 
             }
-
-            adapter.Update(simplotDatabaseDataSet);
-
-            simplotDatabaseDataSet.AcceptChanges();
-
-
             
             //eventDatabaseDataSet.Events.AddEventsRow(ev.filename, ev.data_filename, "video filename", ev.conveyor, ev.index_of_event, ev.time_stamp_event, ev.time_of_event_relative_to_start_of_data_file, "");
 
@@ -890,22 +954,27 @@ namespace MichaelsDataManipulator
                 Debug.WriteLine(changed_filename);
 
 
-                int index = (int)this.radGridView_data.CurrentRow.Cells["EVENT_INDEX"].Value;
+                
 
                 if (File.Exists(changed_filename))
                 {
 
-                    CDataFile datafile = new CDataFile(filename, 0.5);
+                    current_datafile = new CDataFile(filename, 0.5);
 
-                    datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, index - chart_sample_size / 2, chart_sample_size);
+                    if (event_file_index != -1)
+                    {
+                        current_file_index = event_file_index;
 
-                    radPropertyGrid1.SelectedObject = datafile;
+                        current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, current_file_index - chart_sample_size / 2, chart_sample_size);
 
-                    // create the video list
+                        radPropertyGrid1.SelectedObject = current_datafile;
 
-                    double event_time = double.Parse(datafile.time_data[index]);
+                        // create the video list
 
-                    ListVideo(event_time, filename);
+                        double event_time = double.Parse(current_datafile.time_data[current_file_index]);
+
+                        ListVideo(event_time, filename);
+                    }
                 }
                 else
                 {
@@ -919,6 +988,85 @@ namespace MichaelsDataManipulator
 
 
             Application.DoEvents();
+        }
+
+        private void radGridView_data_CellValueChanged(object sender, GridViewCellEventArgs e)
+        {
+
+            SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
+            a.Update(simplotDatabaseDataSet);
+            simplotDatabaseDataSet.AcceptChanges();
+
+        }
+
+        private void radHScrollBar_index_ValueChanged(object sender, EventArgs e)
+        {
+            if (current_datafile != null)
+            {
+                current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis, current_file_index - chart_sample_size / 2, chart_sample_size);
+            }
+        }
+
+        private void radButton_transfer_Click(object sender, EventArgs e)
+        {
+
+            SimplotDatabaseDataSetTableAdapters.EventsTableAdapter ae = new EventsTableAdapter();
+
+            ae.Fill(simplotDatabaseDataSet.Events);
+
+
+            radProgressBar_ReadData.Maximum = simplotDatabaseDataSet.Events.Rows.Count;
+
+
+
+
+            SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
+
+            int i = 0;
+            foreach (SimplotDatabaseDataSet.EventsRow row in simplotDatabaseDataSet.Events.Rows)
+            {
+                radProgressBar_ReadData.Value1 = i++;
+
+                Application.DoEvents();
+
+                if (!row.Is_EVENT_TYPENull())
+                {
+                    if (row._EVENT_TYPE != "")
+                    {
+                        // find equivalent row in main database
+
+                        string filename = row._DATA_FILENAME;
+                        int event_index = row._EVENT_INDEX;
+
+                        foreach (SimplotDatabaseDataSet.dataRow data_row in simplotDatabaseDataSet.data.Rows)
+                        {
+                            if (data_row.DATA_FILENAME == filename)
+                              
+                            {
+                                if (row._FILENAME.Contains(data_row.CONVEYOR))
+                                {
+                                    data_row.BeginEdit();
+
+                                    data_row.EVENT_TYPE = row._EVENT_TYPE;
+
+                                    data_row.EndEdit();
+
+                                    a.Update(simplotDatabaseDataSet);
+                                    simplotDatabaseDataSet.AcceptChanges();
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+
+
+            
+
         }
     }
 }
