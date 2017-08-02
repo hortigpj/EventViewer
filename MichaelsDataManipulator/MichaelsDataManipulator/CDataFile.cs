@@ -20,19 +20,13 @@ namespace MichaelsDataManipulator
         public List<double> relative_time_data = new List<double>();
 
         public List<double>[] data;
-        public int n_of_data_sets;
-
-        public int unfiltered_data_points
-        {
-            get;
-            set;
-        }
+        public int n_of_data_points;
 
         public string percentage_of_good_data
         {
             get
             {
-                return (100 * (double)Count / (double)unfiltered_data_points).ToString() + "%";
+                return (100 * (double)n_of_good_data_points / (double)n_of_data_points).ToString() + "%";
             }
         }
 
@@ -51,11 +45,11 @@ namespace MichaelsDataManipulator
 
         public string filename { get; set; }
         public double total_average { get; set; }
-        public string total_average_ft_per_min
+        public double total_average_ft_per_min
         {
             get
             {
-                return (Speed.FromMetersPerSecond(total_average).FeetPerSecond * 60).ToString();
+                return Speed.FromMetersPerSecond(total_average).FeetPerSecond * 60;
             }
         }
 
@@ -63,7 +57,7 @@ namespace MichaelsDataManipulator
         
         public double std_dev_of_average { get; set; }
 
-        public int Count
+        public int n_of_good_data_points
         {
             get
             {
@@ -80,20 +74,20 @@ namespace MichaelsDataManipulator
         }
 
         public double maximum { get; set; }
-        public string maximum_ft_per_min
+        public double maximum_ft_per_min
         {
             get
             {
-                return (Speed.FromMetersPerSecond(maximum).FeetPerSecond * 60).ToString();
+                return Speed.FromMetersPerSecond(maximum).FeetPerSecond * 60;
             }
         }
 
         public double minimum { get; set; }
-        public string minimum_ft_per_min
+        public double minimum_ft_per_min
         {
             get
             {
-                return (Speed.FromMetersPerSecond(minimum).FeetPerSecond * 60).ToString();
+                return Speed.FromMetersPerSecond(minimum).FeetPerSecond * 60;
             }
         }
 
@@ -240,6 +234,15 @@ namespace MichaelsDataManipulator
             }
         }
 
+        public string data_filename
+        {
+            get
+            {
+                return Path.GetFileName(this.filename);
+            }
+        }
+
+
 
 
         public CDataFile(string file_name, int n_of_data_sets, string [] dataset_names)
@@ -261,7 +264,7 @@ namespace MichaelsDataManipulator
             Read();
 
 
-            if (Count > 0)
+            if (n_of_good_data_points > 0)
             {
                 CreateDerivedData();
             }
@@ -296,7 +299,7 @@ namespace MichaelsDataManipulator
                 {
                     if (line != "")
                     {
-                        unfiltered_data_points++;
+                        n_of_data_points++;
 
                         string[] tokens = line.Split('\t');
 
@@ -388,8 +391,8 @@ namespace MichaelsDataManipulator
                     if (k < 0)
                         k = 0;
 
-                    if (k > this.Count - 1)
-                        k = Count - 1;
+                    if (k > this.n_of_good_data_points - 1)
+                        k = n_of_good_data_points - 1;
 
                     r_avr_sum += average[k];
 
@@ -613,7 +616,7 @@ namespace MichaelsDataManipulator
             {
                 int j = index + i;
 
-                if (j>=0 && j < Count)
+                if (j>=0 && j < n_of_good_data_points)
                 {
 
                     tail_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed[j]).FeetPerSecond * 60));
@@ -676,7 +679,7 @@ namespace MichaelsDataManipulator
             PointF old_point = new PointF(0, 0);
 
 
-            for (int i = 0;i<Count;i++)
+            for (int i = 0;i<n_of_good_data_points;i++)
             {
                 double x = relative_time_data[i] - t_min;
                 double y = y_max - head_speed[i];
