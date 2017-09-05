@@ -18,7 +18,7 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\install files
-OutputBaseFilename=setup
+OutputBaseFilename=EventViewer_setup
 Compression=lzma
 SolidCompression=yes
 
@@ -30,7 +30,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MichaelsDataManipulator.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MathNet.Numerics.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MichaelsDataManipulator.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MichaelsDataManipulator.exe.config"; DestDir: "{app}"; Flags: ignoreversion
@@ -41,7 +40,9 @@ Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataM
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.RadDock.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\TelerikCommon.dll"; DestDir: "{app}"; Flags: ignoreversion
-
+Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MathNet.Filtering.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\UnitsNet.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

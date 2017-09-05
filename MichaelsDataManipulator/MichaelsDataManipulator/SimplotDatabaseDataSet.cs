@@ -4,6 +4,9 @@
 
     partial class SimplotDatabaseDataSet
     {
+        partial class dataDataTable
+        {
+        }
     }
 }
 

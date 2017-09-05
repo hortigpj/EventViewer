@@ -352,6 +352,8 @@ namespace MichaelsDataManipulator {
             
             private global::System.Data.DataColumn columnFILE_TOTAL_COUNT;
             
+            private global::System.Data.DataColumn columnSCAN_TYPE;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public dataDataTable() {
@@ -539,6 +541,14 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SCAN_TYPEColumn {
+                get {
+                    return this.columnSCAN_TYPE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -592,7 +602,8 @@ namespace MichaelsDataManipulator {
                         double FILE_AVERAGE, 
                         double FILE_STD_DEV, 
                         int FILE_GOOD_COUNT, 
-                        int FILE_TOTAL_COUNT) {
+                        int FILE_TOTAL_COUNT, 
+                        string SCAN_TYPE) {
                 dataRow rowdataRow = ((dataRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -613,7 +624,8 @@ namespace MichaelsDataManipulator {
                         FILE_AVERAGE,
                         FILE_STD_DEV,
                         FILE_GOOD_COUNT,
-                        FILE_TOTAL_COUNT};
+                        FILE_TOTAL_COUNT,
+                        SCAN_TYPE};
                 rowdataRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdataRow);
                 return rowdataRow;
@@ -662,6 +674,7 @@ namespace MichaelsDataManipulator {
                 this.columnFILE_STD_DEV = base.Columns["FILE_STD_DEV"];
                 this.columnFILE_GOOD_COUNT = base.Columns["FILE_GOOD_COUNT"];
                 this.columnFILE_TOTAL_COUNT = base.Columns["FILE_TOTAL_COUNT"];
+                this.columnSCAN_TYPE = base.Columns["SCAN_TYPE"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -705,6 +718,8 @@ namespace MichaelsDataManipulator {
                 base.Columns.Add(this.columnFILE_GOOD_COUNT);
                 this.columnFILE_TOTAL_COUNT = new global::System.Data.DataColumn("FILE_TOTAL_COUNT", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFILE_TOTAL_COUNT);
+                this.columnSCAN_TYPE = new global::System.Data.DataColumn("SCAN_TYPE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSCAN_TYPE);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnID}, true));
                 this.columnID.AutoIncrement = true;
@@ -717,6 +732,7 @@ namespace MichaelsDataManipulator {
                 this.columnVIDEO_FILENAME.MaxLength = 536870910;
                 this.columnCONVEYOR.MaxLength = 255;
                 this.columnEVENT_TYPE.MaxLength = 536870910;
+                this.columnSCAN_TYPE.MaxLength = 255;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1536,6 +1552,22 @@ namespace MichaelsDataManipulator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SCAN_TYPE {
+                get {
+                    try {
+                        return ((string)(this[this.tabledata.SCAN_TYPEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'SCAN_TYPE\' in table \'data\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledata.SCAN_TYPEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsFILENAMENull() {
                 return this.IsNull(this.tabledata.FILENAMEColumn);
             }
@@ -1748,6 +1780,18 @@ namespace MichaelsDataManipulator {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetFILE_TOTAL_COUNTNull() {
                 this[this.tabledata.FILE_TOTAL_COUNTColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsSCAN_TYPENull() {
+                return this.IsNull(this.tabledata.SCAN_TYPEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetSCAN_TYPENull() {
+                this[this.tabledata.SCAN_TYPEColumn] = global::System.Convert.DBNull;
             }
         }
         
@@ -2213,10 +2257,11 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             tableMapping.ColumnMappings.Add("FILE_STD_DEV", "FILE_STD_DEV");
             tableMapping.ColumnMappings.Add("FILE_GOOD_COUNT", "FILE_GOOD_COUNT");
             tableMapping.ColumnMappings.Add("FILE_TOTAL_COUNT", "FILE_TOTAL_COUNT");
+            tableMapping.ColumnMappings.Add("SCAN_TYPE", "SCAN_TYPE");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `data` WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MIN` IS NULL) OR (`EVENT_WINDOW_MIN` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MAX` IS NULL) OR (`EVENT_WINDOW_MAX` = ?)) AND ((? = 1 AND `EVENT_WINDOW_AVERAGE` IS NULL) OR (`EVENT_WINDOW_AVERAGE` = ?)) AND ((? = 1 AND `EVENT_LOCAL_STD_DEV_MAX` IS NULL) OR (`EVENT_LOCAL_STD_DEV_MAX` = ?)) AND ((? = 1 AND `FILE_MIN` IS NULL) OR (`FILE_MIN` = ?)) AND ((? = 1 AND `FILE_MAX` IS NULL) OR (`FILE_MAX` = ?)) AND ((? = 1 AND `FILE_AVERAGE` IS NULL) OR (`FILE_AVERAGE` = ?)) AND ((? = 1 AND `FILE_STD_DEV` IS NULL) OR (`FILE_STD_DEV` = ?)) AND ((? = 1 AND `FILE_GOOD_COUNT` IS NULL) OR (`FILE_GOOD_COUNT` = ?)) AND ((? = 1 AND `FILE_TOTAL_COUNT` IS NULL) OR (`FILE_TOTAL_COUNT` = ?)))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM `data` WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MIN` IS NULL) OR (`EVENT_WINDOW_MIN` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MAX` IS NULL) OR (`EVENT_WINDOW_MAX` = ?)) AND ((? = 1 AND `EVENT_WINDOW_AVERAGE` IS NULL) OR (`EVENT_WINDOW_AVERAGE` = ?)) AND ((? = 1 AND `EVENT_LOCAL_STD_DEV_MAX` IS NULL) OR (`EVENT_LOCAL_STD_DEV_MAX` = ?)) AND ((? = 1 AND `FILE_MIN` IS NULL) OR (`FILE_MIN` = ?)) AND ((? = 1 AND `FILE_MAX` IS NULL) OR (`FILE_MAX` = ?)) AND ((? = 1 AND `FILE_AVERAGE` IS NULL) OR (`FILE_AVERAGE` = ?)) AND ((? = 1 AND `FILE_STD_DEV` IS NULL) OR (`FILE_STD_DEV` = ?)) AND ((? = 1 AND `FILE_GOOD_COUNT` IS NULL) OR (`FILE_GOOD_COUNT` = ?)) AND ((? = 1 AND `FILE_TOTAL_COUNT` IS NULL) OR (`FILE_TOTAL_COUNT` = ?)) AND ((? = 1 AND `SCAN_TYPE` IS NULL) OR (`SCAN_TYPE` = ?)))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_CONVEYOR", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Original, true, null));
@@ -2247,9 +2292,11 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FILE_GOOD_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_GOOD_COUNT", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_FILE_TOTAL_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_TOTAL_COUNT", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FILE_TOTAL_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_TOTAL_COUNT", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_SCAN_TYPE", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "SCAN_TYPE", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_SCAN_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "SCAN_TYPE", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.InsertCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = @"INSERT INTO `data` (`FILENAME`, `DATA_FILENAME`, `VIDEO_FILENAME`, `CONVEYOR`, `EVENT_INDEX`, `EVENT_TIME_STAMP`, `EVENT_TIME`, `EVENT_TYPE`, `EVENT_WINDOW_MIN`, `EVENT_WINDOW_MAX`, `EVENT_WINDOW_AVERAGE`, `EVENT_LOCAL_STD_DEV_MAX`, `FILE_MIN`, `FILE_MAX`, `FILE_AVERAGE`, `FILE_STD_DEV`, `FILE_GOOD_COUNT`, `FILE_TOTAL_COUNT`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO `data` (`FILENAME`, `DATA_FILENAME`, `VIDEO_FILENAME`, `CONVEYOR`, `EVENT_INDEX`, `EVENT_TIME_STAMP`, `EVENT_TIME`, `EVENT_TYPE`, `EVENT_WINDOW_MIN`, `EVENT_WINDOW_MAX`, `EVENT_WINDOW_AVERAGE`, `EVENT_LOCAL_STD_DEV_MAX`, `FILE_MIN`, `FILE_MAX`, `FILE_AVERAGE`, `FILE_STD_DEV`, `FILE_GOOD_COUNT`, `FILE_TOTAL_COUNT`, `SCAN_TYPE`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILENAME", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DATA_FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DATA_FILENAME", global::System.Data.DataRowVersion.Current, false, null));
@@ -2269,9 +2316,10 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILE_STD_DEV", global::System.Data.OleDb.OleDbType.Double, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_STD_DEV", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILE_GOOD_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_GOOD_COUNT", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILE_TOTAL_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_TOTAL_COUNT", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("SCAN_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "SCAN_TYPE", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand = new global::System.Data.OleDb.OleDbCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE `data` SET `FILENAME` = ?, `DATA_FILENAME` = ?, `VIDEO_FILENAME` = ?, `CONVEYOR` = ?, `EVENT_INDEX` = ?, `EVENT_TIME_STAMP` = ?, `EVENT_TIME` = ?, `EVENT_TYPE` = ?, `EVENT_WINDOW_MIN` = ?, `EVENT_WINDOW_MAX` = ?, `EVENT_WINDOW_AVERAGE` = ?, `EVENT_LOCAL_STD_DEV_MAX` = ?, `FILE_MIN` = ?, `FILE_MAX` = ?, `FILE_AVERAGE` = ?, `FILE_STD_DEV` = ?, `FILE_GOOD_COUNT` = ?, `FILE_TOTAL_COUNT` = ? WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MIN` IS NULL) OR (`EVENT_WINDOW_MIN` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MAX` IS NULL) OR (`EVENT_WINDOW_MAX` = ?)) AND ((? = 1 AND `EVENT_WINDOW_AVERAGE` IS NULL) OR (`EVENT_WINDOW_AVERAGE` = ?)) AND ((? = 1 AND `EVENT_LOCAL_STD_DEV_MAX` IS NULL) OR (`EVENT_LOCAL_STD_DEV_MAX` = ?)) AND ((? = 1 AND `FILE_MIN` IS NULL) OR (`FILE_MIN` = ?)) AND ((? = 1 AND `FILE_MAX` IS NULL) OR (`FILE_MAX` = ?)) AND ((? = 1 AND `FILE_AVERAGE` IS NULL) OR (`FILE_AVERAGE` = ?)) AND ((? = 1 AND `FILE_STD_DEV` IS NULL) OR (`FILE_STD_DEV` = ?)) AND ((? = 1 AND `FILE_GOOD_COUNT` IS NULL) OR (`FILE_GOOD_COUNT` = ?)) AND ((? = 1 AND `FILE_TOTAL_COUNT` IS NULL) OR (`FILE_TOTAL_COUNT` = ?)))";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE `data` SET `FILENAME` = ?, `DATA_FILENAME` = ?, `VIDEO_FILENAME` = ?, `CONVEYOR` = ?, `EVENT_INDEX` = ?, `EVENT_TIME_STAMP` = ?, `EVENT_TIME` = ?, `EVENT_TYPE` = ?, `EVENT_WINDOW_MIN` = ?, `EVENT_WINDOW_MAX` = ?, `EVENT_WINDOW_AVERAGE` = ?, `EVENT_LOCAL_STD_DEV_MAX` = ?, `FILE_MIN` = ?, `FILE_MAX` = ?, `FILE_AVERAGE` = ?, `FILE_STD_DEV` = ?, `FILE_GOOD_COUNT` = ?, `FILE_TOTAL_COUNT` = ?, `SCAN_TYPE` = ? WHERE ((`ID` = ?) AND ((? = 1 AND `CONVEYOR` IS NULL) OR (`CONVEYOR` = ?)) AND ((? = 1 AND `EVENT_INDEX` IS NULL) OR (`EVENT_INDEX` = ?)) AND ((? = 1 AND `EVENT_TIME_STAMP` IS NULL) OR (`EVENT_TIME_STAMP` = ?)) AND ((? = 1 AND `EVENT_TIME` IS NULL) OR (`EVENT_TIME` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MIN` IS NULL) OR (`EVENT_WINDOW_MIN` = ?)) AND ((? = 1 AND `EVENT_WINDOW_MAX` IS NULL) OR (`EVENT_WINDOW_MAX` = ?)) AND ((? = 1 AND `EVENT_WINDOW_AVERAGE` IS NULL) OR (`EVENT_WINDOW_AVERAGE` = ?)) AND ((? = 1 AND `EVENT_LOCAL_STD_DEV_MAX` IS NULL) OR (`EVENT_LOCAL_STD_DEV_MAX` = ?)) AND ((? = 1 AND `FILE_MIN` IS NULL) OR (`FILE_MIN` = ?)) AND ((? = 1 AND `FILE_MAX` IS NULL) OR (`FILE_MAX` = ?)) AND ((? = 1 AND `FILE_AVERAGE` IS NULL) OR (`FILE_AVERAGE` = ?)) AND ((? = 1 AND `FILE_STD_DEV` IS NULL) OR (`FILE_STD_DEV` = ?)) AND ((? = 1 AND `FILE_GOOD_COUNT` IS NULL) OR (`FILE_GOOD_COUNT` = ?)) AND ((? = 1 AND `FILE_TOTAL_COUNT` IS NULL) OR (`FILE_TOTAL_COUNT` = ?)) AND ((? = 1 AND `SCAN_TYPE` IS NULL) OR (`SCAN_TYPE` = ?)))";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILENAME", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("DATA_FILENAME", global::System.Data.OleDb.OleDbType.LongVarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "DATA_FILENAME", global::System.Data.DataRowVersion.Current, false, null));
@@ -2291,6 +2339,7 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILE_STD_DEV", global::System.Data.OleDb.OleDbType.Double, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_STD_DEV", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILE_GOOD_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_GOOD_COUNT", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("FILE_TOTAL_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_TOTAL_COUNT", global::System.Data.DataRowVersion.Current, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("SCAN_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "SCAN_TYPE", global::System.Data.DataRowVersion.Current, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_ID", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "ID", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_CONVEYOR", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_CONVEYOR", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "CONVEYOR", global::System.Data.DataRowVersion.Original, false, null));
@@ -2320,6 +2369,8 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FILE_GOOD_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_GOOD_COUNT", global::System.Data.DataRowVersion.Original, false, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_FILE_TOTAL_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_TOTAL_COUNT", global::System.Data.DataRowVersion.Original, true, null));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_FILE_TOTAL_COUNT", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "FILE_TOTAL_COUNT", global::System.Data.DataRowVersion.Original, false, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("IsNull_SCAN_TYPE", global::System.Data.OleDb.OleDbType.Integer, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "SCAN_TYPE", global::System.Data.DataRowVersion.Original, true, null));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.OleDb.OleDbParameter("Original_SCAN_TYPE", global::System.Data.OleDb.OleDbType.VarWChar, 0, global::System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "SCAN_TYPE", global::System.Data.DataRowVersion.Original, false, null));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2335,7 +2386,7 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             this._commandCollection = new global::System.Data.OleDb.OleDbCommand[1];
             this._commandCollection[0] = new global::System.Data.OleDb.OleDbCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = @"SELECT ID, FILENAME, DATA_FILENAME, VIDEO_FILENAME, CONVEYOR, EVENT_INDEX, EVENT_TIME_STAMP, EVENT_TIME, EVENT_TYPE, EVENT_WINDOW_MIN, EVENT_WINDOW_MAX, EVENT_WINDOW_AVERAGE, EVENT_LOCAL_STD_DEV_MAX, FILE_MIN, FILE_MAX, FILE_AVERAGE, FILE_STD_DEV, FILE_GOOD_COUNT, FILE_TOTAL_COUNT FROM data";
+            this._commandCollection[0].CommandText = @"SELECT ID, FILENAME, DATA_FILENAME, VIDEO_FILENAME, CONVEYOR, EVENT_INDEX, EVENT_TIME_STAMP, EVENT_TIME, EVENT_TYPE, EVENT_WINDOW_MIN, EVENT_WINDOW_MAX, EVENT_WINDOW_AVERAGE, EVENT_LOCAL_STD_DEV_MAX, FILE_MIN, FILE_MAX, FILE_AVERAGE, FILE_STD_DEV, FILE_GOOD_COUNT, FILE_TOTAL_COUNT,SCAN_TYPE FROM data";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -2396,7 +2447,23 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_ID, string Original_CONVEYOR, global::System.Nullable<int> Original_EVENT_INDEX, global::System.Nullable<global::System.DateTime> Original_EVENT_TIME_STAMP, global::System.Nullable<double> Original_EVENT_TIME, global::System.Nullable<double> Original_EVENT_WINDOW_MIN, global::System.Nullable<double> Original_EVENT_WINDOW_MAX, global::System.Nullable<double> Original_EVENT_WINDOW_AVERAGE, global::System.Nullable<double> Original_EVENT_LOCAL_STD_DEV_MAX, global::System.Nullable<double> Original_FILE_MIN, global::System.Nullable<double> Original_FILE_MAX, global::System.Nullable<double> Original_FILE_AVERAGE, global::System.Nullable<double> Original_FILE_STD_DEV, global::System.Nullable<int> Original_FILE_GOOD_COUNT, global::System.Nullable<int> Original_FILE_TOTAL_COUNT) {
+        public virtual int Delete(
+                    int Original_ID, 
+                    string Original_CONVEYOR, 
+                    global::System.Nullable<int> Original_EVENT_INDEX, 
+                    global::System.Nullable<global::System.DateTime> Original_EVENT_TIME_STAMP, 
+                    global::System.Nullable<double> Original_EVENT_TIME, 
+                    global::System.Nullable<double> Original_EVENT_WINDOW_MIN, 
+                    global::System.Nullable<double> Original_EVENT_WINDOW_MAX, 
+                    global::System.Nullable<double> Original_EVENT_WINDOW_AVERAGE, 
+                    global::System.Nullable<double> Original_EVENT_LOCAL_STD_DEV_MAX, 
+                    global::System.Nullable<double> Original_FILE_MIN, 
+                    global::System.Nullable<double> Original_FILE_MAX, 
+                    global::System.Nullable<double> Original_FILE_AVERAGE, 
+                    global::System.Nullable<double> Original_FILE_STD_DEV, 
+                    global::System.Nullable<int> Original_FILE_GOOD_COUNT, 
+                    global::System.Nullable<int> Original_FILE_TOTAL_COUNT, 
+                    string Original_SCAN_TYPE) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_ID));
             if ((Original_CONVEYOR == null)) {
                 this.Adapter.DeleteCommand.Parameters[1].Value = ((object)(1));
@@ -2510,6 +2577,14 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
                 this.Adapter.DeleteCommand.Parameters[27].Value = ((object)(1));
                 this.Adapter.DeleteCommand.Parameters[28].Value = global::System.DBNull.Value;
             }
+            if ((Original_SCAN_TYPE == null)) {
+                this.Adapter.DeleteCommand.Parameters[29].Value = ((object)(1));
+                this.Adapter.DeleteCommand.Parameters[30].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[29].Value = ((object)(0));
+                this.Adapter.DeleteCommand.Parameters[30].Value = ((string)(Original_SCAN_TYPE));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2548,7 +2623,8 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
                     global::System.Nullable<double> FILE_AVERAGE, 
                     global::System.Nullable<double> FILE_STD_DEV, 
                     global::System.Nullable<int> FILE_GOOD_COUNT, 
-                    global::System.Nullable<int> FILE_TOTAL_COUNT) {
+                    global::System.Nullable<int> FILE_TOTAL_COUNT, 
+                    string SCAN_TYPE) {
             if ((FILENAME == null)) {
                 this.Adapter.InsertCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
@@ -2657,6 +2733,12 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             else {
                 this.Adapter.InsertCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
+            if ((SCAN_TYPE == null)) {
+                this.Adapter.InsertCommand.Parameters[18].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[18].Value = ((string)(SCAN_TYPE));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2696,6 +2778,7 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
                     global::System.Nullable<double> FILE_STD_DEV, 
                     global::System.Nullable<int> FILE_GOOD_COUNT, 
                     global::System.Nullable<int> FILE_TOTAL_COUNT, 
+                    string SCAN_TYPE, 
                     int Original_ID, 
                     string Original_CONVEYOR, 
                     global::System.Nullable<int> Original_EVENT_INDEX, 
@@ -2710,7 +2793,8 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
                     global::System.Nullable<double> Original_FILE_AVERAGE, 
                     global::System.Nullable<double> Original_FILE_STD_DEV, 
                     global::System.Nullable<int> Original_FILE_GOOD_COUNT, 
-                    global::System.Nullable<int> Original_FILE_TOTAL_COUNT) {
+                    global::System.Nullable<int> Original_FILE_TOTAL_COUNT, 
+                    string Original_SCAN_TYPE) {
             if ((FILENAME == null)) {
                 this.Adapter.UpdateCommand.Parameters[0].Value = global::System.DBNull.Value;
             }
@@ -2819,118 +2903,132 @@ namespace MichaelsDataManipulator.SimplotDatabaseDataSetTableAdapters {
             else {
                 this.Adapter.UpdateCommand.Parameters[17].Value = global::System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[18].Value = ((int)(Original_ID));
-            if ((Original_CONVEYOR == null)) {
-                this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[20].Value = global::System.DBNull.Value;
+            if ((SCAN_TYPE == null)) {
+                this.Adapter.UpdateCommand.Parameters[18].Value = global::System.DBNull.Value;
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[19].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[20].Value = ((string)(Original_CONVEYOR));
+                this.Adapter.UpdateCommand.Parameters[18].Value = ((string)(SCAN_TYPE));
+            }
+            this.Adapter.UpdateCommand.Parameters[19].Value = ((int)(Original_ID));
+            if ((Original_CONVEYOR == null)) {
+                this.Adapter.UpdateCommand.Parameters[20].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[21].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[20].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[21].Value = ((string)(Original_CONVEYOR));
             }
             if ((Original_EVENT_INDEX.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[21].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[22].Value = ((int)(Original_EVENT_INDEX.Value));
+                this.Adapter.UpdateCommand.Parameters[22].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[23].Value = ((int)(Original_EVENT_INDEX.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[21].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[22].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[22].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[23].Value = global::System.DBNull.Value;
             }
             if ((Original_EVENT_TIME_STAMP.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[23].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[24].Value = ((System.DateTime)(Original_EVENT_TIME_STAMP.Value));
+                this.Adapter.UpdateCommand.Parameters[24].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[25].Value = ((System.DateTime)(Original_EVENT_TIME_STAMP.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[23].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[24].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[24].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[25].Value = global::System.DBNull.Value;
             }
             if ((Original_EVENT_TIME.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[26].Value = ((double)(Original_EVENT_TIME.Value));
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[27].Value = ((double)(Original_EVENT_TIME.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[25].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[26].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[26].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[27].Value = global::System.DBNull.Value;
             }
             if ((Original_EVENT_WINDOW_MIN.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[28].Value = ((double)(Original_EVENT_WINDOW_MIN.Value));
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[29].Value = ((double)(Original_EVENT_WINDOW_MIN.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[27].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[28].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[28].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[29].Value = global::System.DBNull.Value;
             }
             if ((Original_EVENT_WINDOW_MAX.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[30].Value = ((double)(Original_EVENT_WINDOW_MAX.Value));
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[31].Value = ((double)(Original_EVENT_WINDOW_MAX.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[29].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[30].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[30].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[31].Value = global::System.DBNull.Value;
             }
             if ((Original_EVENT_WINDOW_AVERAGE.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[32].Value = ((double)(Original_EVENT_WINDOW_AVERAGE.Value));
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[33].Value = ((double)(Original_EVENT_WINDOW_AVERAGE.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[31].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[32].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[32].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[33].Value = global::System.DBNull.Value;
             }
             if ((Original_EVENT_LOCAL_STD_DEV_MAX.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[34].Value = ((double)(Original_EVENT_LOCAL_STD_DEV_MAX.Value));
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[35].Value = ((double)(Original_EVENT_LOCAL_STD_DEV_MAX.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[33].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[34].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[34].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[35].Value = global::System.DBNull.Value;
             }
             if ((Original_FILE_MIN.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[36].Value = ((double)(Original_FILE_MIN.Value));
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[37].Value = ((double)(Original_FILE_MIN.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[35].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[36].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[36].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[37].Value = global::System.DBNull.Value;
             }
             if ((Original_FILE_MAX.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[38].Value = ((double)(Original_FILE_MAX.Value));
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[39].Value = ((double)(Original_FILE_MAX.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[37].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[38].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[38].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[39].Value = global::System.DBNull.Value;
             }
             if ((Original_FILE_AVERAGE.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[40].Value = ((double)(Original_FILE_AVERAGE.Value));
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[41].Value = ((double)(Original_FILE_AVERAGE.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[39].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[40].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[40].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[41].Value = global::System.DBNull.Value;
             }
             if ((Original_FILE_STD_DEV.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[42].Value = ((double)(Original_FILE_STD_DEV.Value));
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[43].Value = ((double)(Original_FILE_STD_DEV.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[41].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[42].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[42].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[43].Value = global::System.DBNull.Value;
             }
             if ((Original_FILE_GOOD_COUNT.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[44].Value = ((int)(Original_FILE_GOOD_COUNT.Value));
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[45].Value = ((int)(Original_FILE_GOOD_COUNT.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[43].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[44].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[44].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[45].Value = global::System.DBNull.Value;
             }
             if ((Original_FILE_TOTAL_COUNT.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[46].Value = ((int)(Original_FILE_TOTAL_COUNT.Value));
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[47].Value = ((int)(Original_FILE_TOTAL_COUNT.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[45].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[46].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[46].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[47].Value = global::System.DBNull.Value;
+            }
+            if ((Original_SCAN_TYPE == null)) {
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[49].Value = global::System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[48].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[49].Value = ((string)(Original_SCAN_TYPE));
             }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
