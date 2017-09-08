@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.Statistics;
+﻿using MathNet.Numerics;
+using MathNet.Numerics.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,9 +19,29 @@ namespace MichaelsDataManipulator
         public List<string> time_data = new List<string>();
         public List<DateTime> time_stamp_data = new List<DateTime>();
         public List<double> relative_time_data = new List<double>();
+        public List<double> delta_time_data = new List<double>();
+
 
         public List<double>[] data;
         public int n_of_data_points;
+
+
+
+        public int running_avr_event_index
+        {
+            get; set;
+        } = -1;
+
+
+
+        public bool IsValid
+        {
+            get
+            {
+                return maximum > minimum;
+            }
+        }
+
 
         public string percentage_of_good_data
         {
@@ -51,7 +72,18 @@ namespace MichaelsDataManipulator
         public CLocalStandardDeviation local_std_dev;
 
         public string filename { get; set; }
-        public double total_average { get; set; }
+        public double total_average {
+            get
+            {
+                if (average.Count > 0)
+                {
+                    return average.Average();
+                }
+                return 0;
+                
+            }
+                
+        }
         public double total_average_ft_per_min
         {
             get
@@ -68,7 +100,7 @@ namespace MichaelsDataManipulator
         {
             get
             {
-                return relative_time_data.Count;
+                return head_speed.Count;
             }
         }
 
@@ -81,11 +113,18 @@ namespace MichaelsDataManipulator
         }
 
 
+
+        double? _dt = null;
         public double dt
         {
             get
             {
-                return relative_time_data[1];
+                if (!_dt.HasValue)
+                {
+                    _dt = delta_time_data.Average();
+                }
+
+                return _dt.Value;
             }
         }
 
@@ -283,17 +322,28 @@ namespace MichaelsDataManipulator
             }
         }
 
+        public double running_average_drop_trigger
+        {
+            get;set;
+        }
 
-        public CDataFile(string file_name, bool spike_filter, double accel_trigger, bool low_pass_filter, double low_pass_frequency, double running_avr_size_in_seconds, int local_std_dev_size_in_seconds)
+
+        public CDataFile(string file_name, bool spike_filter, double accel_trigger, bool low_pass_filter, double low_pass_frequency,
+            double running_avr_size_in_seconds, double local_std_dev_size_in_seconds, double running_avr_trigger,
+            bool test_for_file_integrity,
+            string logfile
+            )
         {
             this.filename = file_name;
             this.running_average_size_in_seconds = running_avr_size_in_seconds;
             this.local_standard_deviation_size_in_seconds = local_std_dev_size_in_seconds;
+            this.running_average_drop_trigger = running_avr_trigger;
 
+           
 
-            Read();
+            Read(this.filename, logfile);
 
-            if (n_of_good_data_points > 0)
+            if (n_of_good_data_points > 0 && running_average_size > 0 && (!test_for_file_integrity))
             {
 
                 running_average = new CRunningAverageList(running_average_size);
@@ -322,6 +372,7 @@ namespace MichaelsDataManipulator
                     CreateDerivedData();
                 }
             }
+ 
         }
 
 
@@ -341,62 +392,100 @@ namespace MichaelsDataManipulator
         }
 
 
-        void Read()
+        void Read(string f_name, string logfile)
         {
-            using (StreamReader sr = new StreamReader(filename))
+            using (StreamWriter log = File.AppendText(logfile))
             {
-                string line;
-
-                // Read and display lines from the file until 
-                // the end of the file is reached. 
-                while ((line = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(f_name))
                 {
-                    if (line != "")
+                    string line;
+
+                    UnitsNet.Duration? first_time_value = null;
+                    UnitsNet.Duration? relative_time = null;
+                    UnitsNet.Duration? last_relative_time = null;
+
+                    // Read and display lines from the file until 
+                    // the end of the file is reached. 
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        n_of_data_points++;
-
-                        string[] tokens = line.Split('\t');
-
-                        try
+                        if (line != "")
                         {
 
-                            if (tokens[6] != "NULL" && tokens[7] != "NULL" && tokens[8] != "NULL")
+                            try
                             {
+
+                                n_of_data_points++;
+
+                                string[] tokens = line.Split('\t');
+
+
                                 double seconds_since_1_1_1970 = double.Parse(tokens[0]);
 
                                 UnitsNet.Duration time = UnitsNet.Duration.FromSeconds(seconds_since_1_1_1970);
+
+                                if (!first_time_value.HasValue)
+                                {
+                                    first_time_value = time;
+                                }
+
 
                                 DateTime date_time = new DateTime((long)(time.Nanoseconds * 0.01));
 
                                 date_time = date_time.AddYears(1969);
                                 date_time = date_time.AddDays(-1);
 
+                                time_data.Add(tokens[0]);
+
+                                last_relative_time = relative_time;
+
+                                relative_time = time - first_time_value;
+
+                                UnitsNet.Duration? delta_t = relative_time - last_relative_time;
+
+                                
+
+                                if (delta_t.HasValue)
+                                {
+                                    delta_time_data.Add(delta_t.Value.Seconds);
+                                }
+                                else
+                                {
+                                    delta_time_data.Add(0);
+                                }
+
+                                time_stamp_data.Add(date_time);
+
                                 double tail_speed_ft_min = 0;
                                 double mid_speed_ft_min = 0;
                                 double head_speed_ft_min = 0;
 
-
-                                tail_speed_ft_min = double.Parse(tokens[8]);
-                                mid_speed_ft_min = double.Parse(tokens[7]);
-                                head_speed_ft_min = double.Parse(tokens[6]);
-
-                                if (tail_speed_ft_min > 0 && mid_speed_ft_min > 0 && head_speed_ft_min > 0)
+                                if (tokens[6] != "NULL" && tokens[7] != "NULL" && tokens[8] != "NULL")
                                 {
-                                    time_data.Add(tokens[0]);
-                                    relative_time_data.Add(time.Seconds);
-                                    time_stamp_data.Add(date_time);
-
-                                    tail_speed.Add(Speed.FromFeetPerSecond(tail_speed_ft_min / 60).MetersPerSecond);
-                                    mid_speed.Add(Speed.FromFeetPerSecond(mid_speed_ft_min / 60).MetersPerSecond);
-                                    head_speed.Add(Speed.FromFeetPerSecond(head_speed_ft_min / 60).MetersPerSecond);
+                                    try
+                                    {
+                                        tail_speed_ft_min = double.Parse(tokens[8]);
+                                        mid_speed_ft_min = double.Parse(tokens[7]);
+                                        head_speed_ft_min = double.Parse(tokens[6]);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        log.WriteLine("datafile:" + f_name + " bad speed data -> ex = "+ex.ToString() );
+                                    }
                                 }
+
+                                tail_speed.Add(Speed.FromFeetPerSecond(tail_speed_ft_min / 60).MetersPerSecond);
+                                mid_speed.Add(Speed.FromFeetPerSecond(mid_speed_ft_min / 60).MetersPerSecond);
+                                head_speed.Add(Speed.FromFeetPerSecond(head_speed_ft_min / 60).MetersPerSecond);
+
+                                relative_time_data.Add(relative_time.Value.Seconds);
+
+                            }
+
+                            catch (Exception ex)
+                            {
+                                log.WriteLine("datafile:" + f_name + " error -> ex = " + ex.ToString());
                             }
                         }
-                        catch
-                        {
-
-                        }
-
                     }
                 }
             }
@@ -407,14 +496,16 @@ namespace MichaelsDataManipulator
 
         public void CreateDerivedData()
         {
-            double t_min = relative_time_data.Min();
+            int n = running_average_size;
 
-            for (int i = 0; i < relative_time_data.Count; i++)
-            {
-                relative_time_data[i] -= t_min;
-            }
+            FixedSizeQueue<double> q_time = new FixedSizeQueue<double>(n);
 
-            //total_average = (head_speed.Average() + mid_speed.Average() + tail_speed.Average()) / 3;
+            FixedSizeQueue<double> q_head = new FixedSizeQueue<double>(n);
+            FixedSizeQueue<double> q_mid = new FixedSizeQueue<double>(n);
+            FixedSizeQueue<double> q_tail = new FixedSizeQueue<double>(n);
+
+            FixedSizeQueue<double> q_average = new FixedSizeQueue<double>(n);
+
 
             for (int i = 0; i < relative_time_data.Count(); i++)
             {
@@ -426,8 +517,7 @@ namespace MichaelsDataManipulator
                 lower.Add(Math.Min(Math.Min(head_speed[i], mid_speed[i]), tail_speed[i]));
 
                 double a = s / 3;
-
-
+                
                 average.Add(a);
 
                 running_average.AddValue(a);
@@ -440,12 +530,47 @@ namespace MichaelsDataManipulator
                 mid_speed_running_avr.AddValue(mid_speed[i]);
                 head_speed_running_avr.AddValue(head_speed[i]);
 
-                if (tail_speed_running_avr.LocalDeltaPercentage > 0.3)
+
+                if (running_avr_event_index == -1)
                 {
-                    
+
+                    q_time.Enqueue(relative_time_data[i]);
+
+                    q_head.Enqueue(head_speed_running_avr[i]);
+                    q_mid.Enqueue(mid_speed_running_avr[i]);
+                    q_tail.Enqueue(tail_speed_running_avr[i]);
+
+                    q_average.Enqueue((head_speed_running_avr[i] + mid_speed_running_avr[i] + tail_speed_running_avr[i]) / 3);
+
+
+                    double head_delta = q_head.Max() - q_head.Min();
+                    double mid_delta = q_mid.Max() - q_mid.Min();
+                    double tail_delta = q_tail.Max() - q_tail.Min();
+
+
+                    if (i > n && a > 0.1)
+                    {
+
+                        double[] x = q_time.ToArray();
+                        double[] y = q_average.ToArray();
+
+                        Tuple<double, double> p = Fit.Line(x, y);
+
+                        if (p.Item2 < 0)
+                        {
+                            if (head_delta / q_head.Max() > running_average_drop_trigger)
+                            {
+                                if (mid_delta / q_mid.Max() > running_average_drop_trigger)
+                                {
+                                    if (tail_delta / q_tail.Max() > running_average_drop_trigger)
+                                    {
+                                        running_avr_event_index = i;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-
-
             }
 
             sum_maximum = sum.Max();
@@ -804,43 +929,58 @@ namespace MichaelsDataManipulator
             return cstTime;
         }
 
-        public int IndexOfRunningAverageDropForAllSpeeds(double trigger_value)
+        //public int IndexOfRunningAverageDropForAllSpeeds(double trigger_value)
+        //{
+        //    int n = running_average_size;
+
+        //    FixedSizeQueue<double> q_head = new FixedSizeQueue<double>(n);
+        //    FixedSizeQueue<double> q_mid = new FixedSizeQueue<double>(n);
+        //    FixedSizeQueue<double> q_tail = new FixedSizeQueue<double>(n);
+
+        //    for (int i=0;i<this.n_of_good_data_points - n;i++)
+        //    {
+        //        q_head.Enqueue(head_speed_running_avr[i]);
+        //        q_mid.Enqueue(mid_speed_running_avr[i]);
+        //        q_tail.Enqueue(tail_speed_running_avr[i]);
+
+
+        //        double head_delta = q_head.Max() - q_head.Min();
+        //        double mid_delta = q_mid.Max() - q_mid.Min();
+        //        double tail_delta = q_tail.Max() - q_tail.Min();
+
+
+        //        if (i > n)
+        //        {
+        //            if (head_delta / q_head.Max() > trigger_value)
+        //            {
+        //                if (mid_delta/ q_mid.Max() > trigger_value)
+        //                {
+        //                    if (tail_delta / q_tail.Max() > trigger_value)
+        //                    {
+        //                        return i;
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //    }
+
+        //    return -1;
+
+        //}
+
+        public static DateTime DateEncodedInFilename(string filename)
         {
+            string s = Path.GetFileName(filename);
 
-            FixedSizeQueue<double> q_head = new FixedSizeQueue<double>(running_average_size);
-            FixedSizeQueue<double> q_mid = new FixedSizeQueue<double>(running_average_size);
-            FixedSizeQueue<double> q_tail = new FixedSizeQueue<double>(running_average_size);
+            string[] parts = s.Split('=');
 
-            for (int i=0;i<this.n_of_good_data_points - running_average_size;i++)
-            {
-                q_head.Enqueue(head_speed_running_avr[i]);
-                q_mid.Enqueue(mid_speed_running_avr[i]);
-                q_tail.Enqueue(tail_speed_running_avr[i]);
+            string d = parts[0];
 
+            d = d.Remove(0, 3);
 
-                double head_delta = q_head.Max() - q_head.Min();
-                double mid_delta = q_mid.Max() - q_mid.Min();
-                double tail_delta = q_tail.Max() - q_tail.Min();
-
-
-                if (q_head.Max()  / head_delta > trigger_value)
-                {
-                    if (q_mid.Max() / mid_delta > trigger_value)
-                    {
-                        if (q_tail.Max() / tail_delta > trigger_value)
-                        {
-                            return i;
-                        }
-                    }
-                }
-
-
-            }
-
-            return -1;
-
+            return DateTime.Parse(d);
         }
-
 
     }
 }

@@ -13,6 +13,8 @@ namespace MichaelsDataManipulator
 
 
         FixedSizeQueue<double> queue = null;
+        FixedSizeQueue<double> window = null;
+
 
         int _running_average_length;
         
@@ -30,41 +32,42 @@ namespace MichaelsDataManipulator
                     _running_average_length = value;
 
                     queue = new FixedSizeQueue<double>(_running_average_length);
+                    window = new FixedSizeQueue<double>(_running_average_length);
                 }
             }
         }
 
-        public double LocalMax
+        public double WindowLocalMax
         {
             get
             {
-                return queue.Max();
+                return window.Max();
             }
         }
 
-        public double LocalMin
+        public double WindowLocalMin
         {
             get
             {
-                return queue.Min();
+                return window.Min();
             }
         }
 
-        public double LocalDelta
+        public double WindowLocalDelta
         {
             get
             {
-                return LocalMax - LocalMin;
+                return WindowLocalMax - WindowLocalMin;
             }
         }
 
-        public double LocalDeltaPercentage
+        public double WindowLocalDeltaPercentage
         {
             get
             {
-                if (LocalMax != 0)
+                if (WindowLocalMax != 0)
                 {
-                    return LocalDelta / LocalMax;
+                    return WindowLocalDelta / WindowLocalMax;
                 }
                 return 0;
             }
@@ -78,6 +81,7 @@ namespace MichaelsDataManipulator
             _running_average_length = window_size;
 
             queue = new FixedSizeQueue<double>(_running_average_length);
+            window = new FixedSizeQueue<double>(_running_average_length);
         }
 
 
@@ -85,7 +89,11 @@ namespace MichaelsDataManipulator
         {
             queue.Enqueue(value);
 
-            this.Add(queue.Average());
+            double average = queue.Average();
+
+            window.Enqueue(average);
+
+            this.Add(average);
         }
 
 

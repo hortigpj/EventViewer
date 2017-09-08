@@ -66,6 +66,15 @@
             this.radLabel12 = new Telerik.WinControls.UI.RadLabel();
             this.radHScrollBar_index = new Telerik.WinControls.UI.RadHScrollBar();
             this.radTextBox_position = new Telerik.WinControls.UI.RadTextBox();
+            this.flowLayoutPanel_Checkboxes = new System.Windows.Forms.FlowLayoutPanel();
+            this.radCheckBox_head_speed = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_mid_speed = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_tail_speed = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_head_speed_running_avr = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_mid_speed_running_avr = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_tail_speed_running_avr = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_all_speeds_running_avr = new Telerik.WinControls.UI.RadCheckBox();
+            this.radCheckBox_all_speeds_local_std_dev = new Telerik.WinControls.UI.RadCheckBox();
             this.radPageViewPage_video = new Telerik.WinControls.UI.RadPageViewPage();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -98,6 +107,10 @@
             this.radDropDownButton_scans = new Telerik.WinControls.UI.RadDropDownButton();
             this.radSpinEditor_running_avr_decrease_trigger_value = new Telerik.WinControls.UI.RadSpinEditor();
             this.radLabel10 = new Telerik.WinControls.UI.RadLabel();
+            this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
+            this.radSpinEditor_running_avr_size = new Telerik.WinControls.UI.RadSpinEditor();
+            this.radLabel14 = new Telerik.WinControls.UI.RadLabel();
+            this.radSpinEditor_local_standard_deviation_size = new Telerik.WinControls.UI.RadSpinEditor();
             this.radProgressBar_ReadData = new Telerik.WinControls.UI.RadProgressBar();
             this.radDesktopAlert1 = new Telerik.WinControls.UI.RadDesktopAlert(this.components);
             this.radDock1 = new Telerik.WinControls.UI.Docking.RadDock();
@@ -107,19 +120,8 @@
             this.toolTabStrip2 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.toolWindow2 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.eventsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.radSpinEditor_running_avr_size = new Telerik.WinControls.UI.RadSpinEditor();
-            this.radLabel13 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel14 = new Telerik.WinControls.UI.RadLabel();
-            this.radSpinEditor_local_standard_deviation_size = new Telerik.WinControls.UI.RadSpinEditor();
-            this.flowLayoutPanel_Checkboxes = new System.Windows.Forms.FlowLayoutPanel();
-            this.radCheckBox_head_speed = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_mid_speed = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_tail_speed = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_tail_speed_running_avr = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_mid_speed_running_avr = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_head_speed_running_avr = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_all_speeds_running_avr = new Telerik.WinControls.UI.RadCheckBox();
-            this.radCheckBox_all_speeds_local_std_dev = new Telerik.WinControls.UI.RadCheckBox();
+            this.radLabel15 = new Telerik.WinControls.UI.RadLabel();
+            this.radDateTimePicker_ignore_before_date = new Telerik.WinControls.UI.RadDateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.radChartView_speed_over_time)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radPageView1)).BeginInit();
             this.radPageView1.SuspendLayout();
@@ -133,6 +135,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radHScrollBar_index)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radTextBox_position)).BeginInit();
+            this.flowLayoutPanel_Checkboxes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed_running_avr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed_running_avr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed_running_avr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_running_avr)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_local_std_dev)).BeginInit();
             this.radPageViewPage_video.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -167,6 +178,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.radDropDownButton_scans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_decrease_trigger_value)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel13)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_size)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_local_standard_deviation_size)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).BeginInit();
             this.radDock1.SuspendLayout();
@@ -178,19 +193,8 @@
             this.toolTabStrip2.SuspendLayout();
             this.toolWindow2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_size)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel13)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel14)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_local_standard_deviation_size)).BeginInit();
-            this.flowLayoutPanel_Checkboxes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed_running_avr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed_running_avr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed_running_avr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_running_avr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_local_std_dev)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDateTimePicker_ignore_before_date)).BeginInit();
             this.SuspendLayout();
             // 
             // radChartView_speed_over_time
@@ -299,7 +303,7 @@
             this.radTrackBar_chart_samples.SmallTickFrequency = 600;
             this.radTrackBar_chart_samples.TabIndex = 3;
             this.radTrackBar_chart_samples.Text = "radTrackBar1";
-            this.radTrackBar_chart_samples.Value = 100F;
+            this.radTrackBar_chart_samples.Value = 500F;
             this.radTrackBar_chart_samples.ValueChanged += new System.EventHandler(this.radTrackBar_chart_samples_ValueChanged);
             // 
             // tableLayoutPanel4
@@ -350,6 +354,104 @@
             this.radTextBox_position.RootElement.MinSize = new System.Drawing.Size(80, 24);
             this.radTextBox_position.Size = new System.Drawing.Size(94, 28);
             this.radTextBox_position.TabIndex = 5;
+            // 
+            // flowLayoutPanel_Checkboxes
+            // 
+            this.flowLayoutPanel_Checkboxes.AutoSize = true;
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_head_speed);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_mid_speed);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_tail_speed);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_head_speed_running_avr);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_mid_speed_running_avr);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_tail_speed_running_avr);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_all_speeds_running_avr);
+            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_all_speeds_local_std_dev);
+            this.flowLayoutPanel_Checkboxes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel_Checkboxes.Location = new System.Drawing.Point(0, 266);
+            this.flowLayoutPanel_Checkboxes.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel_Checkboxes.Name = "flowLayoutPanel_Checkboxes";
+            this.flowLayoutPanel_Checkboxes.Size = new System.Drawing.Size(1675, 18);
+            this.flowLayoutPanel_Checkboxes.TabIndex = 7;
+            // 
+            // radCheckBox_head_speed
+            // 
+            this.radCheckBox_head_speed.Location = new System.Drawing.Point(0, 0);
+            this.radCheckBox_head_speed.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_head_speed.Name = "radCheckBox_head_speed";
+            this.radCheckBox_head_speed.Size = new System.Drawing.Size(81, 18);
+            this.radCheckBox_head_speed.TabIndex = 0;
+            this.radCheckBox_head_speed.Text = "Head Speed";
+            this.radCheckBox_head_speed.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_head_speed_ToggleStateChanged);
+            // 
+            // radCheckBox_mid_speed
+            // 
+            this.radCheckBox_mid_speed.Location = new System.Drawing.Point(81, 0);
+            this.radCheckBox_mid_speed.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_mid_speed.Name = "radCheckBox_mid_speed";
+            this.radCheckBox_mid_speed.Size = new System.Drawing.Size(74, 18);
+            this.radCheckBox_mid_speed.TabIndex = 0;
+            this.radCheckBox_mid_speed.Text = "Mid Speed";
+            this.radCheckBox_mid_speed.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_mid_speed_ToggleStateChanged);
+            // 
+            // radCheckBox_tail_speed
+            // 
+            this.radCheckBox_tail_speed.Location = new System.Drawing.Point(155, 0);
+            this.radCheckBox_tail_speed.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_tail_speed.Name = "radCheckBox_tail_speed";
+            this.radCheckBox_tail_speed.Size = new System.Drawing.Size(72, 18);
+            this.radCheckBox_tail_speed.TabIndex = 0;
+            this.radCheckBox_tail_speed.Text = "Tail Speed";
+            this.radCheckBox_tail_speed.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_tail_speed_ToggleStateChanged);
+            // 
+            // radCheckBox_head_speed_running_avr
+            // 
+            this.radCheckBox_head_speed_running_avr.Location = new System.Drawing.Point(227, 0);
+            this.radCheckBox_head_speed_running_avr.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_head_speed_running_avr.Name = "radCheckBox_head_speed_running_avr";
+            this.radCheckBox_head_speed_running_avr.Size = new System.Drawing.Size(170, 18);
+            this.radCheckBox_head_speed_running_avr.TabIndex = 0;
+            this.radCheckBox_head_speed_running_avr.Text = "Head Speed Running Average";
+            this.radCheckBox_head_speed_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_head_speed_running_avr_ToggleStateChanged);
+            // 
+            // radCheckBox_mid_speed_running_avr
+            // 
+            this.radCheckBox_mid_speed_running_avr.Location = new System.Drawing.Point(397, 0);
+            this.radCheckBox_mid_speed_running_avr.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_mid_speed_running_avr.Name = "radCheckBox_mid_speed_running_avr";
+            this.radCheckBox_mid_speed_running_avr.Size = new System.Drawing.Size(163, 18);
+            this.radCheckBox_mid_speed_running_avr.TabIndex = 0;
+            this.radCheckBox_mid_speed_running_avr.Text = "Mid Speed Running Average";
+            this.radCheckBox_mid_speed_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_mid_speed_running_avr_ToggleStateChanged);
+            // 
+            // radCheckBox_tail_speed_running_avr
+            // 
+            this.radCheckBox_tail_speed_running_avr.Location = new System.Drawing.Point(560, 0);
+            this.radCheckBox_tail_speed_running_avr.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_tail_speed_running_avr.Name = "radCheckBox_tail_speed_running_avr";
+            this.radCheckBox_tail_speed_running_avr.Size = new System.Drawing.Size(161, 18);
+            this.radCheckBox_tail_speed_running_avr.TabIndex = 0;
+            this.radCheckBox_tail_speed_running_avr.Text = "Tail Speed Running Average";
+            this.radCheckBox_tail_speed_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_tail_speed_running_avr_ToggleStateChanged);
+            // 
+            // radCheckBox_all_speeds_running_avr
+            // 
+            this.radCheckBox_all_speeds_running_avr.Location = new System.Drawing.Point(721, 0);
+            this.radCheckBox_all_speeds_running_avr.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_all_speeds_running_avr.Name = "radCheckBox_all_speeds_running_avr";
+            this.radCheckBox_all_speeds_running_avr.Size = new System.Drawing.Size(161, 18);
+            this.radCheckBox_all_speeds_running_avr.TabIndex = 0;
+            this.radCheckBox_all_speeds_running_avr.Text = "All Speeds Running Average";
+            this.radCheckBox_all_speeds_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_all_speeds_running_avr_ToggleStateChanged);
+            // 
+            // radCheckBox_all_speeds_local_std_dev
+            // 
+            this.radCheckBox_all_speeds_local_std_dev.Location = new System.Drawing.Point(882, 0);
+            this.radCheckBox_all_speeds_local_std_dev.Margin = new System.Windows.Forms.Padding(0);
+            this.radCheckBox_all_speeds_local_std_dev.Name = "radCheckBox_all_speeds_local_std_dev";
+            this.radCheckBox_all_speeds_local_std_dev.Size = new System.Drawing.Size(148, 18);
+            this.radCheckBox_all_speeds_local_std_dev.TabIndex = 0;
+            this.radCheckBox_all_speeds_local_std_dev.Text = "All Speeds Local Std. Dev.";
+            this.radCheckBox_all_speeds_local_std_dev.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_all_speeds_local_std_dev_ToggleStateChanged);
             // 
             // radPageViewPage_video
             // 
@@ -575,7 +677,7 @@
             // 
             this.radGridView_data.AutoSizeRows = true;
             this.radGridView_data.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radGridView_data.Location = new System.Drawing.Point(3, 63);
+            this.radGridView_data.Location = new System.Drawing.Point(3, 89);
             // 
             // 
             // 
@@ -720,7 +822,7 @@
             this.radGridView_data.MasterTemplate.DataSource = this.simplotDatabaseDataSetBindingSource;
             this.radGridView_data.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.radGridView_data.Name = "radGridView_data";
-            this.radGridView_data.Size = new System.Drawing.Size(1690, 416);
+            this.radGridView_data.Size = new System.Drawing.Size(1690, 390);
             this.radGridView_data.TabIndex = 7;
             this.radGridView_data.Text = "radGridView1";
             this.radGridView_data.SelectionChanged += new System.EventHandler(this.radGridView_data_SelectionChanged);
@@ -756,10 +858,12 @@
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_running_avr_size);
             this.flowLayoutPanel2.Controls.Add(this.radLabel14);
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_local_standard_deviation_size);
+            this.flowLayoutPanel2.Controls.Add(this.radLabel15);
+            this.flowLayoutPanel2.Controls.Add(this.radDateTimePicker_ignore_before_date);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(1690, 30);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(1690, 56);
             this.flowLayoutPanel2.TabIndex = 7;
             // 
             // radLabel7
@@ -921,10 +1025,76 @@
             this.radLabel10.TabIndex = 0;
             this.radLabel10.Text = "[%]";
             // 
+            // radLabel13
+            // 
+            this.radLabel13.Enabled = false;
+            this.radLabel13.Location = new System.Drawing.Point(1079, 3);
+            this.radLabel13.Name = "radLabel13";
+            this.radLabel13.Size = new System.Drawing.Size(145, 18);
+            this.radLabel13.TabIndex = 0;
+            this.radLabel13.Text = "Running Average Length [s]";
+            // 
+            // radSpinEditor_running_avr_size
+            // 
+            this.radSpinEditor_running_avr_size.DecimalPlaces = 2;
+            this.radSpinEditor_running_avr_size.Location = new System.Drawing.Point(1230, 3);
+            this.radSpinEditor_running_avr_size.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.radSpinEditor_running_avr_size.Name = "radSpinEditor_running_avr_size";
+            this.radSpinEditor_running_avr_size.NullableValue = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.radSpinEditor_running_avr_size.Size = new System.Drawing.Size(100, 20);
+            this.radSpinEditor_running_avr_size.TabIndex = 12;
+            this.radSpinEditor_running_avr_size.TabStop = false;
+            this.radSpinEditor_running_avr_size.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            // 
+            // radLabel14
+            // 
+            this.radLabel14.Enabled = false;
+            this.radLabel14.Location = new System.Drawing.Point(1336, 3);
+            this.radLabel14.Name = "radLabel14";
+            this.radLabel14.Size = new System.Drawing.Size(131, 18);
+            this.radLabel14.TabIndex = 0;
+            this.radLabel14.Text = "Local Std. Dev. Length [s]";
+            // 
+            // radSpinEditor_local_standard_deviation_size
+            // 
+            this.radSpinEditor_local_standard_deviation_size.DecimalPlaces = 2;
+            this.radSpinEditor_local_standard_deviation_size.Location = new System.Drawing.Point(1473, 3);
+            this.radSpinEditor_local_standard_deviation_size.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.radSpinEditor_local_standard_deviation_size.Name = "radSpinEditor_local_standard_deviation_size";
+            this.radSpinEditor_local_standard_deviation_size.NullableValue = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.radSpinEditor_local_standard_deviation_size.Size = new System.Drawing.Size(100, 20);
+            this.radSpinEditor_local_standard_deviation_size.TabIndex = 12;
+            this.radSpinEditor_local_standard_deviation_size.TabStop = false;
+            this.radSpinEditor_local_standard_deviation_size.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            // 
             // radProgressBar_ReadData
             // 
             this.radProgressBar_ReadData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 39);
+            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 65);
             this.radProgressBar_ReadData.Name = "radProgressBar_ReadData";
             this.radProgressBar_ReadData.Size = new System.Drawing.Size(1690, 18);
             this.radProgressBar_ReadData.TabIndex = 5;
@@ -1028,157 +1198,25 @@
             this.toolWindow2.Size = new System.Drawing.Size(1696, 482);
             this.toolWindow2.Text = "Database";
             // 
-            // radSpinEditor_running_avr_size
+            // radLabel15
             // 
-            this.radSpinEditor_running_avr_size.Location = new System.Drawing.Point(1200, 3);
-            this.radSpinEditor_running_avr_size.Name = "radSpinEditor_running_avr_size";
-            this.radSpinEditor_running_avr_size.NullableValue = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.radSpinEditor_running_avr_size.Size = new System.Drawing.Size(100, 20);
-            this.radSpinEditor_running_avr_size.TabIndex = 12;
-            this.radSpinEditor_running_avr_size.TabStop = false;
-            this.radSpinEditor_running_avr_size.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
+            this.radLabel15.Enabled = false;
+            this.radLabel15.Location = new System.Drawing.Point(1579, 3);
+            this.radLabel15.Name = "radLabel15";
+            this.radLabel15.Size = new System.Drawing.Size(101, 18);
+            this.radLabel15.TabIndex = 0;
+            this.radLabel15.Text = "Ignore Before Date";
             // 
-            // radLabel13
+            // radDateTimePicker_ignore_before_date
             // 
-            this.radLabel13.Enabled = false;
-            this.radLabel13.Location = new System.Drawing.Point(1079, 3);
-            this.radLabel13.Name = "radLabel13";
-            this.radLabel13.Size = new System.Drawing.Size(115, 18);
-            this.radLabel13.TabIndex = 0;
-            this.radLabel13.Text = "Running Average Size";
-            // 
-            // radLabel14
-            // 
-            this.radLabel14.Enabled = false;
-            this.radLabel14.Location = new System.Drawing.Point(1306, 3);
-            this.radLabel14.Name = "radLabel14";
-            this.radLabel14.Size = new System.Drawing.Size(102, 18);
-            this.radLabel14.TabIndex = 0;
-            this.radLabel14.Text = "Local Std. Dev. Size";
-            // 
-            // radSpinEditor_local_standard_deviation_size
-            // 
-            this.radSpinEditor_local_standard_deviation_size.Location = new System.Drawing.Point(1414, 3);
-            this.radSpinEditor_local_standard_deviation_size.Name = "radSpinEditor_local_standard_deviation_size";
-            this.radSpinEditor_local_standard_deviation_size.NullableValue = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.radSpinEditor_local_standard_deviation_size.Size = new System.Drawing.Size(100, 20);
-            this.radSpinEditor_local_standard_deviation_size.TabIndex = 12;
-            this.radSpinEditor_local_standard_deviation_size.TabStop = false;
-            this.radSpinEditor_local_standard_deviation_size.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // flowLayoutPanel_Checkboxes
-            // 
-            this.flowLayoutPanel_Checkboxes.AutoSize = true;
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_head_speed);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_mid_speed);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_tail_speed);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_head_speed_running_avr);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_mid_speed_running_avr);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_tail_speed_running_avr);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_all_speeds_running_avr);
-            this.flowLayoutPanel_Checkboxes.Controls.Add(this.radCheckBox_all_speeds_local_std_dev);
-            this.flowLayoutPanel_Checkboxes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel_Checkboxes.Location = new System.Drawing.Point(0, 266);
-            this.flowLayoutPanel_Checkboxes.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel_Checkboxes.Name = "flowLayoutPanel_Checkboxes";
-            this.flowLayoutPanel_Checkboxes.Size = new System.Drawing.Size(1675, 18);
-            this.flowLayoutPanel_Checkboxes.TabIndex = 7;
-            // 
-            // radCheckBox_head_speed
-            // 
-            this.radCheckBox_head_speed.Location = new System.Drawing.Point(0, 0);
-            this.radCheckBox_head_speed.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_head_speed.Name = "radCheckBox_head_speed";
-            this.radCheckBox_head_speed.Size = new System.Drawing.Size(81, 18);
-            this.radCheckBox_head_speed.TabIndex = 0;
-            this.radCheckBox_head_speed.Text = "Head Speed";
-            this.radCheckBox_head_speed.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_head_speed_ToggleStateChanged);
-            // 
-            // radCheckBox_mid_speed
-            // 
-            this.radCheckBox_mid_speed.Location = new System.Drawing.Point(81, 0);
-            this.radCheckBox_mid_speed.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_mid_speed.Name = "radCheckBox_mid_speed";
-            this.radCheckBox_mid_speed.Size = new System.Drawing.Size(74, 18);
-            this.radCheckBox_mid_speed.TabIndex = 0;
-            this.radCheckBox_mid_speed.Text = "Mid Speed";
-            this.radCheckBox_mid_speed.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_mid_speed_ToggleStateChanged);
-            // 
-            // radCheckBox_tail_speed
-            // 
-            this.radCheckBox_tail_speed.Location = new System.Drawing.Point(155, 0);
-            this.radCheckBox_tail_speed.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_tail_speed.Name = "radCheckBox_tail_speed";
-            this.radCheckBox_tail_speed.Size = new System.Drawing.Size(72, 18);
-            this.radCheckBox_tail_speed.TabIndex = 0;
-            this.radCheckBox_tail_speed.Text = "Tail Speed";
-            this.radCheckBox_tail_speed.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_tail_speed_ToggleStateChanged);
-            // 
-            // radCheckBox_tail_speed_running_avr
-            // 
-            this.radCheckBox_tail_speed_running_avr.Location = new System.Drawing.Point(560, 0);
-            this.radCheckBox_tail_speed_running_avr.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_tail_speed_running_avr.Name = "radCheckBox_tail_speed_running_avr";
-            this.radCheckBox_tail_speed_running_avr.Size = new System.Drawing.Size(161, 18);
-            this.radCheckBox_tail_speed_running_avr.TabIndex = 0;
-            this.radCheckBox_tail_speed_running_avr.Text = "Tail Speed Running Average";
-            this.radCheckBox_tail_speed_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_tail_speed_running_avr_ToggleStateChanged);
-            // 
-            // radCheckBox_mid_speed_running_avr
-            // 
-            this.radCheckBox_mid_speed_running_avr.Location = new System.Drawing.Point(397, 0);
-            this.radCheckBox_mid_speed_running_avr.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_mid_speed_running_avr.Name = "radCheckBox_mid_speed_running_avr";
-            this.radCheckBox_mid_speed_running_avr.Size = new System.Drawing.Size(163, 18);
-            this.radCheckBox_mid_speed_running_avr.TabIndex = 0;
-            this.radCheckBox_mid_speed_running_avr.Text = "Mid Speed Running Average";
-            this.radCheckBox_mid_speed_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_mid_speed_running_avr_ToggleStateChanged);
-            // 
-            // radCheckBox_head_speed_running_avr
-            // 
-            this.radCheckBox_head_speed_running_avr.Location = new System.Drawing.Point(227, 0);
-            this.radCheckBox_head_speed_running_avr.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_head_speed_running_avr.Name = "radCheckBox_head_speed_running_avr";
-            this.radCheckBox_head_speed_running_avr.Size = new System.Drawing.Size(170, 18);
-            this.radCheckBox_head_speed_running_avr.TabIndex = 0;
-            this.radCheckBox_head_speed_running_avr.Text = "Head Speed Running Average";
-            this.radCheckBox_head_speed_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_head_speed_running_avr_ToggleStateChanged);
-            // 
-            // radCheckBox_all_speeds_running_avr
-            // 
-            this.radCheckBox_all_speeds_running_avr.Location = new System.Drawing.Point(721, 0);
-            this.radCheckBox_all_speeds_running_avr.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_all_speeds_running_avr.Name = "radCheckBox_all_speeds_running_avr";
-            this.radCheckBox_all_speeds_running_avr.Size = new System.Drawing.Size(161, 18);
-            this.radCheckBox_all_speeds_running_avr.TabIndex = 0;
-            this.radCheckBox_all_speeds_running_avr.Text = "All Speeds Running Average";
-            this.radCheckBox_all_speeds_running_avr.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_all_speeds_running_avr_ToggleStateChanged);
-            // 
-            // radCheckBox_all_speeds_local_std_dev
-            // 
-            this.radCheckBox_all_speeds_local_std_dev.Location = new System.Drawing.Point(882, 0);
-            this.radCheckBox_all_speeds_local_std_dev.Margin = new System.Windows.Forms.Padding(0);
-            this.radCheckBox_all_speeds_local_std_dev.Name = "radCheckBox_all_speeds_local_std_dev";
-            this.radCheckBox_all_speeds_local_std_dev.Size = new System.Drawing.Size(148, 18);
-            this.radCheckBox_all_speeds_local_std_dev.TabIndex = 0;
-            this.radCheckBox_all_speeds_local_std_dev.Text = "All Speeds Local Std. Dev.";
-            this.radCheckBox_all_speeds_local_std_dev.ToggleStateChanged += new Telerik.WinControls.UI.StateChangedEventHandler(this.radCheckBox_all_speeds_local_std_dev_ToggleStateChanged);
+            this.radDateTimePicker_ignore_before_date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.radDateTimePicker_ignore_before_date.Location = new System.Drawing.Point(3, 33);
+            this.radDateTimePicker_ignore_before_date.Name = "radDateTimePicker_ignore_before_date";
+            this.radDateTimePicker_ignore_before_date.Size = new System.Drawing.Size(164, 20);
+            this.radDateTimePicker_ignore_before_date.TabIndex = 14;
+            this.radDateTimePicker_ignore_before_date.TabStop = false;
+            this.radDateTimePicker_ignore_before_date.Text = "12/1/2016";
+            this.radDateTimePicker_ignore_before_date.Value = new System.DateTime(2016, 12, 1, 0, 0, 0, 0);
             // 
             // Form1
             // 
@@ -1206,6 +1244,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radHScrollBar_index)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radTextBox_position)).EndInit();
+            this.flowLayoutPanel_Checkboxes.ResumeLayout(false);
+            this.flowLayoutPanel_Checkboxes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed_running_avr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed_running_avr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed_running_avr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_running_avr)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_local_std_dev)).EndInit();
             this.radPageViewPage_video.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -1244,6 +1292,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.radDropDownButton_scans)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_decrease_trigger_value)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel13)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_size)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_local_standard_deviation_size)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).EndInit();
             this.radDock1.ResumeLayout(false);
@@ -1255,20 +1307,8 @@
             this.toolTabStrip2.ResumeLayout(false);
             this.toolWindow2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_size)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel13)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel14)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_local_standard_deviation_size)).EndInit();
-            this.flowLayoutPanel_Checkboxes.ResumeLayout(false);
-            this.flowLayoutPanel_Checkboxes.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_tail_speed_running_avr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_mid_speed_running_avr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_head_speed_running_avr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_running_avr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_all_speeds_local_std_dev)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDateTimePicker_ignore_before_date)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1344,6 +1384,8 @@
         private Telerik.WinControls.UI.RadCheckBox radCheckBox_tail_speed_running_avr;
         private Telerik.WinControls.UI.RadCheckBox radCheckBox_all_speeds_running_avr;
         private Telerik.WinControls.UI.RadCheckBox radCheckBox_all_speeds_local_std_dev;
+        private Telerik.WinControls.UI.RadLabel radLabel15;
+        private Telerik.WinControls.UI.RadDateTimePicker radDateTimePicker_ignore_before_date;
     }
 }
 
