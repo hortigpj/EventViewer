@@ -16,6 +16,16 @@ namespace MichaelsDataManipulator
 {
     public class CDataFile 
     {
+        public enum SCAN_TYPE
+        {
+            STD_DEV,
+            RUNNING_AVR,
+            MULTIPLE_RUNNING_AVR
+        };
+
+        public SCAN_TYPE scan_type { get; set; }
+
+
         public List<string> time_data = new List<string>();
         public List<DateTime> time_stamp_data = new List<DateTime>();
         public List<double> relative_time_data = new List<double>();
@@ -25,12 +35,16 @@ namespace MichaelsDataManipulator
         public List<double>[] data;
         public int n_of_data_points;
 
+        public List<int> event_index_list = new List<int>();
+        public List<double> event_incline_list = new List<double>();
 
 
         public int running_avr_event_index
         {
             get; set;
         } = -1;
+
+
 
 
 
@@ -60,11 +74,16 @@ namespace MichaelsDataManipulator
         public CRunningAverageList mid_speed_running_avr;
         public CRunningAverageList head_speed_running_avr;
 
+        public List<double> average_running_average_incline  = new List<double>();
+
+
         public List<double> sum = new List<double>();
         public List<double> upper = new List<double>();
         public List<double> lower = new List<double>();
 
         public List<double> average = new List<double>();
+
+        public List<double> mid_speed_peek_frequency = new List<double>();
 
         public CRunningAverageList running_average;
 
@@ -331,15 +350,17 @@ namespace MichaelsDataManipulator
         public CDataFile(string file_name, bool spike_filter, double accel_trigger, bool low_pass_filter, double low_pass_frequency,
             double running_avr_size_in_seconds, double local_std_dev_size_in_seconds, double running_avr_trigger,
             bool test_for_file_integrity,
-            string logfile
+            string logfile,
+            SCAN_TYPE scan_type,
+            bool do_fft
             )
         {
             this.filename = file_name;
             this.running_average_size_in_seconds = running_avr_size_in_seconds;
             this.local_standard_deviation_size_in_seconds = local_std_dev_size_in_seconds;
             this.running_average_drop_trigger = running_avr_trigger;
+            this.scan_type = scan_type;          
 
-           
 
             Read(this.filename, logfile);
 
@@ -354,9 +375,6 @@ namespace MichaelsDataManipulator
 
                 local_std_dev = new CLocalStandardDeviation(local_standard_deviation_size);
 
-
-
-
                 if (spike_filter)
                 {
                     SpikeFilterData(accel_trigger);
@@ -369,7 +387,26 @@ namespace MichaelsDataManipulator
 
                 if (n_of_good_data_points > 0)
                 {
-                    CreateDerivedData();
+                    switch (scan_type)
+                    {
+                        case SCAN_TYPE.MULTIPLE_RUNNING_AVR:
+                            {
+                                CreateDerivedData2(do_fft);
+                                break;
+                            }
+                        case SCAN_TYPE.RUNNING_AVR:
+                            {
+                                CreateDerivedData();
+                                break;
+                            }
+                        case SCAN_TYPE.STD_DEV:
+                            {
+                                CreateDerivedData();
+                                break;
+                            }
+                    }
+
+                    
                 }
             }
  
@@ -758,11 +795,20 @@ namespace MichaelsDataManipulator
 
 
 
-        public void ChartData(RadChartView rad_chart_view, LinearAxis horizontalAxis, LinearAxis verticalAxis, int index , int width)
+        public void ChartData(RadChartView rad_chart_view, LinearAxis horizontalAxis, LinearAxis verticalAxis1, LinearAxis verticalAxis2, int index , int width)
         {
             Debug.WriteLine("Creating chart");
 
-            int max_data_points = width;
+            int data_points = width;
+
+            int increment = data_points / 500;
+
+            if (increment < 1)
+            {
+                increment = 1;
+            }
+
+
 
             ScatterLineSeries tail_speed_series = new ScatterLineSeries();
             ScatterLineSeries mid_speed_series = new ScatterLineSeries();
@@ -773,47 +819,60 @@ namespace MichaelsDataManipulator
             ScatterLineSeries head_speed_running_avr_series = new ScatterLineSeries();
 
 
-            //ScatterLineSeries upper_series = new ScatterLineSeries();
-            //ScatterLineSeries lower_series = new ScatterLineSeries();
+            ScatterLineSeries mid_speed_fft_series = new ScatterLineSeries();
+            
 
             ScatterLineSeries running_average_series = new ScatterLineSeries();
             //ScatterLineSeries band_width_series = new ScatterLineSeries();
             ScatterLineSeries local_std_dev_series = new ScatterLineSeries();
+            ScatterLineSeries average_running_average_incline_series = new ScatterLineSeries();
 
 
             tail_speed_series.HorizontalAxis = horizontalAxis;
-            tail_speed_series.VerticalAxis = verticalAxis;
+            tail_speed_series.VerticalAxis = verticalAxis1;
 
             mid_speed_series.HorizontalAxis = horizontalAxis;
-            mid_speed_series.VerticalAxis = verticalAxis;
+            mid_speed_series.VerticalAxis = verticalAxis1;
 
             head_speed_series.HorizontalAxis = horizontalAxis;
-            head_speed_series.VerticalAxis = verticalAxis;
+            head_speed_series.VerticalAxis = verticalAxis1;
+
+            mid_speed_fft_series.HorizontalAxis = horizontalAxis;
+            mid_speed_fft_series.VerticalAxis = verticalAxis2;
+            
 
             tail_speed_running_avr_series.HorizontalAxis = horizontalAxis;
-            tail_speed_running_avr_series.VerticalAxis = verticalAxis;
+            tail_speed_running_avr_series.VerticalAxis = verticalAxis1;
 
             mid_speed_running_avr_series.HorizontalAxis = horizontalAxis;
-            mid_speed_running_avr_series.VerticalAxis = verticalAxis;
+            mid_speed_running_avr_series.VerticalAxis = verticalAxis1;
 
             head_speed_running_avr_series.HorizontalAxis = horizontalAxis;
-            head_speed_running_avr_series.VerticalAxis = verticalAxis;
+            head_speed_running_avr_series.VerticalAxis = verticalAxis1;
 
             //upper_series.HorizontalAxis = horizontalAxis;
             //upper_series.VerticalAxis = verticalAxis;
             //lower_series.HorizontalAxis = horizontalAxis;
             //lower_series.VerticalAxis = verticalAxis;
             running_average_series.HorizontalAxis = horizontalAxis;
-            running_average_series.VerticalAxis = verticalAxis;
+            running_average_series.VerticalAxis = verticalAxis1;
             //band_width_series.HorizontalAxis = horizontalAxis;
             //band_width_series.VerticalAxis = verticalAxis;
             local_std_dev_series.HorizontalAxis = horizontalAxis;
-            local_std_dev_series.VerticalAxis = verticalAxis;
+            local_std_dev_series.VerticalAxis = verticalAxis1;
+
+
+
+
+            average_running_average_incline_series.HorizontalAxis = horizontalAxis;
+            average_running_average_incline_series.VerticalAxis = verticalAxis1;
 
 
             tail_speed_series.LegendTitle = "Tail Speed";
             mid_speed_series.LegendTitle = "Mid Speed";
             head_speed_series.LegendTitle = "Head Speed";
+
+            mid_speed_fft_series.LegendTitle = "mid speed peek freq.";
 
             tail_speed_running_avr_series.LegendTitle = "Tail Speed Running Avr.";
             mid_speed_running_avr_series.LegendTitle = "Mid Speed Running Avr.";
@@ -826,14 +885,15 @@ namespace MichaelsDataManipulator
             //band_width_series.LegendTitle = "Band Width";
             local_std_dev_series.LegendTitle = "local Std dev";
 
-            
+            average_running_average_incline_series.LegendTitle = "Avr. Run. Avr. Incline";
+
 
 
             double t_min = double.MaxValue;
             double t_max = double.MinValue;
 
 
-            for (int i = 0; i < max_data_points; i++)
+            for (int i = 0; i < data_points; i+= increment)
             {
                 int j = index + i;
 
@@ -844,6 +904,10 @@ namespace MichaelsDataManipulator
                     mid_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed[j]).FeetPerSecond * 60));
                     head_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed[j]).FeetPerSecond * 60));
 
+                    if (mid_speed_peek_frequency.Count > 0 && j < mid_speed_peek_frequency.Count && j>=0)
+                    {
+                        mid_speed_fft_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], mid_speed_peek_frequency[j]));
+                    }
                     tail_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed_running_avr[j]).FeetPerSecond * 60));
                     mid_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed_running_avr[j]).FeetPerSecond * 60));
                     head_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed_running_avr[j]).FeetPerSecond * 60));
@@ -855,6 +919,8 @@ namespace MichaelsDataManipulator
                     running_average_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(running_average[j]).FeetPerSecond * 60));
                     //band_width_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(band_width[j]).FeetPerSecond * 60));
                     local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(local_std_dev[j]).FeetPerSecond * 60));
+
+                    average_running_average_incline_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(average_running_average_incline[j]).FeetPerSecond * 60));
 
                     if (relative_time_data[j] > t_max)
                     {
@@ -873,15 +939,17 @@ namespace MichaelsDataManipulator
 
             horizontalAxis.MajorStep = 0;
 
-            verticalAxis.Minimum = 0;
-            verticalAxis.Maximum = 250;
-            verticalAxis.MajorStep = 50;
+            verticalAxis1.Minimum = 0;
+            verticalAxis1.Maximum = 250;
+            verticalAxis1.MajorStep = 50;
 
 
             rad_chart_view.Series.Clear();
             rad_chart_view.Series.Add(tail_speed_series);
             rad_chart_view.Series.Add(mid_speed_series);
             rad_chart_view.Series.Add(head_speed_series);
+
+            rad_chart_view.Series.Add(mid_speed_fft_series);
 
             rad_chart_view.Series.Add(tail_speed_running_avr_series);
             rad_chart_view.Series.Add(mid_speed_running_avr_series);
@@ -891,11 +959,16 @@ namespace MichaelsDataManipulator
             rad_chart_view.Series.Add(running_average_series);
             //rad_chart_view.Series.Add(band_width_series);
             rad_chart_view.Series.Add(local_std_dev_series);
+            rad_chart_view.Series.Add(average_running_average_incline_series);
 
             foreach (ScatterSeries series in rad_chart_view.Series)
             {
                 series.PointSize = new SizeF(0, 0);
+                series.IsVisible = true;
             }
+
+            rad_chart_view.ShowTitle = true;
+            rad_chart_view.Title = filename;
 
         }
 
@@ -981,6 +1054,157 @@ namespace MichaelsDataManipulator
 
             return DateTime.Parse(d);
         }
+
+        public void CreateDerivedData2(bool do_fft)
+        {
+            int n = running_average_size;
+
+            FixedSizeQueue<double> q_time = new FixedSizeQueue<double>(n);
+
+            FixedSizeQueue<double> q_head = new FixedSizeQueue<double>(n);
+            FixedSizeQueue<double> q_mid = new FixedSizeQueue<double>(n);
+            FixedSizeQueue<double> q_tail = new FixedSizeQueue<double>(n);
+
+            FixedSizeQueue<double> q_average = new FixedSizeQueue<double>(n);
+
+            FixedSizeQueue<double> q_average_fft = new FixedSizeQueue<double>(1026);
+
+            bool scanning_for_running_average_event = true;
+
+            
+
+
+            for (int i = 0; i < relative_time_data.Count(); i++)
+            {
+                double s = head_speed[i] + tail_speed[i] + mid_speed[i];
+
+                sum.Add(s);
+
+                upper.Add(Math.Max(Math.Max(head_speed[i], mid_speed[i]), tail_speed[i]));
+                lower.Add(Math.Min(Math.Min(head_speed[i], mid_speed[i]), tail_speed[i]));
+
+                double a = s / 3;
+
+                average.Add(a);
+
+                // FFT
+                if (do_fft)
+                {
+
+                    q_average_fft.Enqueue(mid_speed[i]);
+
+                    if (q_average_fft.Count >= 1026)
+                    {
+                        double[] samples = q_average_fft.ToArray();
+
+                        //samples = MathNet.Numerics.Generate.Sinusoidal(1026, 100, 20, 1.0);
+
+                        MathNet.Numerics.IntegralTransforms.Fourier.ForwardReal(samples, 1024);
+
+                        List<double> spectrum = new List<double>();
+
+                        for (int j = 1; j < 513; j++)
+                        {
+                            spectrum.Add(Math.Abs(samples[j]));
+                        }
+
+                        double[] frequency_scale = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(1024, 50);
+
+                        double peek = spectrum.Max();
+
+                        int peek_index = spectrum.IndexOf(peek);
+
+                        double peek_freq = frequency_scale[peek_index];
+
+                        mid_speed_peek_frequency.Add(peek_freq);
+                    }
+
+                }
+
+                running_average.AddValue(a);
+
+                band_width.Add(upper[i] - lower[i]);
+
+                local_std_dev.AddValue(a);
+
+                tail_speed_running_avr.AddValue(tail_speed[i]);
+                mid_speed_running_avr.AddValue(mid_speed[i]);
+                head_speed_running_avr.AddValue(head_speed[i]);
+
+
+
+
+
+                if (running_avr_event_index == -1)
+                {
+
+                    q_time.Enqueue(relative_time_data[i]);
+
+                    q_head.Enqueue(head_speed_running_avr[i]);
+                    q_mid.Enqueue(mid_speed_running_avr[i]);
+                    q_tail.Enqueue(tail_speed_running_avr[i]);
+
+                    q_average.Enqueue((head_speed_running_avr[i] + mid_speed_running_avr[i] + tail_speed_running_avr[i]) / 3);
+
+
+                    double head_delta = q_head.Max() - q_head.Min();
+                    double mid_delta = q_mid.Max() - q_mid.Min();
+                    double tail_delta = q_tail.Max() - q_tail.Min();
+
+                    
+
+                    if (i > n )
+                    {
+                        double[] x = q_time.ToArray();
+                        double[] y = q_average.ToArray();
+
+                        Tuple<double, double> p = Fit.Line(x, y);
+
+                        double incline = p.Item2;
+
+                        average_running_average_incline.Add(Math.Abs(incline));
+
+                        if (incline > -0.01 && incline < 0.01)
+                        {
+                            scanning_for_running_average_event = true;
+                        }
+
+                        if (incline < 0 && scanning_for_running_average_event && a > 0.1)
+                        {
+                            if (head_delta / q_head.Max() > running_average_drop_trigger)
+                            {
+                                if (mid_delta / q_mid.Max() > running_average_drop_trigger)
+                                {
+                                    if (tail_delta / q_tail.Max() > running_average_drop_trigger)
+                                    {
+
+
+                                        event_index_list.Add(i);
+                                        event_incline_list.Add(incline);
+
+                                        scanning_for_running_average_event = false;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        average_running_average_incline.Add(0);
+                    }
+                }
+            }
+
+            sum_maximum = sum.Max();
+            maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()), tail_speed.Max());
+            minimum = Math.Min(Math.Min(head_speed.Min(), mid_speed.Min()), tail_speed.Min());
+
+            std_dev_of_average = ArrayStatistics.StandardDeviation(average.ToArray());
+
+        }
+
+
 
     }
 }
