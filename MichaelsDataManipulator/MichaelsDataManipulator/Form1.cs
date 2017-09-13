@@ -27,6 +27,7 @@ namespace MichaelsDataManipulator
         bool ignore_events = true;
 
         Form_LoadScreen form_load = new Form_LoadScreen();
+        Form_Wait wait_form = new Form_Wait();
 
         public double SamplingRate
         {
@@ -458,18 +459,18 @@ namespace MichaelsDataManipulator
                 int n_letters = 0;
                 foreach (string drive_letter in drive_letters)
                 {
-                    //try
-                    //{
-                    //    string[] file_names = Directory.GetFiles(drive_letter + "\\DATA", "*.mp4", SearchOption.AllDirectories);
-                    //    all_file_names.AddRange(file_names.ToList<string>());
+                    try
+                    {
+                        string[] file_names = Directory.GetFiles(drive_letter + "\\DATA", "*.mp4", SearchOption.AllDirectories);
+                        all_file_names.AddRange(file_names.ToList<string>());
 
-                    //    search_form.radProgressBar_search_for_video_files_drive_letters.Text = "scanning drive letter: " + drive_letter;
-                    //    search_form.radProgressBar_search_for_video_files_drive_letters.Value1 = ++n_letters;
+                        search_form.radProgressBar_search_for_video_files_drive_letters.Text = "scanning drive letter: " + drive_letter;
+                        search_form.radProgressBar_search_for_video_files_drive_letters.Value1 = ++n_letters;
 
-                    //    Application.DoEvents();
-                    //}
-                    //catch (Exception ex)
-                    //{ }
+                        Application.DoEvents();
+                    }
+                    catch (Exception ex)
+                    { }
                 }
 
                 int n_files = 0;
@@ -564,8 +565,6 @@ namespace MichaelsDataManipulator
 
         void PopulateDatabase()
         {
-
-
             string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
 
             List<string> fn = new List<string>();
@@ -819,9 +818,9 @@ namespace MichaelsDataManipulator
 
             }
 
-            //adapter.Update(simplotDatabaseDataSet);
+            adapter.Update(simplotDatabaseDataSet);
 
-            //simplotDatabaseDataSet.AcceptChanges();
+            simplotDatabaseDataSet.AcceptChanges();
 
             Application.DoEvents();
 
@@ -838,6 +837,8 @@ namespace MichaelsDataManipulator
             if (radGridView_data.SelectedRows.Count > 0)
             {
                 Cursor = Cursors.WaitCursor;
+                wait_form.Show();
+
                 Application.DoEvents();
 
                 this.radDesktopAlert1.Hide();
@@ -889,6 +890,7 @@ namespace MichaelsDataManipulator
             }
 
             Cursor = Cursors.Default;
+            wait_form.Hide();
             Application.DoEvents();
         }
 
