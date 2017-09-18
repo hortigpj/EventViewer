@@ -43,7 +43,16 @@ namespace MichaelsDataManipulator
         public new void AddValue(double value)
         {
             queue.Enqueue(value);
-            this.Add(ArrayStatistics.StandardDeviation(queue.ToArray()));
+            double v = ArrayStatistics.StandardDeviation(queue.ToArray());
+
+            if (!double.IsNaN(v))
+            {
+                this.Add(v);
+            }
+            else
+            {
+                this.Add(0);
+            }
         }
 
 

@@ -29,6 +29,38 @@ namespace MichaelsDataManipulator
         Form_LoadScreen form_load = new Form_LoadScreen();
         Form_Wait wait_form = new Form_Wait();
 
+        public int allow_for_1_event_per_seconds
+        {
+            get
+            {
+                return (int)radSpinEditor_allow_for_1_event_per_seconds.Value;
+            }
+        }
+
+
+        public double? current_event_time
+        {
+            get
+            {
+                if (current_datafile != null)
+                {
+
+                    return double.Parse(current_datafile.time_data[current_file_index]);
+                }
+
+                return null;
+            }
+        }
+
+        public double LocalStdDevTrigger
+        {
+            get
+            {
+                return (double)radSpinEditor_local_std_dev_trigger.Value;
+            }
+        }
+
+
         public double SamplingRate
         {
             get
@@ -206,6 +238,8 @@ namespace MichaelsDataManipulator
 
         LinearAxis verticalAxis_speed_in_ft_min;
         LinearAxis verticalAxis_frequency_in_Hz;
+        LinearAxis verticalAxis_std_dev;
+
 
         public double delta_t_min
         {
@@ -275,9 +309,16 @@ namespace MichaelsDataManipulator
             verticalAxis_frequency_in_Hz.Minimum = 0;
             verticalAxis_frequency_in_Hz.Maximum = 50;
 
+            verticalAxis_std_dev = new LinearAxis();
+            verticalAxis_std_dev.AxisType = AxisType.Second;
+            verticalAxis_std_dev.HorizontalLocation = AxisHorizontalLocation.Right;
+            verticalAxis_std_dev.Title = "Std.Dev.";
+            verticalAxis_std_dev.Minimum = 0;
+            verticalAxis_std_dev.Maximum = 0.1;
 
             area.Axes.Add(verticalAxis_speed_in_ft_min);
             area.Axes.Add(verticalAxis_frequency_in_Hz);
+            area.Axes.Add(verticalAxis_std_dev);
 
             RadMenuItem radmenuitem_std_dev_scan = new RadMenuItem("Std. Dev. Scan");
             radmenuitem_std_dev_scan.Click += Radmenuitem_std_dev_scan_Click;
@@ -305,7 +346,8 @@ namespace MichaelsDataManipulator
                 flowLayoutPanel_range_buttons.Controls.Add(range_button);
             }
 
-            
+            // add video player
+
 
 
             /// tests
@@ -342,8 +384,12 @@ namespace MichaelsDataManipulator
             if (current_datafile != null)
             {
                 ChartLogic();
-                current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, current_file_index - chart_sample_size / 2, chart_sample_size);
-                
+                current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, verticalAxis_std_dev,current_file_index - chart_sample_size / 2, chart_sample_size);
+
+                userControl_Spectrum1.datafile = current_datafile;
+                userControl_Spectrum1.index_from = current_file_index - chart_sample_size / 2;
+                userControl_Spectrum1.index_to = userControl_Spectrum1.index_from + chart_sample_size;
+
                 Application.DoEvents();
             }
         }
@@ -351,19 +397,18 @@ namespace MichaelsDataManipulator
 
         private void Radmenuitem_multiple_running_average_scan_Click(object sender, EventArgs e)
         {
-            MultipleRunningAverageScan();
+            Scan(CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, true);
             //MultipleRunningAverageScanParallel();
         }
 
 
         private void Radmenuitem_running_average_scan_Click(object sender, EventArgs e)
         {
-            RunningAverageScan();
         }
 
         private void Radmenuitem_std_dev_scan_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Scan(CDataFile.SCAN_TYPE.STD_DEV, true);
         }
 
 
@@ -437,99 +482,129 @@ namespace MichaelsDataManipulator
 
         }
 
-        private void ListVideo(double event_time, string filename)
+        private void ListVideo(double? event_time, CDataFile datafile)
         {
-            this.radListView_video.Items.Clear();
+            ignore_events = true;
 
-            this.radSpinEditor_event_time_code.Value = (decimal)event_time;
-
-            string path = Path.GetPathRoot(filename);
-
-            List<string> all_file_names = new List<string>();
-
-            Form_searching_for_video_files search_form = new Form_searching_for_video_files();
-
-            if (drive_letters.Count > 0)
+            if (event_time.HasValue && datafile != null)
             {
+                axWindowsMediaPlayer1.URL = "";
 
-                search_form.radProgressBar_search_for_video_files_drive_letters.Maximum = drive_letters.Count - 1;
+                this.radListView_video.Items.Clear();
 
-                search_form.Show();
+                this.radSpinEditor_event_time_code.Value = (decimal)event_time;
 
-                int n_letters = 0;
-                foreach (string drive_letter in drive_letters)
+                string path = Path.GetPathRoot(datafile.filename);
+
+                List<string> all_file_names = new List<string>();
+
+                Form_searching_for_video_files search_form = new Form_searching_for_video_files();
+
+                if (drive_letters.Count > 0)
                 {
-                    try
+
+                    search_form.radProgressBar_search_for_video_files_drive_letters.Maximum = drive_letters.Count - 1;
+
+                    search_form.Show();
+
+                    int n_letters = 0;
+                    foreach (string drive_letter in drive_letters)
                     {
-                        string[] file_names = Directory.GetFiles(drive_letter + "\\DATA", "*.mp4", SearchOption.AllDirectories);
-                        all_file_names.AddRange(file_names.ToList<string>());
-
-                        search_form.radProgressBar_search_for_video_files_drive_letters.Text = "scanning drive letter: " + drive_letter;
-                        search_form.radProgressBar_search_for_video_files_drive_letters.Value1 = ++n_letters;
-
-                        Application.DoEvents();
-                    }
-                    catch (Exception ex)
-                    { }
-                }
-
-                int n_files = 0;
-
-                search_form.radProgressBar_search_for_video_files_files.Maximum = all_file_names.Count;
-
-                foreach (string video_file in all_file_names)
-                {
-                    if (n_files % 10 == 0)
-                    {
-                        search_form.radProgressBar_search_for_video_files_files.Text = "scanning file " + n_files.ToString() + " of " + all_file_names.Count().ToString();
-                        search_form.radProgressBar_search_for_video_files_files.Value1 = ++n_files;
-
-                        Application.DoEvents();
-                    }
-
-                    string fn = Path.GetFileNameWithoutExtension(video_file);
-
-                    string[] subs = fn.Split('-');
-
-                    if (subs.GetUpperBound(0) == 5)
-                    {
-                        string time_code = subs[subs.GetUpperBound(0)];
-
-                        time_code = time_code.Substring(0, 10);
-
-                        double start_time_of_video = double.Parse(time_code);
-
-                        double time_min = event_time + delta_t_min;
-                        double time_max = event_time + delta_t_max;
-
-                        if (start_time_of_video > time_min && start_time_of_video < time_max)
+                        try
                         {
-                            double event_delta_t = event_time - start_time_of_video;
+                            string[] file_names = Directory.GetFiles(drive_letter + "\\DATA", "*.mp4", SearchOption.AllDirectories);
+                            all_file_names.AddRange(file_names.ToList<string>());
 
-                            TimeSpan event_delta_time_span = new TimeSpan(0, 0, (int)event_delta_t);
+                            search_form.radProgressBar_search_for_video_files_drive_letters.Text = "scanning drive letter: " + drive_letter;
+                            search_form.radProgressBar_search_for_video_files_drive_letters.Value1 = ++n_letters;
 
-                            ListViewDataItem item = new ListViewDataItem();
-                            this.radListView_video.Items.Add(item);
-                            item.Text = video_file;
+                            Application.DoEvents();
+                        }
+                        catch (Exception ex)
+                        { }
+                    }
 
-                            item[0] = video_file;
-                            item[1] = start_time_of_video.ToString();
-                            item[2] = event_delta_time_span.ToString();
+                    int n_files = 0;
+
+                    search_form.radProgressBar_search_for_video_files_files.Maximum = all_file_names.Count;
+
+                    foreach (string video_file in all_file_names)
+                    {
+                        if (n_files % 10 == 0)
+                        {
+                            search_form.radProgressBar_search_for_video_files_files.Text = "scanning file " + n_files.ToString() + " of " + all_file_names.Count().ToString();
+                            search_form.radProgressBar_search_for_video_files_files.Value1 = ++n_files;
+
+                            Application.DoEvents();
+                        }
+
+                        if (video_file.Contains(datafile.conveyor))
+                        {
+                            string fn = Path.GetFileNameWithoutExtension(video_file);
+
+                            string[] subs = fn.Split('-');
+
+                            if (subs.GetUpperBound(0) == 5)
+                            {
+                                string time_code = subs[subs.GetUpperBound(0)];
+
+                                time_code = time_code.Substring(0, 10);
+
+                                double start_time_of_video = double.Parse(time_code);
+
+                                double time_min = event_time.Value + delta_t_min;
+                                double time_max = event_time.Value + delta_t_max;
+
+
+
+                                if (start_time_of_video > time_min && start_time_of_video < time_max)
+                                {
+                                    double event_delta_t = event_time.Value - start_time_of_video;
+
+                                    TimeSpan event_delta_time_span = new TimeSpan(0, 0, (int)event_delta_t);
+
+                                    ListViewDataItem item = new ListViewDataItem();
+                                    this.radListView_video.Items.Add(item);
+                                    item.Text = video_file;
+
+                                    item[0] = video_file;
+                                    item[1] = start_time_of_video.ToString();
+                                    item[2] = event_delta_time_span.ToString();
+
+                                    if (video_file.Contains("AXIS - P1425-LE - 1"))
+                                    {
+                                        item[3] = "Camera 1";
+                                    }
+                                    if (video_file.Contains("AXIS - P1425-LE - 2"))
+                                    {
+                                        item[3] = "Camera 2";
+                                    }
+                                    if (video_file.Contains("AXIS - P1425-LE - 3"))
+                                    {
+                                        item[3] = "Camera 3";
+                                    }
+
+
+                                }
+                            }
                         }
                     }
+                    search_form.Hide();
                 }
             }
-            search_form.Hide();
+
+
+            ignore_events = false;
         }
 
         private void radSpinEditor_delta_t_min_ValueChanged(object sender, EventArgs e)
         {
-            radGridView_events_SelectionChanged(null, null);
+            ListVideo(current_event_time, current_datafile);
         }
 
         private void radSpinEditor_delta_t_max_ValueChanged(object sender, EventArgs e)
         {
-            radGridView_events_SelectionChanged(null, null);
+            ListVideo(current_event_time, current_datafile);
         }
 
         private void radListView_video_DoubleClick(object sender, EventArgs e)
@@ -563,7 +638,7 @@ namespace MichaelsDataManipulator
         }
 
 
-        void PopulateDatabase()
+        void LocalStdDevScan()
         {
             string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
 
@@ -624,9 +699,9 @@ namespace MichaelsDataManipulator
 
                 CDataFile data_file = new CDataFile(file_name, radCheckBox_spike_filter.Checked, spike_filter_accel,
                     radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
-                    running_average_length_in_seconds, local_standard_deviation_length_in_seconds,
+                    running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
                     speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.STD_DEV
-                    , DoFFT);
+                    , DoFFT, allow_for_1_event_per_seconds);
 
                 float progress = ++i / (float)file_names.Count();
 
@@ -654,12 +729,6 @@ namespace MichaelsDataManipulator
                     min_max_time_span_in_seconds = max_end_time_code - min_start_time_code;
 
                     expected_data_points = (int)(min_max_time_span_in_seconds * 100);
-
-                    //radTextBox_counted_data_points.Text = counted_data_points.ToString();
-
-                    //radTextBox_expected_data_points.Text = expected_data_points.ToString();
-
-                    //radTextBox_data_point_ratio.Text = (100 * (double)counted_data_points / (double)expected_data_points).ToString() + "%";
 
                     AddDataFileToDataBase(data_file, file_name, CDataFile.SCAN_TYPE.STD_DEV);
 
@@ -752,7 +821,7 @@ namespace MichaelsDataManipulator
                     current_datafile = datafile;
                     current_file_index = index_of_event;
 
-                    current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, current_file_index - chart_sample_size / 2, chart_sample_size);
+                    current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, verticalAxis_std_dev, current_file_index - chart_sample_size / 2, chart_sample_size);
                     ChartLogic();
 
 
@@ -852,10 +921,14 @@ namespace MichaelsDataManipulator
                 if (File.Exists(changed_filename))
                 {
 
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+
+
                     current_datafile = new CDataFile(changed_filename, radCheckBox_spike_filter.Checked, spike_filter_accel,
                         radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
-                        running_average_length_in_seconds, local_standard_deviation_length_in_seconds,
-                        speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, DoFFT);
+                        running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
+                        speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.STD_DEV, DoFFT, allow_for_1_event_per_seconds);
 
                     if (event_file_index != -1)
                     {
@@ -866,17 +939,19 @@ namespace MichaelsDataManipulator
                         }
 
                         Application.DoEvents();
-                        current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, current_file_index - chart_sample_size / 2, chart_sample_size);
+                        current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, verticalAxis_std_dev, current_file_index - chart_sample_size / 2, chart_sample_size);
                         ChartLogic();
 
+                        userControl_Spectrum1.datafile = current_datafile;
+                        userControl_Spectrum1.index_from = current_file_index - chart_sample_size / 2;
+                        userControl_Spectrum1.index_to = userControl_Spectrum1.index_from + chart_sample_size;
+
+                        //userControl_Spectrum1.Draw();
 
                         radPropertyGrid1.SelectedObject = current_datafile;
 
                         // create the video list
-
-                        double event_time = double.Parse(current_datafile.time_data[current_file_index]);
-
-                        ListVideo(event_time, filename);
+                        ListVideo(current_event_time, current_datafile);
                     }
                 }
                 else
@@ -907,7 +982,7 @@ namespace MichaelsDataManipulator
         {
             if (current_datafile != null)
             {
-                current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, current_file_index - chart_sample_size / 2, chart_sample_size);
+                current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, verticalAxis_std_dev, current_file_index - chart_sample_size / 2, chart_sample_size);
                 ChartLogic();
             }
         }
@@ -1056,179 +1131,6 @@ namespace MichaelsDataManipulator
 
         }
 
-        public void RunningAverageScan()
-        {
-            string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
-            //string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.TopDirectoryOnly);
-
-            List<string> fn = new List<string>();
-            fn.AddRange(file_names);
-
-            fn.Sort();
-
-            file_names = fn.ToArray();
-
-            ignore_events = true;
-
-            float i = 0;
-
-            long aver_ticks = 0;
-            long old_ticks = 0;
-
-            Stopwatch stopwatch = new Stopwatch();
-
-            stopwatch.Start();
-
-            long start_ticks = stopwatch.ElapsedMilliseconds;
-
-            foreach (string file_name in file_names)
-            {
-                Debug.WriteLine("reading:" + file_name);
-
-                long now_ticks = stopwatch.ElapsedMilliseconds;
-
-                long ticks_passed = now_ticks - old_ticks;
-
-                long ticks_passed_total = now_ticks - start_ticks;
-
-                old_ticks = now_ticks;
-
-                aver_ticks += ticks_passed;
-
-                aver_ticks /= 2;
-
-                long ticks_total = aver_ticks * file_names.Count();
-
-                long ticks_left = ticks_total - ticks_passed_total;
-
-                if (ticks_left < 0)
-                    ticks_left = 0;
-
-                Duration time_left = Duration.FromMilliseconds((double)(ticks_left));
-                Duration time_per = Duration.FromMilliseconds((double)(ticks_passed));
-
-                float progress = ++i / (float)file_names.Count();
-
-                radProgressBar_ReadData.Value1 = (int)(progress * 100);
-                radProgressBar_ReadData.Text = i.ToString() + "/" + file_names.Count().ToString() + " "
-                    + ((int)time_left.ToTimeSpan().TotalMinutes).ToString() + " min left" +
-                    " per : " + ((int)time_per.ToTimeSpan().TotalSeconds).ToString() + " sec";
-
-                Application.DoEvents();
-
-                if (CDataFile.DateEncodedInFilename(file_name) < IgnoreBeforeDate)
-                {
-                    using (StreamWriter log = File.AppendText(logfile))
-                    {
-                        log.WriteLine("skipped file due to date:" + file_name);
-                    }
-
-                    continue;
-                }
-
-                if (IsFileAndScanTypeAlreadyInDataBase(file_name, CDataFile.SCAN_TYPE.RUNNING_AVR.ToString()))
-                {
-                    continue;
-                }
-
-                if (IsFileAndScanTypeAlreadyInDataBase(file_name, "BAD_SET"))
-                {
-                    continue;
-                }
-
-
-                CDataFile data_file = new CDataFile(file_name, radCheckBox_spike_filter.Checked, spike_filter_accel,
-                    radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
-                    running_average_length_in_seconds, local_standard_deviation_length_in_seconds,
-                    speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.RUNNING_AVR, DoFFT);
-
-                if (data_file.n_of_good_data_points > 0)
-                {
-                    ignore_events = true;
-
-                    AddDataFileToDataBase(data_file, file_name, CDataFile.SCAN_TYPE.RUNNING_AVR);
-
-                    ignore_events = false;
-
-                    Application.DoEvents();
-                }
-
-                data_file = null;
-            }
-            ignore_events = false;
-
-
-        }
-
-        //public void ScanForFileIntegrity()
-        //{
-        //    string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
-
-        //    List<string> fn = new List<string>();
-        //    fn.AddRange(file_names);
-
-        //    fn.Sort();
-
-        //    file_names = fn.ToArray();
-
-        //    ignore_events = true;
-
-        //    float i = 0;
-
-        //    long aver_ticks = 0;
-        //    long old_ticks = 0;
-
-        //    Stopwatch stopwatch = new Stopwatch();
-
-        //    stopwatch.Start();
-
-        //    long start_ticks = stopwatch.ElapsedMilliseconds;
-
-        //    foreach (string file_name in file_names)
-        //    {
-        //        Debug.WriteLine("reading:" + file_name);
-
-        //        long now_ticks = stopwatch.ElapsedMilliseconds;
-
-        //        long ticks_passed = now_ticks - old_ticks;
-
-        //        long ticks_passed_total = now_ticks - start_ticks;
-
-        //        old_ticks = now_ticks;
-
-        //        aver_ticks += ticks_passed;
-
-        //        aver_ticks /= 2;
-
-        //        long ticks_total = aver_ticks * file_names.Count();
-
-        //        long ticks_left = ticks_total - ticks_passed_total;
-
-        //        if (ticks_left < 0)
-        //            ticks_left = 0;
-
-        //        Duration time_left = Duration.FromMilliseconds((double)(ticks_left));
-        //        Duration time_per = Duration.FromMilliseconds((double)(ticks_passed));
-
-
-        //        CDataFile data_file = new CDataFile(file_name, radCheckBox_spike_filter.Checked,
-        //            spike_filter_accel, radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
-        //            running_average_length_in_seconds, local_standard_deviation_length_in_seconds,
-        //            speed_drop_in_percent, true, logfile);
-
-        //        float progress = ++i / (float)file_names.Count();
-
-        //        radProgressBar_ReadData.Value1 = (int)(progress * 100);
-        //        radProgressBar_ReadData.Text = i.ToString() + "/" + file_names.Count().ToString() + " "
-        //            + ((int)time_left.ToTimeSpan().TotalMinutes).ToString() + " min left" +
-        //            " per : " + ((int)time_per.ToTimeSpan().TotalSeconds).ToString() + " sec";
-
-        //        Application.DoEvents();
-
-        //        data_file = null;
-        //    }
-        //    ignore_events = false;
-        //}
 
         public void ChartLogic()
         {
@@ -1271,11 +1173,11 @@ namespace MichaelsDataManipulator
         }
 
 
-        private bool IsFileAndScanTypeAlreadyInDataBase(string filename, string scan_type)
+        private bool IsFileAndScanTypeAlreadyInDataBase(string filename, CDataFile.SCAN_TYPE scan_type)
         {
             //SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
 
-            string filter = "FILENAME = '" + filename + "'" + " AND SCAN_TYPE = '" + scan_type + "'";
+            string filter = "FILENAME = '" + filename + "'" + " AND SCAN_TYPE = '" + scan_type.ToString() + "'";
 
             DataRow[] selection = simplotDatabaseDataSet.data.Select(filter);
 
@@ -1288,7 +1190,9 @@ namespace MichaelsDataManipulator
 
         }
 
-        public void MultipleRunningAverageScan()
+
+
+        public void Scan(CDataFile.SCAN_TYPE scan_type, bool test)
         {
             string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
             //string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.TopDirectoryOnly);
@@ -1359,12 +1263,12 @@ namespace MichaelsDataManipulator
                     continue;
                 }
 
-                if (IsFileAndScanTypeAlreadyInDataBase(file_name, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR.ToString()))
+                if (IsFileAndScanTypeAlreadyInDataBase(file_name, scan_type))
                 {
                     continue;
                 }
 
-                if (IsFileAndScanTypeAlreadyInDataBase(file_name, "BAD_SET"))
+                if (IsFileAndScanTypeAlreadyInDataBase(file_name, CDataFile.SCAN_TYPE.BAD_SET))
                 {
                     continue;
                 }
@@ -1372,8 +1276,8 @@ namespace MichaelsDataManipulator
 
                 CDataFile data_file = new CDataFile(file_name, radCheckBox_spike_filter.Checked, spike_filter_accel,
                     radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
-                    running_average_length_in_seconds, local_standard_deviation_length_in_seconds,
-                    speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, DoFFT);
+                    running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
+                    speed_drop_in_percent, false, logfile, scan_type, DoFFT, allow_for_1_event_per_seconds);
 
                 if (data_file.n_of_good_data_points > 0)
                 {
@@ -1382,7 +1286,7 @@ namespace MichaelsDataManipulator
                         foreach (int index_of_event in data_file.event_index_list)
                         {
                             ignore_events = true;
-                            AddDataFileToDataBaseForMultipleEvents(data_file, file_name, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, index_of_event);
+                            AddDataFileToDataBaseForMultipleEvents(data_file, file_name, scan_type, index_of_event, test);
                             ignore_events = false;
                             Application.DoEvents();
                         }
@@ -1390,7 +1294,7 @@ namespace MichaelsDataManipulator
                     else
                     {
                         ignore_events = true;
-                        AddDataFileToDataBaseForMultipleEvents(data_file, file_name, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, -1);
+                        AddDataFileToDataBaseForMultipleEvents(data_file, file_name, scan_type, -1, test);
                         ignore_events = false;
                         Application.DoEvents();
                     }
@@ -1398,7 +1302,7 @@ namespace MichaelsDataManipulator
                 else
                 {
                     ignore_events = true;
-                    AddDataFileToDataBaseForMultipleEvents(data_file, file_name, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, -1);
+                    AddDataFileToDataBaseForMultipleEvents(data_file, file_name, scan_type, -1, test);
                     ignore_events = false;
                     Application.DoEvents();
 
@@ -1412,34 +1316,7 @@ namespace MichaelsDataManipulator
 
         }
 
-        public void MultipleRunningAverageScanParallel()
-        {
-            string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.AllDirectories);
-            //string[] file_names = Directory.GetFiles(@"\\prod\root\S_Drive\USGR-Shared\SimPlot DATA\DATA", "*.bin", SearchOption.TopDirectoryOnly);
-
-            List<string> fn = new List<string>();
-            fn.AddRange(file_names);
-
-            fn.Sort();
-
-            file_names = fn.ToArray();
-
-            ignore_events = true;
-
-
-
-            Stopwatch stopwatch = new Stopwatch();
-
-            stopwatch.Start();
-
-            long start_ticks = stopwatch.ElapsedMilliseconds;
-
-            Parallel.ForEach(file_names, file_name => MultipleRunningAverageScanParallel(file_name));
-       
-        }
-
-
-        void AddDataFileToDataBaseForMultipleEvents(CDataFile datafile, string filename, CDataFile.SCAN_TYPE scan_type, int index_of_event)
+        void AddDataFileToDataBaseForMultipleEvents(CDataFile datafile, string filename, CDataFile.SCAN_TYPE scan_type, int index_of_event, bool test)
         {
             SimplotDatabaseDataSetTableAdapters.dataTableAdapter adapter = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
 
@@ -1447,7 +1324,6 @@ namespace MichaelsDataManipulator
             {
                 if (index_of_event >= 0)
                 {
-
                     double t_window_min = -10;
                     double t_window_max = 10;
 
@@ -1492,13 +1368,11 @@ namespace MichaelsDataManipulator
                     double window_min_ft_per_min = Speed.FromMetersPerSecond(window_min).FeetPerSecond * 60;
                     double window_max_ft_per_min = Speed.FromMetersPerSecond(window_max).FeetPerSecond * 60;
                     double window_average_ft_per_min = Speed.FromMetersPerSecond(window_average).FeetPerSecond * 60;
-
-
-
+                    
                     current_datafile = datafile;
                     current_file_index = index_of_event;
 
-                    current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, current_file_index - chart_sample_size / 2, chart_sample_size);
+                    current_datafile.ChartData(radChartView_speed_over_time, horizontalAxis_seconds, verticalAxis_speed_in_ft_min, verticalAxis_frequency_in_Hz, verticalAxis_std_dev, current_file_index - chart_sample_size / 2, chart_sample_size);
                     ChartLogic();
 
                     radPropertyGrid1.SelectedObject = current_datafile;
@@ -1561,53 +1435,17 @@ namespace MichaelsDataManipulator
                    datafile.n_of_data_points, "BAD_SET", 0, "", "", 0);
             }
 
-            adapter.Update(simplotDatabaseDataSet);
+            if (!test)
+            {
+                adapter.Update(simplotDatabaseDataSet);
 
-            simplotDatabaseDataSet.AcceptChanges();
-
+                simplotDatabaseDataSet.AcceptChanges();
+            }
             Application.DoEvents();
+
         }
 
         
-
-
-        void MultipleRunningAverageScanParallel(string file_name)
-        {
-
-
-            if (CDataFile.DateEncodedInFilename(file_name) >= IgnoreBeforeDate)
-            {
-                if (!IsFileAndScanTypeAlreadyInDataBase(file_name, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR.ToString()))
-                {
-
-                    if (!IsFileAndScanTypeAlreadyInDataBase(file_name, "BAD_SET"))
-                    {
-
-
-                        CDataFile data_file = new CDataFile(file_name, radCheckBox_spike_filter.Checked, spike_filter_accel,
-                            radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
-                            running_average_length_in_seconds, local_standard_deviation_length_in_seconds,
-                            speed_drop_in_percent, false, "", CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, DoFFT);
-
-                        if (data_file.n_of_good_data_points > 0)
-                        {
-                            foreach (int index_of_event in data_file.event_index_list)
-                            {
-                                ignore_events = true;
-                                AddDataFileToDataBaseForMultipleEvents(data_file, file_name, CDataFile.SCAN_TYPE.MULTIPLE_RUNNING_AVR, index_of_event);
-                                ignore_events = false;
-                                Application.DoEvents();
-                            }
-
-                        }
-
-                        data_file = null;
-                    }
-                }
-            }
-
-            ignore_events = false;
-        }
 
         private void radSpinEditor_position_ValueChanged(object sender, EventArgs e)
         {
@@ -1615,6 +1453,17 @@ namespace MichaelsDataManipulator
                 return;
 
             current_file_index = (int)(SamplingRate * (double)radSpinEditor_position.Value);
+        }
+
+        private void radListView_video_Click(object sender, EventArgs e)
+        {
+            if (ignore_events)
+                return;
+
+            string video_file = radListView_video.SelectedItem.Text;
+            
+           
+            axWindowsMediaPlayer1.URL = video_file;
         }
     }
 }

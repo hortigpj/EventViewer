@@ -20,10 +20,11 @@ namespace MichaelsDataManipulator
         {
             STD_DEV,
             RUNNING_AVR,
-            MULTIPLE_RUNNING_AVR
+            MULTIPLE_RUNNING_AVR, 
+            BAD_SET
         };
 
-        public SCAN_TYPE scan_type { get; set; }
+        public SCAN_TYPE scan_type { get; private set; }
 
 
         public List<string> time_data = new List<string>();
@@ -35,8 +36,10 @@ namespace MichaelsDataManipulator
         public List<double>[] data;
         public int n_of_data_points;
 
-        public List<int> event_index_list = new List<int>();
-        public List<double> event_incline_list = new List<double>();
+        public List<int> event_index_list
+        { get; set; } = new List<int>();
+        public List<double> event_incline_list
+        { get; set; } = new List<double>();
 
 
         public int running_avr_event_index
@@ -45,6 +48,10 @@ namespace MichaelsDataManipulator
         } = -1;
 
 
+        public int allow_1_event_per_seconds
+        {
+            get;private set;
+        }
 
 
 
@@ -84,11 +91,15 @@ namespace MichaelsDataManipulator
         public List<double> average = new List<double>();
 
         public List<double> mid_speed_peek_frequency = new List<double>();
+        public double[,] spectrum;
+        public double spectrum_max = double.MinValue;
 
         public CRunningAverageList running_average;
 
         public List<double> band_width = new List<double>();
         public CLocalStandardDeviation local_std_dev;
+        public List<double> filtered_local_std_dev = new List<double>();
+        public List<double> differential_filtered_local_std_dev = new List<double>();
 
         public string filename { get; set; }
         public double total_average {
@@ -341,6 +352,12 @@ namespace MichaelsDataManipulator
             }
         }
 
+        public double local_standard_deviation_trigger
+        {
+            get; private set;
+        }
+
+
         public double running_average_drop_trigger
         {
             get;set;
@@ -348,19 +365,23 @@ namespace MichaelsDataManipulator
 
 
         public CDataFile(string file_name, bool spike_filter, double accel_trigger, bool low_pass_filter, double low_pass_frequency,
-            double running_avr_size_in_seconds, double local_std_dev_size_in_seconds, double running_avr_trigger,
+            double running_avr_size_in_seconds, double local_std_dev_size_in_seconds, double local_std_dev_trigger, double running_avr_trigger,
             bool test_for_file_integrity,
             string logfile,
             SCAN_TYPE scan_type,
-            bool do_fft
+            bool do_fft, 
+            int allow_1_event_per_seconds
             )
         {
             this.filename = file_name;
             this.running_average_size_in_seconds = running_avr_size_in_seconds;
             this.local_standard_deviation_size_in_seconds = local_std_dev_size_in_seconds;
-            this.running_average_drop_trigger = running_avr_trigger;
-            this.scan_type = scan_type;          
+            this.local_standard_deviation_trigger = local_std_dev_trigger;
 
+            this.running_average_drop_trigger = running_avr_trigger;
+            this.scan_type = scan_type;
+
+            this.allow_1_event_per_seconds = allow_1_event_per_seconds;
 
             Read(this.filename, logfile);
 
@@ -387,26 +408,7 @@ namespace MichaelsDataManipulator
 
                 if (n_of_good_data_points > 0)
                 {
-                    switch (scan_type)
-                    {
-                        case SCAN_TYPE.MULTIPLE_RUNNING_AVR:
-                            {
-                                CreateDerivedData2(do_fft);
-                                break;
-                            }
-                        case SCAN_TYPE.RUNNING_AVR:
-                            {
-                                CreateDerivedData();
-                                break;
-                            }
-                        case SCAN_TYPE.STD_DEV:
-                            {
-                                CreateDerivedData();
-                                break;
-                            }
-                    }
-
-                    
+                    CreateDerivedData2(do_fft);
                 }
             }
  
@@ -561,8 +563,16 @@ namespace MichaelsDataManipulator
 
                 band_width.Add(upper[i] - lower[i]);
 
+                double p0 = local_std_dev.Last();
+
                 local_std_dev.AddValue(a);
 
+                double p1 = local_std_dev.Last();
+
+                double diff = (p1 - p0) / dt;
+
+                differential_filtered_local_std_dev.Add(diff);
+                
                 tail_speed_running_avr.AddValue(tail_speed[i]);
                 mid_speed_running_avr.AddValue(mid_speed[i]);
                 head_speed_running_avr.AddValue(head_speed[i]);
@@ -760,18 +770,6 @@ namespace MichaelsDataManipulator
 
         public List<double> LowPassFilter(List<double> x, double sampling_rate, double cutoff, double band_width)
         {
-            //var lowPass = MathNet.Filtering.IIR.IirCoefficients.LowPass(sampling_rate, cutoff, band_width);
-            //MathNet.Filtering.IIR.OnlineIirFilter filter = new MathNet.Filtering.IIR.OnlineIirFilter(lowPass);
-
-            //double[] result;
-
-            //result = filter.ProcessSamples(value_list.ToArray());
-
-
-            //result_list.AddRange(result);
-
-            
-
             double[] y = new double[x.Count];
 
             double RC = 1 / cutoff;
@@ -795,7 +793,7 @@ namespace MichaelsDataManipulator
 
 
 
-        public void ChartData(RadChartView rad_chart_view, LinearAxis horizontalAxis, LinearAxis verticalAxis1, LinearAxis verticalAxis2, int index , int width)
+        public void ChartData(RadChartView rad_chart_view, LinearAxis horizontalAxis, LinearAxis verticalAxis1, LinearAxis verticalAxis2, LinearAxis verticalAxis3, int index , int width)
         {
             Debug.WriteLine("Creating chart");
 
@@ -824,7 +822,13 @@ namespace MichaelsDataManipulator
 
             ScatterLineSeries running_average_series = new ScatterLineSeries();
             //ScatterLineSeries band_width_series = new ScatterLineSeries();
+
             ScatterLineSeries local_std_dev_series = new ScatterLineSeries();
+            ScatterLineSeries filtered_local_std_dev_series = new ScatterLineSeries();
+
+
+            ScatterLineSeries diff_local_std_dev_series = new ScatterLineSeries();
+
             ScatterLineSeries average_running_average_incline_series = new ScatterLineSeries();
 
 
@@ -859,8 +863,14 @@ namespace MichaelsDataManipulator
             //band_width_series.HorizontalAxis = horizontalAxis;
             //band_width_series.VerticalAxis = verticalAxis;
             local_std_dev_series.HorizontalAxis = horizontalAxis;
-            local_std_dev_series.VerticalAxis = verticalAxis1;
+            local_std_dev_series.VerticalAxis = verticalAxis3;
 
+            filtered_local_std_dev_series.HorizontalAxis = horizontalAxis;
+            filtered_local_std_dev_series.VerticalAxis = verticalAxis3;
+
+
+            diff_local_std_dev_series.HorizontalAxis = horizontalAxis;
+            diff_local_std_dev_series.VerticalAxis = verticalAxis3;
 
 
 
@@ -884,6 +894,8 @@ namespace MichaelsDataManipulator
             running_average_series.LegendTitle = "Running Avr. Speed";
             //band_width_series.LegendTitle = "Band Width";
             local_std_dev_series.LegendTitle = "local Std dev";
+            filtered_local_std_dev_series.LegendTitle = "filtered local Std dev";
+            diff_local_std_dev_series.LegendTitle = "diff local Std dev";
 
             average_running_average_incline_series.LegendTitle = "Avr. Run. Avr. Incline";
 
@@ -918,7 +930,10 @@ namespace MichaelsDataManipulator
                     //lower_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(lower[j]).FeetPerSecond * 60));
                     running_average_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(running_average[j]).FeetPerSecond * 60));
                     //band_width_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(band_width[j]).FeetPerSecond * 60));
-                    local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(local_std_dev[j]).FeetPerSecond * 60));
+
+                    local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], local_std_dev[j]));
+                    filtered_local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], filtered_local_std_dev[j]));
+                    diff_local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], differential_filtered_local_std_dev[j]) );
 
                     average_running_average_incline_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(average_running_average_incline[j]).FeetPerSecond * 60));
 
@@ -957,8 +972,11 @@ namespace MichaelsDataManipulator
 
 
             rad_chart_view.Series.Add(running_average_series);
-            //rad_chart_view.Series.Add(band_width_series);
+            
             rad_chart_view.Series.Add(local_std_dev_series);
+            rad_chart_view.Series.Add(filtered_local_std_dev_series);
+            rad_chart_view.Series.Add(diff_local_std_dev_series);
+
             rad_chart_view.Series.Add(average_running_average_incline_series);
 
             foreach (ScatterSeries series in rad_chart_view.Series)
@@ -1057,6 +1075,14 @@ namespace MichaelsDataManipulator
 
         public void CreateDerivedData2(bool do_fft)
         {
+            double[] frequency_scale = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(1024, 50);
+
+            FixedSizeQueue<double> q_average_fft = new FixedSizeQueue<double>(1026);
+
+            bool scanning_for_running_average_event = true;
+
+            spectrum_max = double.MinValue;
+
             int n = running_average_size;
 
             FixedSizeQueue<double> q_time = new FixedSizeQueue<double>(n);
@@ -1066,13 +1092,6 @@ namespace MichaelsDataManipulator
             FixedSizeQueue<double> q_tail = new FixedSizeQueue<double>(n);
 
             FixedSizeQueue<double> q_average = new FixedSizeQueue<double>(n);
-
-            FixedSizeQueue<double> q_average_fft = new FixedSizeQueue<double>(1026);
-
-            bool scanning_for_running_average_event = true;
-
-            
-
 
             for (int i = 0; i < relative_time_data.Count(); i++)
             {
@@ -1090,7 +1109,6 @@ namespace MichaelsDataManipulator
                 // FFT
                 if (do_fft)
                 {
-
                     q_average_fft.Enqueue(mid_speed[i]);
 
                     if (q_average_fft.Count >= 1026)
@@ -1101,39 +1119,53 @@ namespace MichaelsDataManipulator
 
                         MathNet.Numerics.IntegralTransforms.Fourier.ForwardReal(samples, 1024);
 
-                        List<double> spectrum = new List<double>();
+                        
 
-                        for (int j = 1; j < 513; j++)
+                        List<double> my_spectrum = new List<double>();
+                                               
+
+                        samples[0] = 0;
+
+                        for (int j = 0; j < 513; j++)
                         {
-                            spectrum.Add(Math.Abs(samples[j]));
+                            my_spectrum.Add(Math.Abs(samples[j]));
+
+                            if (samples[j] > spectrum_max)
+                            {
+                                spectrum_max = samples[j];
+                            }
+
+                            //spectrum[i, j] = samples[j];
+
+                            //if (bw!= null)
+                            //{
+                            //    bw.Write((float)frequency_scale[j]);
+                            //    bw.Write((float)samples[j]);
+                            //}
                         }
 
-                        double[] frequency_scale = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(1024, 50);
+                        
 
-                        double peek = spectrum.Max();
+                        double peek = my_spectrum.Max();
 
-                        int peek_index = spectrum.IndexOf(peek);
+                        int peek_index = my_spectrum.IndexOf(peek);
 
                         double peek_freq = frequency_scale[peek_index];
 
                         mid_speed_peek_frequency.Add(peek_freq);
                     }
-
                 }
 
                 running_average.AddValue(a);
 
                 band_width.Add(upper[i] - lower[i]);
 
+
                 local_std_dev.AddValue(a);
 
                 tail_speed_running_avr.AddValue(tail_speed[i]);
                 mid_speed_running_avr.AddValue(mid_speed[i]);
                 head_speed_running_avr.AddValue(head_speed[i]);
-
-
-
-
 
                 if (running_avr_event_index == -1)
                 {
@@ -1152,8 +1184,8 @@ namespace MichaelsDataManipulator
                     double tail_delta = q_tail.Max() - q_tail.Min();
 
                     
-
-                    if (i > n )
+                    // only done if scanning for multiple running avr
+                    if (i > n)
                     {
                         double[] x = q_time.ToArray();
                         double[] y = q_average.ToArray();
@@ -1177,12 +1209,16 @@ namespace MichaelsDataManipulator
                                 {
                                     if (tail_delta / q_tail.Max() > running_average_drop_trigger)
                                     {
+                                        if (scan_type == SCAN_TYPE.MULTIPLE_RUNNING_AVR)
+                                        {
+                                            if (IsIntervalFree(i))
+                                            {
+                                                event_index_list.Add(i);
+                                                event_incline_list.Add(incline);
 
-
-                                        event_index_list.Add(i);
-                                        event_incline_list.Add(incline);
-
-                                        scanning_for_running_average_event = false;
+                                                scanning_for_running_average_event = false;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -1193,8 +1229,12 @@ namespace MichaelsDataManipulator
                     {
                         average_running_average_incline.Add(0);
                     }
+
                 }
             }
+
+
+
 
             sum_maximum = sum.Max();
             maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()), tail_speed.Max());
@@ -1202,6 +1242,146 @@ namespace MichaelsDataManipulator
 
             std_dev_of_average = ArrayStatistics.StandardDeviation(average.ToArray());
 
+            filtered_local_std_dev = LowPassFilter(local_std_dev, 100, 2, 100);
+          
+            differential_filtered_local_std_dev = SimpleDifferentiate(filtered_local_std_dev, dt);
+
+            differential_filtered_local_std_dev = LowPassFilter(differential_filtered_local_std_dev, 100, 2, 100);
+
+            List<int> differential_filtered_local_std_dev_roots = FindDownwardCrossRootIndices(differential_filtered_local_std_dev);
+
+            SortedDictionary<double,int> maxima = new SortedDictionary<double,int>(Comparer<double>.Create((x, y) => y.CompareTo(x))); 
+
+            foreach (int i in differential_filtered_local_std_dev_roots)
+            {
+                if (!maxima.ContainsKey(filtered_local_std_dev[i]))
+                {
+                    if (filtered_local_std_dev[i] > local_standard_deviation_trigger)
+                        maxima.Add(filtered_local_std_dev[i], i);
+                }
+            }
+
+            maxima.Reverse();
+
+            foreach (KeyValuePair<double, int>  t in maxima)
+            {
+                if ( IsIntervalFree(t.Value) )
+                {
+                    event_index_list.Add(t.Value);
+                }
+            }
+
+
+
+        }
+
+        public int NumberOfEventsInIntervall(int intervall_min, int intervall_max)
+        {
+            int count = 0;
+
+            foreach (int i in event_index_list)
+            {
+                if (i>= intervall_min && i<= intervall_max)
+                {
+                    count++;
+                }
+            }
+
+
+            return count;
+        }
+
+        Tuple<int, int> IntervalForEventIndex(int index)
+        {
+            int size =  allow_1_event_per_seconds * (int)SamplingRate ;
+            int size2 = size / 2;
+
+            return new Tuple<int, int>(index - size2, index + size2);
+
+        }
+
+        bool IsIntervalFree(int index)
+        {
+            return NumberOfEventsInIntervall(IntervalForEventIndex(index).Item1, IntervalForEventIndex(index).Item2) == 0;
+        }
+
+
+        List<int> FindDownwardCrossRootIndices(List<double> values)
+        {
+            List<int> result = new List<int>();
+
+            for (int i = 1; i < values.Count(); i++)
+            {
+                if (values[i-1] >= 0 && values[i] < 0)
+                {
+                    result.Add(i);
+                }
+            }
+
+            return result;
+        }
+
+
+        List<double> SimpleDifferentiate(List<double> values, double dt)
+        {
+            List<double> result = new List<double>();
+
+            result.Add(0);
+
+            for (int i = 1; i<values.Count();i++)
+            {
+                result.Add((values[i] - values[i - 1]) / dt);
+            }
+
+            return result;
+        }
+
+
+        public Tuple<double, double>[] GetSpectrumAtIndex(int index)
+        {
+            int n = 1026;
+            int n2 = n/2;
+
+            if (index < n2)
+            {
+                index = n2;
+            }
+
+            if (index > relative_time_data.Count() - n2)
+            {
+                index = relative_time_data.Count() - n2;
+            }
+
+            double[] frequency_scale = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(1024, 50);
+
+            FixedSizeQueue<double> q_average_fft = new FixedSizeQueue<double>(1026);
+
+            for (int i = index - n2; i < index + n2; i++)
+            {
+                q_average_fft.Enqueue(mid_speed[i]);
+            }
+
+            double[] samples = q_average_fft.ToArray();
+
+            MathNet.Numerics.IntegralTransforms.Fourier.ForwardReal(samples, 1024);
+
+            List<double> my_spectrum = new List<double>();
+
+            samples[0] = 0;
+
+            for (int j = 0; j < 513; j++)
+            {
+                my_spectrum.Add(Math.Abs(samples[j]));
+            }
+
+            Tuple<double, double>[] result = new Tuple<double, double>[513];
+
+            for (int j = 0; j < 513; j++)
+            {
+                result[j] = new Tuple<double, double>(frequency_scale[j], my_spectrum[j]);
+            }
+
+            return result;
         }
 
 

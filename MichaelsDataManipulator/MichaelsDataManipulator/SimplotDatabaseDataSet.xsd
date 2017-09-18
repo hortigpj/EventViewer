@@ -274,7 +274,7 @@
   <xs:element name="SimplotDatabaseDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="SimplotDatabaseDataSet" msprop:Generator_UserDSName="SimplotDatabaseDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="data" msprop:Generator_TableClassName="dataDataTable" msprop:Generator_TableVarName="tabledata" msprop:Generator_RowChangedName="dataRowChanged" msprop:Generator_TablePropName="data" msprop:Generator_RowDeletingName="dataRowDeleting" msprop:Generator_RowChangingName="dataRowChanging" msprop:Generator_RowEvHandlerName="dataRowChangeEventHandler" msprop:Generator_RowDeletedName="dataRowDeleted" msprop:Generator_RowClassName="dataRow" msprop:Generator_UserTableName="data" msprop:Generator_RowEvArgName="dataRowChangeEvent">
+        <xs:element name="data" msprop:Generator_TableClassName="dataDataTable" msprop:Generator_TableVarName="tabledata" msprop:Generator_TablePropName="data" msprop:Generator_RowDeletingName="dataRowDeleting" msprop:Generator_RowChangingName="dataRowChanging" msprop:Generator_RowEvHandlerName="dataRowChangeEventHandler" msprop:Generator_RowDeletedName="dataRowDeleted" msprop:Generator_UserTableName="data" msprop:Generator_RowChangedName="dataRowChanged" msprop:Generator_RowEvArgName="dataRowChangeEvent" msprop:Generator_RowClassName="dataRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
@@ -352,7 +352,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Events" msprop:Generator_TableClassName="EventsDataTable" msprop:Generator_TableVarName="tableEvents" msprop:Generator_RowChangedName="EventsRowChanged" msprop:Generator_TablePropName="Events" msprop:Generator_RowDeletingName="EventsRowDeleting" msprop:Generator_RowChangingName="EventsRowChanging" msprop:Generator_RowEvHandlerName="EventsRowChangeEventHandler" msprop:Generator_RowDeletedName="EventsRowDeleted" msprop:Generator_RowClassName="EventsRow" msprop:Generator_UserTableName="Events" msprop:Generator_RowEvArgName="EventsRowChangeEvent">
+        <xs:element name="Events" msprop:Generator_TableClassName="EventsDataTable" msprop:Generator_TableVarName="tableEvents" msprop:Generator_TablePropName="Events" msprop:Generator_RowDeletingName="EventsRowDeleting" msprop:Generator_RowChangingName="EventsRowChanging" msprop:Generator_RowEvHandlerName="EventsRowChangeEventHandler" msprop:Generator_RowDeletedName="EventsRowDeleted" msprop:Generator_UserTableName="Events" msprop:Generator_RowChangedName="EventsRowChanged" msprop:Generator_RowEvArgName="EventsRowChangeEvent" msprop:Generator_RowClassName="EventsRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="ID" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_UserColumnName="ID" type="xs:int" />
