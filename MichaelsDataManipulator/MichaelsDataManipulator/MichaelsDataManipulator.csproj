@@ -122,12 +122,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_LoadScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form_LoadScreen.Designer.cs">
-      <DependentUpon>Form_LoadScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form_running_avr_scan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,9 +158,6 @@
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form_LoadScreen.resx">
-      <DependentUpon>Form_LoadScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_running_avr_scan.resx">
       <DependentUpon>Form_running_avr_scan.cs</DependentUpon>

@@ -28,17 +28,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\SimplotEventViewer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MathNet.Filtering.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MathNet.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.ChartView.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.GridView.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.RadDock.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\Telerik.WinControls.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\TelerikCommon.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\UnitsNet.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\phortig\Documents\GitHub\MichaelsDataManipulator\MichaelsDataManipulator\MichaelsDataManipulator\bin\Release\*.*"; DestDir: "{app}"; Flags: ignoreversion
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -15,6 +15,14 @@ namespace MichaelsDataManipulator
 
         public int Limit { get; private set; }
 
+        public bool IsFilled
+        {
+            get
+            {
+                return Count >= Limit;
+            }
+        }
+
         public FixedSizeQueue(int limit)
         {
             this.Limit = limit;

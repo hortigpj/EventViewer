@@ -19,6 +19,7 @@ namespace MichaelsDataManipulator
         public enum SCAN_TYPE
         {
             STD_DEV,
+            MAX_SPEED,
             RUNNING_AVR,
             MULTIPLE_RUNNING_AVR, 
             BAD_SET
@@ -76,6 +77,7 @@ namespace MichaelsDataManipulator
         public List<double> tail_speed = new List<double>();
         public List<double> mid_speed = new List<double>();
         public List<double> head_speed = new List<double>();
+        
 
         public CRunningAverageList tail_speed_running_avr;
         public CRunningAverageList mid_speed_running_avr;
@@ -88,7 +90,7 @@ namespace MichaelsDataManipulator
         public List<double> upper = new List<double>();
         public List<double> lower = new List<double>();
 
-        public List<double> average = new List<double>();
+        public List<double> average_speed = new List<double>();
 
         public List<double> mid_speed_peek_frequency = new List<double>();
         public double[,] spectrum;
@@ -101,13 +103,16 @@ namespace MichaelsDataManipulator
         public List<double> filtered_local_std_dev = new List<double>();
         public List<double> differential_filtered_local_std_dev = new List<double>();
 
+        public List<double> max_speed_std_dev = new List<double>();
+
+
         public string filename { get; set; }
         public double total_average {
             get
             {
-                if (average.Count > 0)
+                if (average_speed.Count > 0)
                 {
-                    return average.Average();
+                    return average_speed.Average();
                 }
                 return 0;
                 
@@ -408,10 +413,33 @@ namespace MichaelsDataManipulator
 
                 if (n_of_good_data_points > 0)
                 {
-                    CreateDerivedData2(do_fft);
+                    switch (scan_type)
+                    {
+                        case SCAN_TYPE.MULTIPLE_RUNNING_AVR:
+                            {
+                                CreateDerivedData2(do_fft);
+                                break;
+                            }
+                        case SCAN_TYPE.RUNNING_AVR:
+                            {
+                                CreateDerivedData2(do_fft);
+                                break;
+                            }
+                        case SCAN_TYPE.STD_DEV:
+                            {
+                                CreateDerivedData2(do_fft);
+                                break;
+                            }
+                        case SCAN_TYPE.MAX_SPEED:
+                            {
+                                CreateDerivedData_MaxSpeed(do_fft);
+                                break;
+                            }
+                    }
+
+
                 }
             }
- 
         }
 
 
@@ -557,7 +585,7 @@ namespace MichaelsDataManipulator
 
                 double a = s / 3;
                 
-                average.Add(a);
+                average_speed.Add(a);
 
                 running_average.AddValue(a);
 
@@ -624,7 +652,7 @@ namespace MichaelsDataManipulator
             maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()), tail_speed.Max());
             minimum = Math.Min(Math.Min(head_speed.Min(), mid_speed.Min()), tail_speed.Min());
 
-            std_dev_of_average = ArrayStatistics.StandardDeviation(average.ToArray());
+            std_dev_of_average = ArrayStatistics.StandardDeviation(average_speed.ToArray());
 
         }
 
@@ -812,6 +840,9 @@ namespace MichaelsDataManipulator
             ScatterLineSeries mid_speed_series = new ScatterLineSeries();
             ScatterLineSeries head_speed_series = new ScatterLineSeries();
 
+            ScatterLineSeries average_speed_series = new ScatterLineSeries();
+            ScatterLineSeries max_speed_std_dev_series = new ScatterLineSeries();
+
             ScatterLineSeries tail_speed_running_avr_series = new ScatterLineSeries();
             ScatterLineSeries mid_speed_running_avr_series = new ScatterLineSeries();
             ScatterLineSeries head_speed_running_avr_series = new ScatterLineSeries();
@@ -841,9 +872,17 @@ namespace MichaelsDataManipulator
             head_speed_series.HorizontalAxis = horizontalAxis;
             head_speed_series.VerticalAxis = verticalAxis1;
 
+            average_speed_series.HorizontalAxis = horizontalAxis;
+            average_speed_series.VerticalAxis = verticalAxis1;
+
+            max_speed_std_dev_series.HorizontalAxis = horizontalAxis;
+            max_speed_std_dev_series.VerticalAxis = verticalAxis2;
+
+
             mid_speed_fft_series.HorizontalAxis = horizontalAxis;
             mid_speed_fft_series.VerticalAxis = verticalAxis2;
             
+
 
             tail_speed_running_avr_series.HorizontalAxis = horizontalAxis;
             tail_speed_running_avr_series.VerticalAxis = verticalAxis1;
@@ -881,6 +920,8 @@ namespace MichaelsDataManipulator
             tail_speed_series.LegendTitle = "Tail Speed";
             mid_speed_series.LegendTitle = "Mid Speed";
             head_speed_series.LegendTitle = "Head Speed";
+            average_speed_series.LegendTitle = "Average Speed";
+            max_speed_std_dev_series.LegendTitle = "Max. Speed Std. Dev.";
 
             mid_speed_fft_series.LegendTitle = "mid speed peek freq.";
 
@@ -912,30 +953,76 @@ namespace MichaelsDataManipulator
                 if (j>=0 && j < n_of_good_data_points)
                 {
 
-                    tail_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed[j]).FeetPerSecond * 60));
-                    mid_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed[j]).FeetPerSecond * 60));
-                    head_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed[j]).FeetPerSecond * 60));
+                    if (tail_speed.Count - 1 >= j)
+                    {
+                        tail_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed[j]).FeetPerSecond * 60));
+                    }
+                    if (mid_speed.Count - 1 >= j)
+                    {
+                        mid_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed[j]).FeetPerSecond * 60));
+                    }
+                    if (head_speed.Count - 1 >= j)
+                    {
+                        head_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed[j]).FeetPerSecond * 60));
+                    }
+
+                    if (average_speed.Count - 1 >= j)
+                    {
+                        average_speed_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(average_speed[j]).FeetPerSecond * 60));
+                    }
+
+                    if (max_speed_std_dev.Count - 1 >= j)
+                    {
+                        max_speed_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(max_speed_std_dev[j]).FeetPerSecond * 60));
+                    }
+
+
 
                     if (mid_speed_peek_frequency.Count > 0 && j < mid_speed_peek_frequency.Count && j>=0)
                     {
                         mid_speed_fft_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], mid_speed_peek_frequency[j]));
                     }
-                    tail_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed_running_avr[j]).FeetPerSecond * 60));
-                    mid_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed_running_avr[j]).FeetPerSecond * 60));
-                    head_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed_running_avr[j]).FeetPerSecond * 60));
+
+                    if (tail_speed_running_avr.Count - 1 >= j)
+                    {
+                        tail_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(tail_speed_running_avr[j]).FeetPerSecond * 60));
+                    }
+
+                    if (mid_speed_running_avr.Count - 1 >= j)
+                    {
+                        mid_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(mid_speed_running_avr[j]).FeetPerSecond * 60));
+                    }
+
+                    if (head_speed_running_avr.Count - 1 >= j)
+                    {
+                        head_speed_running_avr_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(head_speed_running_avr[j]).FeetPerSecond * 60));
+                    }
 
 
+                    if (running_average.Count - 1 >= j)
+                    {
+                        running_average_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(running_average[j]).FeetPerSecond * 60));
+                    }
 
-                    //upper_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(upper[j]).FeetPerSecond * 60));
-                    //lower_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(lower[j]).FeetPerSecond * 60));
-                    running_average_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(running_average[j]).FeetPerSecond * 60));
-                    //band_width_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(band_width[j]).FeetPerSecond * 60));
+                    if (local_std_dev.Count - 1 >= j)
+                    {
+                        local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], local_std_dev[j]));
+                    }
 
-                    local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], local_std_dev[j]));
-                    filtered_local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], filtered_local_std_dev[j]));
-                    diff_local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], differential_filtered_local_std_dev[j]) );
+                    if (filtered_local_std_dev.Count - 1 >= j)
+                    {
+                        filtered_local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], filtered_local_std_dev[j]));
+                    }
 
-                    average_running_average_incline_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(average_running_average_incline[j]).FeetPerSecond * 60));
+                    if (differential_filtered_local_std_dev.Count - 1 >= j)
+                    {
+                        diff_local_std_dev_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], differential_filtered_local_std_dev[j]));
+                    }
+
+                    if (average_running_average_incline.Count - 1 >= j)
+                    {
+                        average_running_average_incline_series.DataPoints.Add(new ScatterDataPoint(relative_time_data[j], Speed.FromMetersPerSecond(average_running_average_incline[j]).FeetPerSecond * 60));
+                    }
 
                     if (relative_time_data[j] > t_max)
                     {
@@ -960,24 +1047,67 @@ namespace MichaelsDataManipulator
 
 
             rad_chart_view.Series.Clear();
-            rad_chart_view.Series.Add(tail_speed_series);
-            rad_chart_view.Series.Add(mid_speed_series);
-            rad_chart_view.Series.Add(head_speed_series);
 
-            rad_chart_view.Series.Add(mid_speed_fft_series);
+            if (tail_speed_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(tail_speed_series);
+            }
+            if (mid_speed_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(mid_speed_series);
+            }
+            if (head_speed_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(head_speed_series);
+            }
 
-            rad_chart_view.Series.Add(tail_speed_running_avr_series);
-            rad_chart_view.Series.Add(mid_speed_running_avr_series);
-            rad_chart_view.Series.Add(head_speed_running_avr_series);
+            if (average_speed_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(average_speed_series);
+            }
+            if (max_speed_std_dev_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(max_speed_std_dev_series);
+            }
 
 
-            rad_chart_view.Series.Add(running_average_series);
-            
-            rad_chart_view.Series.Add(local_std_dev_series);
-            rad_chart_view.Series.Add(filtered_local_std_dev_series);
-            rad_chart_view.Series.Add(diff_local_std_dev_series);
 
-            rad_chart_view.Series.Add(average_running_average_incline_series);
+            if (mid_speed_fft_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(mid_speed_fft_series);
+            }
+            if (tail_speed_running_avr_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(tail_speed_running_avr_series);
+            }
+            if (mid_speed_running_avr_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(mid_speed_running_avr_series);
+            }
+            if (head_speed_running_avr_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(head_speed_running_avr_series);
+            }
+            if (running_average_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(running_average_series);
+            }
+            if (local_std_dev_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(local_std_dev_series);
+            }
+            if (filtered_local_std_dev_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(filtered_local_std_dev_series);
+            }
+            if (diff_local_std_dev_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(diff_local_std_dev_series);
+            }
+            if (average_running_average_incline_series.DataPoints.Count > 0)
+            {
+                rad_chart_view.Series.Add(average_running_average_incline_series);
+            }
 
             foreach (ScatterSeries series in rad_chart_view.Series)
             {
@@ -1104,7 +1234,7 @@ namespace MichaelsDataManipulator
 
                 double a = s / 3;
 
-                average.Add(a);
+                average_speed.Add(a);
 
                 // FFT
                 if (do_fft)
@@ -1240,7 +1370,7 @@ namespace MichaelsDataManipulator
             maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()), tail_speed.Max());
             minimum = Math.Min(Math.Min(head_speed.Min(), mid_speed.Min()), tail_speed.Min());
 
-            std_dev_of_average = ArrayStatistics.StandardDeviation(average.ToArray());
+            std_dev_of_average = ArrayStatistics.StandardDeviation(average_speed.ToArray());
 
             filtered_local_std_dev = LowPassFilter(local_std_dev, 100, 2, 100);
           
@@ -1384,6 +1514,115 @@ namespace MichaelsDataManipulator
             return result;
         }
 
+        public void CreateDerivedData_MaxSpeed(bool do_fft)
+        {
+            double[] frequency_scale = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(1024, 50);
+
+            FixedSizeQueue<double> q_average_fft = new FixedSizeQueue<double>(1026);
+            
+            spectrum_max = double.MinValue;
+
+            int n = running_average_size;
+
+            //FixedSizeQueue<double> q_time = new FixedSizeQueue<double>(n);
+
+            //FixedSizeQueue<double> q_head = new FixedSizeQueue<double>(n);
+            //FixedSizeQueue<double> q_mid = new FixedSizeQueue<double>(n);
+            //FixedSizeQueue<double> q_tail = new FixedSizeQueue<double>(n);
+
+            //FixedSizeQueue<double> q_average = new FixedSizeQueue<double>(n);
+
+            int std_dev_spike_fiter_size = 5;
+
+            FixedSizeQueue<double> std_dev_spike_filter = new FixedSizeQueue<double>(std_dev_spike_fiter_size);
+
+
+            double maxi = double.MinValue;
+
+            int maxi_index = -1;
+
+            double threshold = (Speed.FromFeetPerSecond(20.0/60.0)).MetersPerSecond;
+
+            for (int i = 0; i < relative_time_data.Count(); i++)
+            {
+                double s = head_speed[i] + tail_speed[i] + mid_speed[i];
+
+                sum.Add(s);
+
+                double a = s / 3;
+
+                average_speed.Add(a);
+
+                std_dev_spike_filter.Enqueue(a);
+
+                if (std_dev_spike_filter.IsFilled)
+                {
+                    double std_dev = ArrayStatistics.StandardDeviation(std_dev_spike_filter.ToArray());
+
+                    max_speed_std_dev.Add(std_dev);
+
+                    if (std_dev < threshold)
+                    {
+                        if (a> maxi)
+                        {
+                            maxi = a;
+                            maxi_index = i;
+                        }
+                    }
+                }
+                else
+                {
+                    max_speed_std_dev.Add(0);
+                }
+
+
+                // FFT
+                if (do_fft)
+                {
+                    q_average_fft.Enqueue(mid_speed[i]);
+
+                    if (q_average_fft.Count >= 1026)
+                    {
+                        double[] samples = q_average_fft.ToArray();
+
+                        //samples = MathNet.Numerics.Generate.Sinusoidal(1026, 100, 20, 1.0);
+
+                        MathNet.Numerics.IntegralTransforms.Fourier.ForwardReal(samples, 1024);
+
+                        List<double> my_spectrum = new List<double>();
+
+                        samples[0] = 0;
+
+                        for (int j = 0; j < 513; j++)
+                        {
+                            my_spectrum.Add(Math.Abs(samples[j]));
+
+                            if (samples[j] > spectrum_max)
+                            {
+                                spectrum_max = samples[j];
+                            }
+                        }
+
+                        double peek = my_spectrum.Max();
+
+                        int peek_index = my_spectrum.IndexOf(peek);
+
+                        double peek_freq = frequency_scale[peek_index];
+
+                        mid_speed_peek_frequency.Add(peek_freq);
+                    }
+                }
+            }
+
+            std_dev_of_average = ArrayStatistics.StandardDeviation(average_speed.ToArray());
+
+            if (maxi_index != -1)
+            {
+                event_index_list.Add(maxi_index);
+            }
+
+
+        }
 
 
     }

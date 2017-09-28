@@ -26,7 +26,7 @@ namespace MichaelsDataManipulator
 
         bool ignore_events = true;
 
-        Form_LoadScreen form_load = new Form_LoadScreen();
+        
         Form_Wait wait_form = new Form_Wait();
 
         public int allow_for_1_event_per_seconds
@@ -193,6 +193,15 @@ namespace MichaelsDataManipulator
                 radHScrollBar_index.Maximum = current_datafile.n_of_good_data_points;
                 radHScrollBar_index.Minimum = 0;
 
+                if (value > radHScrollBar_index.Maximum)
+                {
+                    value = radHScrollBar_index.Maximum;
+                }
+
+                if (value < radHScrollBar_index.Minimum)
+                {
+                    value = radHScrollBar_index.Minimum;
+                }
 
                 radHScrollBar_index.Value = value;
 
@@ -234,6 +243,7 @@ namespace MichaelsDataManipulator
 
 
         LinearAxis horizontalAxis_seconds;
+        LinearAxis horizontalAxis_minutes;
 
 
         LinearAxis verticalAxis_speed_in_ft_min;
@@ -266,7 +276,7 @@ namespace MichaelsDataManipulator
 
         public Form1()
         {
-            form_load.Show();
+            
 
             Application.DoEvents();
 
@@ -294,6 +304,22 @@ namespace MichaelsDataManipulator
 
 
             area.Axes.Add(horizontalAxis_seconds);
+
+
+            horizontalAxis_minutes = new LinearAxis();
+            horizontalAxis_minutes.LabelFitMode = AxisLabelFitMode.MultiLine;
+
+
+            horizontalAxis_minutes.Title = "Time [min]";
+
+            horizontalAxis_minutes.Minimum = 0;
+            horizontalAxis_minutes.Maximum = 1;
+
+            horizontalAxis_minutes.MajorStep = 1;
+
+
+            area.Axes.Add(horizontalAxis_minutes);
+
 
             verticalAxis_speed_in_ft_min = new LinearAxis();
             verticalAxis_speed_in_ft_min.AxisType = AxisType.Second;
@@ -329,10 +355,14 @@ namespace MichaelsDataManipulator
             RadMenuItem radmenuitem_multiple_running_average_scan = new RadMenuItem("Multiple Run. Avr. Scan");
             radmenuitem_multiple_running_average_scan.Click += Radmenuitem_multiple_running_average_scan_Click;
 
+            RadMenuItem radmenuitem_max_speed_scan = new RadMenuItem("Max. Speed Scan");
+            radmenuitem_max_speed_scan.Click += Radmenuitem_max_speed_scan_Click;
+
 
             radDropDownButton_scans.Items.Add(radmenuitem_std_dev_scan);
             radDropDownButton_scans.Items.Add(radmenuitem_running_average_scan);
             radDropDownButton_scans.Items.Add(radmenuitem_multiple_running_average_scan);
+            radDropDownButton_scans.Items.Add(radmenuitem_max_speed_scan);
 
             // add range buttons
 
@@ -354,6 +384,11 @@ namespace MichaelsDataManipulator
             /// 
 
 
+        }
+
+        private void Radmenuitem_max_speed_scan_Click(object sender, EventArgs e)
+        {
+            Scan(CDataFile.SCAN_TYPE.MAX_SPEED, true);
         }
 
         private void Range_button_Click(object sender, EventArgs e)
@@ -475,8 +510,6 @@ namespace MichaelsDataManipulator
             }
             ignore_events = false;
 
-            form_load.Hide();
-
             Application.DoEvents();
 
 
@@ -518,7 +551,7 @@ namespace MichaelsDataManipulator
                             search_form.radProgressBar_search_for_video_files_drive_letters.Text = "scanning drive letter: " + drive_letter;
                             search_form.radProgressBar_search_for_video_files_drive_letters.Value1 = ++n_letters;
 
-                            Application.DoEvents();
+                           Application.DoEvents();
                         }
                         catch (Exception ex)
                         { }
@@ -805,7 +838,7 @@ namespace MichaelsDataManipulator
                             window_max = datafile.upper[i];
                         }
 
-                        window_average += datafile.average[i];
+                        window_average += datafile.average_speed[i];
 
                         n++;
                     }
@@ -905,7 +938,10 @@ namespace MichaelsDataManipulator
 
             if (radGridView_data.SelectedRows.Count > 0)
             {
+
+                radGridView_data.Enabled = false;
                 Cursor = Cursors.WaitCursor;
+
                 wait_form.Show();
 
                 Application.DoEvents();
@@ -924,11 +960,10 @@ namespace MichaelsDataManipulator
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
 
-
                     current_datafile = new CDataFile(changed_filename, radCheckBox_spike_filter.Checked, spike_filter_accel,
                         radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
                         running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
-                        speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.STD_DEV, DoFFT, allow_for_1_event_per_seconds);
+                        speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.MAX_SPEED, DoFFT, allow_for_1_event_per_seconds);
 
                     if (event_file_index != -1)
                     {
@@ -961,12 +996,11 @@ namespace MichaelsDataManipulator
                     this.radDesktopAlert1.Show();
                 }
 
-
+                Cursor = Cursors.Default;
+                radGridView_data.Enabled = true;
+                wait_form.Hide();
+                Application.DoEvents();
             }
-
-            Cursor = Cursors.Default;
-            wait_form.Hide();
-            Application.DoEvents();
         }
 
         private void radGridView_data_CellValueChanged(object sender, GridViewCellEventArgs e)
@@ -1358,7 +1392,7 @@ namespace MichaelsDataManipulator
                             window_max = datafile.upper[i];
                         }
 
-                        window_average += datafile.average[i];
+                        window_average += datafile.average_speed[i];
 
                         n++;
                     }
