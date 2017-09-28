@@ -331,7 +331,7 @@ namespace MichaelsDataManipulator
             verticalAxis_frequency_in_Hz = new LinearAxis();
             verticalAxis_frequency_in_Hz.AxisType = AxisType.Second;
             verticalAxis_frequency_in_Hz.HorizontalLocation = AxisHorizontalLocation.Right;
-            verticalAxis_frequency_in_Hz.Title = "Frequency";
+            verticalAxis_frequency_in_Hz.Title = "Frequency / Std. Dev.";
             verticalAxis_frequency_in_Hz.Minimum = 0;
             verticalAxis_frequency_in_Hz.Maximum = 50;
 
@@ -1411,6 +1411,15 @@ namespace MichaelsDataManipulator
 
                     radPropertyGrid1.SelectedObject = current_datafile;
 
+
+                    double average_running_average_incline_at_event=0;
+
+                    if (datafile.average_running_average_incline.Count > index_of_event)
+                    {
+                        average_running_average_incline_at_event = Speed.FromMetersPerSecond(datafile.average_running_average_incline[index_of_event]).FeetPerSecond * 60;
+                    }
+                                                                      
+
                     simplotDatabaseDataSet.data.AdddataRow(datafile.filename, datafile.data_filename, "", datafile.conveyor,
                         index_of_event,
                         datafile.time_stamp_data[index_of_event],
@@ -1426,8 +1435,9 @@ namespace MichaelsDataManipulator
                         datafile.total_average_ft_per_min,
                         datafile.std_dev_of_average,
                         datafile.n_of_good_data_points,
-                        datafile.n_of_data_points, scan_type.ToString(), 0, "", "",
-                        Speed.FromMetersPerSecond(datafile.average_running_average_incline[index_of_event]).FeetPerSecond * 60);
+                        datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 
+                        average_running_average_incline_at_event
+                        );
 
 
                 }
@@ -1498,6 +1508,22 @@ namespace MichaelsDataManipulator
             
            
             axWindowsMediaPlayer1.URL = video_file;
+        }
+
+        private void radChartView_speed_over_time_MouseClick(object sender, MouseEventArgs e)
+        {
+            CartesianArea area = this.radChartView_speed_over_time.GetArea<CartesianArea>();
+
+
+            Point p = radChartView_speed_over_time.PointToClient(e.Location);
+            
+
+
+        }
+
+        private void radChartView_speed_over_time_SelectedPointChanged(object sender, ChartViewSelectedPointChangedEventArgs e)
+        {
+
         }
     }
 }

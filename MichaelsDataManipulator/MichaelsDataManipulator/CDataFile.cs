@@ -1533,6 +1533,7 @@ namespace MichaelsDataManipulator
             //FixedSizeQueue<double> q_average = new FixedSizeQueue<double>(n);
 
             int std_dev_spike_fiter_size = 5;
+            int std_dev_spike_fiter_size2 = std_dev_spike_fiter_size /2;
 
             FixedSizeQueue<double> std_dev_spike_filter = new FixedSizeQueue<double>(std_dev_spike_fiter_size);
 
@@ -1547,36 +1548,21 @@ namespace MichaelsDataManipulator
             {
                 double s = head_speed[i] + tail_speed[i] + mid_speed[i];
 
+                upper.Add(Math.Max(Math.Max(head_speed[i], mid_speed[i]), tail_speed[i]));
+                lower.Add(Math.Min(Math.Min(head_speed[i], mid_speed[i]), tail_speed[i]));
+
+
                 sum.Add(s);
 
                 double a = s / 3;
 
                 average_speed.Add(a);
+                local_std_dev.AddValue(a);
 
-                std_dev_spike_filter.Enqueue(a);
-
-                if (std_dev_spike_filter.IsFilled)
-                {
-                    double std_dev = ArrayStatistics.StandardDeviation(std_dev_spike_filter.ToArray());
-
-                    max_speed_std_dev.Add(std_dev);
-
-                    if (std_dev < threshold)
-                    {
-                        if (a> maxi)
-                        {
-                            maxi = a;
-                            maxi_index = i;
-                        }
-                    }
-                }
-                else
-                {
-                    max_speed_std_dev.Add(0);
-                }
+                max_speed_std_dev.Add(0);
 
 
-                // FFT
+
                 if (do_fft)
                 {
                     q_average_fft.Enqueue(mid_speed[i]);
@@ -1613,6 +1599,38 @@ namespace MichaelsDataManipulator
                     }
                 }
             }
+
+            for (int i = std_dev_spike_fiter_size2; i < relative_time_data.Count() - std_dev_spike_fiter_size2; i++)
+            {
+
+                double[] std_dev_array = new double[std_dev_spike_fiter_size];
+
+                int k = 0;
+                for (int j = -std_dev_spike_fiter_size2; j <= std_dev_spike_fiter_size2; j++)
+                {
+                    std_dev_array[k++] = average_speed[i + j];
+                }
+
+                double std_dev = ArrayStatistics.StandardDeviation(std_dev_array);
+
+                max_speed_std_dev[i] = std_dev;
+
+                if (std_dev < threshold)
+                {
+                    if (average_speed[i] > maxi)
+                    {
+                        maxi = average_speed[i];
+                        maxi_index = i;
+                    }
+                }
+
+                // FFT
+                
+            }
+
+            sum_maximum = sum.Max();
+            maximum = Math.Max(Math.Max(head_speed.Max(), mid_speed.Max()), tail_speed.Max());
+            minimum = Math.Min(Math.Min(head_speed.Min(), mid_speed.Min()), tail_speed.Min());
 
             std_dev_of_average = ArrayStatistics.StandardDeviation(average_speed.ToArray());
 
