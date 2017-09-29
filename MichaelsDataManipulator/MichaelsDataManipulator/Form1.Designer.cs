@@ -122,12 +122,12 @@
             this.radProgressBar_ReadData = new Telerik.WinControls.UI.RadProgressBar();
             this.radDesktopAlert1 = new Telerik.WinControls.UI.RadDesktopAlert(this.components);
             this.radDock1 = new Telerik.WinControls.UI.Docking.RadDock();
-            this.toolWindow2 = new Telerik.WinControls.UI.Docking.ToolWindow();
+            this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.documentContainer1 = new Telerik.WinControls.UI.Docking.DocumentContainer();
             this.documentTabStrip2 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow1 = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.userControl_Spectrum1 = new MichaelsDataManipulator.UserControl_Spectrum();
-            this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
+            this.toolWindow2 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.eventsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolTabStrip3 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             ((System.ComponentModel.ISupportInitialize)(this.radChartView_speed_over_time)).BeginInit();
@@ -196,13 +196,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).BeginInit();
             this.radDock1.SuspendLayout();
-            this.toolWindow2.SuspendLayout();
+            this.toolWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).BeginInit();
             this.documentContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).BeginInit();
             this.documentTabStrip2.SuspendLayout();
             this.documentWindow1.SuspendLayout();
-            this.toolWindow1.SuspendLayout();
+            this.toolWindow2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip3)).BeginInit();
             this.SuspendLayout();
@@ -957,14 +957,14 @@
             this.radCheckBox_jump_to_event.CheckState = System.Windows.Forms.CheckState.Checked;
             this.radCheckBox_jump_to_event.Location = new System.Drawing.Point(738, 3);
             this.radCheckBox_jump_to_event.Name = "radCheckBox_jump_to_event";
-            this.radCheckBox_jump_to_event.Size = new System.Drawing.Size(91, 18);
+            this.radCheckBox_jump_to_event.Size = new System.Drawing.Size(124, 18);
             this.radCheckBox_jump_to_event.TabIndex = 10;
-            this.radCheckBox_jump_to_event.Text = "Jump to Event";
+            this.radCheckBox_jump_to_event.Text = "Jump to Event In File";
             this.radCheckBox_jump_to_event.ToggleState = Telerik.WinControls.Enumerations.ToggleState.On;
             // 
             // radDropDownButton_scans
             // 
-            this.radDropDownButton_scans.Location = new System.Drawing.Point(835, 3);
+            this.radDropDownButton_scans.Location = new System.Drawing.Point(868, 3);
             this.radDropDownButton_scans.Name = "radDropDownButton_scans";
             this.radDropDownButton_scans.Size = new System.Drawing.Size(140, 24);
             this.radDropDownButton_scans.TabIndex = 11;
@@ -973,7 +973,7 @@
             // radSpinEditor_running_avr_decrease_trigger_value
             // 
             this.radSpinEditor_running_avr_decrease_trigger_value.DecimalPlaces = 2;
-            this.radSpinEditor_running_avr_decrease_trigger_value.Location = new System.Drawing.Point(981, 3);
+            this.radSpinEditor_running_avr_decrease_trigger_value.Location = new System.Drawing.Point(1014, 3);
             this.radSpinEditor_running_avr_decrease_trigger_value.Minimum = new decimal(new int[] {
             1,
             0,
@@ -998,7 +998,7 @@
             // radLabel10
             // 
             this.radLabel10.Enabled = false;
-            this.radLabel10.Location = new System.Drawing.Point(1051, 3);
+            this.radLabel10.Location = new System.Drawing.Point(1084, 3);
             this.radLabel10.Name = "radLabel10";
             this.radLabel10.Size = new System.Drawing.Size(22, 18);
             this.radLabel10.TabIndex = 0;
@@ -1007,7 +1007,7 @@
             // radLabel13
             // 
             this.radLabel13.Enabled = false;
-            this.radLabel13.Location = new System.Drawing.Point(1079, 3);
+            this.radLabel13.Location = new System.Drawing.Point(1112, 3);
             this.radLabel13.Name = "radLabel13";
             this.radLabel13.Size = new System.Drawing.Size(145, 18);
             this.radLabel13.TabIndex = 0;
@@ -1016,7 +1016,7 @@
             // radSpinEditor_running_avr_size
             // 
             this.radSpinEditor_running_avr_size.DecimalPlaces = 2;
-            this.radSpinEditor_running_avr_size.Location = new System.Drawing.Point(1230, 3);
+            this.radSpinEditor_running_avr_size.Location = new System.Drawing.Point(1263, 3);
             this.radSpinEditor_running_avr_size.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -1040,7 +1040,7 @@
             // radLabel14
             // 
             this.radLabel14.Enabled = false;
-            this.radLabel14.Location = new System.Drawing.Point(1336, 3);
+            this.radLabel14.Location = new System.Drawing.Point(1369, 3);
             this.radLabel14.Name = "radLabel14";
             this.radLabel14.Size = new System.Drawing.Size(131, 18);
             this.radLabel14.TabIndex = 0;
@@ -1049,7 +1049,7 @@
             // radSpinEditor_local_standard_deviation_size
             // 
             this.radSpinEditor_local_standard_deviation_size.DecimalPlaces = 2;
-            this.radSpinEditor_local_standard_deviation_size.Location = new System.Drawing.Point(1473, 3);
+            this.radSpinEditor_local_standard_deviation_size.Location = new System.Drawing.Point(1506, 3);
             this.radSpinEditor_local_standard_deviation_size.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -1230,7 +1230,7 @@
             // 
             // radDock1
             // 
-            this.radDock1.ActiveWindow = this.toolWindow1;
+            this.radDock1.ActiveWindow = this.toolWindow2;
             this.radDock1.Controls.Add(this.documentContainer1);
             this.radDock1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.radDock1.IsCleanUpTarget = true;
@@ -1247,16 +1247,16 @@
             this.radDock1.TabStop = false;
             this.radDock1.Text = "radDock1";
             // 
-            // toolWindow2
+            // toolWindow1
             // 
-            this.toolWindow2.Caption = null;
-            this.toolWindow2.Controls.Add(this.tableLayoutPanel3);
-            this.toolWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolWindow2.Location = new System.Drawing.Point(6, 29);
-            this.toolWindow2.Name = "toolWindow2";
-            this.toolWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.toolWindow2.Size = new System.Drawing.Size(1686, 858);
-            this.toolWindow2.Text = "Database";
+            this.toolWindow1.Caption = null;
+            this.toolWindow1.Controls.Add(this.radPageView1);
+            this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolWindow1.Location = new System.Drawing.Point(6, 29);
+            this.toolWindow1.Name = "toolWindow1";
+            this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.toolWindow1.Size = new System.Drawing.Size(1686, 858);
+            this.toolWindow1.Text = "Viewer";
             // 
             // documentContainer1
             // 
@@ -1283,7 +1283,7 @@
             // 
             // 
             this.documentTabStrip2.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentTabStrip2.SelectedIndex = 2;
+            this.documentTabStrip2.SelectedIndex = 1;
             this.documentTabStrip2.Size = new System.Drawing.Size(1698, 893);
             this.documentTabStrip2.SizeInfo.AbsoluteSize = new System.Drawing.Size(200, 508);
             this.documentTabStrip2.SizeInfo.AutoSizeScale = new System.Drawing.SizeF(-0.01829988F, 0F);
@@ -1312,16 +1312,16 @@
             this.userControl_Spectrum1.Size = new System.Drawing.Size(1686, 858);
             this.userControl_Spectrum1.TabIndex = 0;
             // 
-            // toolWindow1
+            // toolWindow2
             // 
-            this.toolWindow1.Caption = null;
-            this.toolWindow1.Controls.Add(this.radPageView1);
-            this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolWindow1.Location = new System.Drawing.Point(6, 29);
-            this.toolWindow1.Name = "toolWindow1";
-            this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.toolWindow1.Size = new System.Drawing.Size(1686, 858);
-            this.toolWindow1.Text = "Viewer";
+            this.toolWindow2.Caption = null;
+            this.toolWindow2.Controls.Add(this.tableLayoutPanel3);
+            this.toolWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolWindow2.Location = new System.Drawing.Point(6, 29);
+            this.toolWindow2.Name = "toolWindow2";
+            this.toolWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.toolWindow2.Size = new System.Drawing.Size(1686, 858);
+            this.toolWindow2.Text = "Database";
             // 
             // toolTabStrip3
             // 
@@ -1421,13 +1421,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).EndInit();
             this.radDock1.ResumeLayout(false);
-            this.toolWindow2.ResumeLayout(false);
+            this.toolWindow1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).EndInit();
             this.documentContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).EndInit();
             this.documentTabStrip2.ResumeLayout(false);
             this.documentWindow1.ResumeLayout(false);
-            this.toolWindow1.ResumeLayout(false);
+            this.toolWindow2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip3)).EndInit();
             this.ResumeLayout(false);

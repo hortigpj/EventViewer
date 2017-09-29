@@ -324,23 +324,23 @@ namespace MichaelsDataManipulator
             verticalAxis_speed_in_ft_min = new LinearAxis();
             verticalAxis_speed_in_ft_min.AxisType = AxisType.Second;
             verticalAxis_speed_in_ft_min.HorizontalLocation = AxisHorizontalLocation.Left;
-            verticalAxis_speed_in_ft_min.Title = "Speed";
+            verticalAxis_speed_in_ft_min.Title = "Speed [ft/min]";
             verticalAxis_speed_in_ft_min.Minimum = 0;
             verticalAxis_speed_in_ft_min.Maximum = 200;
 
             verticalAxis_frequency_in_Hz = new LinearAxis();
             verticalAxis_frequency_in_Hz.AxisType = AxisType.Second;
             verticalAxis_frequency_in_Hz.HorizontalLocation = AxisHorizontalLocation.Right;
-            verticalAxis_frequency_in_Hz.Title = "Frequency / Std. Dev.";
+            verticalAxis_frequency_in_Hz.Title = "Frequency [Hz]";
             verticalAxis_frequency_in_Hz.Minimum = 0;
             verticalAxis_frequency_in_Hz.Maximum = 50;
 
             verticalAxis_std_dev = new LinearAxis();
             verticalAxis_std_dev.AxisType = AxisType.Second;
             verticalAxis_std_dev.HorizontalLocation = AxisHorizontalLocation.Right;
-            verticalAxis_std_dev.Title = "Std.Dev.";
+            verticalAxis_std_dev.Title = "Std.Dev. [ft/min]";
             verticalAxis_std_dev.Minimum = 0;
-            verticalAxis_std_dev.Maximum = 0.1;
+            verticalAxis_std_dev.Maximum = 100;
 
             area.Axes.Add(verticalAxis_speed_in_ft_min);
             area.Axes.Add(verticalAxis_frequency_in_Hz);
@@ -388,7 +388,7 @@ namespace MichaelsDataManipulator
 
         private void Radmenuitem_max_speed_scan_Click(object sender, EventArgs e)
         {
-            Scan(CDataFile.SCAN_TYPE.MAX_SPEED, true);
+            Scan(CDataFile.SCAN_TYPE.MAX_SPEED, false);
         }
 
         private void Range_button_Click(object sender, EventArgs e)
