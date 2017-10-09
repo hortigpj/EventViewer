@@ -26,6 +26,7 @@ namespace MichaelsDataManipulator
 
         bool ignore_events = true;
 
+        bool gridview_cell_value_changed = false;
         
         Form_Wait wait_form = new Form_Wait();
 
@@ -59,6 +60,15 @@ namespace MichaelsDataManipulator
                 return (double)radSpinEditor_local_std_dev_trigger.Value;
             }
         }
+
+        public CDataFile.SCAN_TYPE current_scan_type_for_viewing
+        {
+            get
+            {
+                return (CDataFile.SCAN_TYPE)radDropDownList_scan_type_for_viewing.SelectedItem.Tag;
+            }
+        }
+
 
 
         public double SamplingRate
@@ -375,6 +385,15 @@ namespace MichaelsDataManipulator
                 range_button.Click += Range_button_Click; 
                 flowLayoutPanel_range_buttons.Controls.Add(range_button);
             }
+
+            foreach (CDataFile.SCAN_TYPE scan_type in Enum.GetValues(typeof(CDataFile.SCAN_TYPE)))
+            {
+                RadListDataItem item = new RadListDataItem(scan_type.ToString());
+                radDropDownList_scan_type_for_viewing.Items.Add(item);
+                item.Tag = scan_type;
+            }
+
+            radDropDownList_scan_type_for_viewing.SelectedIndex = 1;
 
             // add video player
 
@@ -734,7 +753,7 @@ namespace MichaelsDataManipulator
                     radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
                     running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
                     speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.STD_DEV
-                    , DoFFT, allow_for_1_event_per_seconds);
+                    , DoFFT, allow_for_1_event_per_seconds,null);
 
                 float progress = ++i / (float)file_names.Count();
 
@@ -874,7 +893,7 @@ namespace MichaelsDataManipulator
                        datafile.total_average_ft_per_min,
                        datafile.std_dev_of_average,
                        datafile.n_of_good_data_points,
-                       datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 0
+                       datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 0,0
 
                        );
 
@@ -896,7 +915,7 @@ namespace MichaelsDataManipulator
                        datafile.total_average_ft_per_min,
                        datafile.std_dev_of_average,
                        datafile.n_of_good_data_points,
-                       datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 0
+                       datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 0,0
                        );
                 }
             }
@@ -916,7 +935,7 @@ namespace MichaelsDataManipulator
                    datafile.total_average_ft_per_min,
                    datafile.std_dev_of_average,
                    datafile.n_of_good_data_points,
-                   datafile.n_of_data_points, "BAD_SET", 0, "", "", 0);
+                   datafile.n_of_data_points, "BAD_SET", 0, "", "", 0,0);
 
             }
 
@@ -936,7 +955,14 @@ namespace MichaelsDataManipulator
             if (ignore_events)
                 return;
 
-            if (radGridView_data.SelectedRows.Count > 0)
+            if (gridview_cell_value_changed)
+            {
+                gridview_cell_value_changed = false;
+                return;
+            }
+
+
+            if (radGridView_data.SelectedRows.Count == 1)
             {
 
                 radGridView_data.Enabled = false;
@@ -963,7 +989,8 @@ namespace MichaelsDataManipulator
                     current_datafile = new CDataFile(changed_filename, radCheckBox_spike_filter.Checked, spike_filter_accel,
                         radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
                         running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
-                        speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.MAX_SPEED, DoFFT, allow_for_1_event_per_seconds);
+                        speed_drop_in_percent, false, null, current_scan_type_for_viewing, DoFFT, allow_for_1_event_per_seconds,
+                        wait_form.SetMessage);
 
                     if (event_file_index != -1)
                     {
@@ -1005,10 +1032,17 @@ namespace MichaelsDataManipulator
 
         private void radGridView_data_CellValueChanged(object sender, GridViewCellEventArgs e)
         {
+            ignore_events = true;
+
+
 
             SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
             a.Update(simplotDatabaseDataSet);
             simplotDatabaseDataSet.AcceptChanges();
+
+            ignore_events = false;
+
+            gridview_cell_value_changed = true;
 
         }
 
@@ -1096,40 +1130,6 @@ namespace MichaelsDataManipulator
 
         private void radButton_script_Click(object sender, EventArgs e)
         {
-            SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
-
-            int i = 0;
-            ignore_events = true;
-
-            radProgressBar_ReadData.Maximum = simplotDatabaseDataSet.data.Rows.Count;
-
-            foreach (SimplotDatabaseDataSet.dataRow data_row in simplotDatabaseDataSet.data.Rows)
-            {
-                string filename = data_row.FILENAME;
-                string datafilename = data_row.DATA_FILENAME;
-                string conveyor = data_row.CONVEYOR;
-
-                radProgressBar_ReadData.Value1 = i++;
-
-                Application.DoEvents();
-
-                if (conveyor != "")
-                {
-                    string n_filename = filename.Substring(0, filename.IndexOf("\\DATA\\")) + "\\DATA\\" + conveyor + "\\LabVIEW Data\\" + datafilename;
-
-                    data_row.BeginEdit();
-
-                    data_row.FILENAME = n_filename;
-
-                    data_row.EndEdit();
-
-                    a.Update(simplotDatabaseDataSet);
-                    simplotDatabaseDataSet.AcceptChanges();
-                }
-
-            }
-
-            ignore_events = false;
         }
 
         public void FillInSTDDEVScript()
@@ -1311,7 +1311,7 @@ namespace MichaelsDataManipulator
                 CDataFile data_file = new CDataFile(file_name, radCheckBox_spike_filter.Checked, spike_filter_accel,
                     radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
                     running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
-                    speed_drop_in_percent, false, logfile, scan_type, DoFFT, allow_for_1_event_per_seconds);
+                    speed_drop_in_percent, false, logfile, scan_type, DoFFT, allow_for_1_event_per_seconds,null);
 
                 if (data_file.n_of_good_data_points > 0)
                 {
@@ -1436,7 +1436,8 @@ namespace MichaelsDataManipulator
                         datafile.std_dev_of_average,
                         datafile.n_of_good_data_points,
                         datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 
-                        average_running_average_incline_at_event
+                        average_running_average_incline_at_event, 
+                        datafile.event_max_speed[index_of_event]
                         );
 
 
@@ -1457,7 +1458,7 @@ namespace MichaelsDataManipulator
                         datafile.total_average_ft_per_min,
                         datafile.std_dev_of_average,
                         datafile.n_of_good_data_points,
-                        datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 0);
+                        datafile.n_of_data_points, scan_type.ToString(), 0, "", "", 0,0);
                 }
             }
             else
@@ -1476,7 +1477,7 @@ namespace MichaelsDataManipulator
                    datafile.total_average_ft_per_min,
                    datafile.std_dev_of_average,
                    datafile.n_of_good_data_points,
-                   datafile.n_of_data_points, "BAD_SET", 0, "", "", 0);
+                   datafile.n_of_data_points, "BAD_SET", 0, "", "", 0,0);
             }
 
             if (!test)
@@ -1523,6 +1524,70 @@ namespace MichaelsDataManipulator
 
         private void radChartView_speed_over_time_SelectedPointChanged(object sender, ChartViewSelectedPointChangedEventArgs e)
         {
+
+        }
+
+        private void radButton_max_speed_script_Click(object sender, EventArgs e)
+        {
+            SimplotDatabaseDataSetTableAdapters.dataTableAdapter a = new SimplotDatabaseDataSetTableAdapters.dataTableAdapter();
+
+            int i = 0;
+            ignore_events = true;
+
+            radProgressBar_ReadData.Maximum = simplotDatabaseDataSet.data.Rows.Count;
+
+            foreach (SimplotDatabaseDataSet.dataRow data_row in simplotDatabaseDataSet.data.Rows)
+            {
+
+                radProgressBar_ReadData.Value1 = i++;
+                radProgressBar_ReadData.Text = "processing " + i.ToString() + "/" + simplotDatabaseDataSet.data.Rows.Count.ToString();
+
+                Application.DoEvents();
+
+                if (data_row != null)
+                {
+                    if (data_row.SCAN_TYPE != null)
+                    {
+                        if (data_row.SCAN_TYPE == CDataFile.SCAN_TYPE.MAX_SPEED.ToString())
+                        {
+                            int event_index = data_row.EVENT_INDEX;
+
+                            if (event_index != -1)
+                            {
+
+
+                                CDataFile data_file = new CDataFile(data_row.FILENAME, radCheckBox_spike_filter.Checked, spike_filter_accel,
+                                    radCheckBox_low_pass_filter.Checked, low_pass_filter_frequency,
+                                    running_average_length_in_seconds, local_standard_deviation_length_in_seconds, LocalStdDevTrigger,
+                                    speed_drop_in_percent, false, logfile, CDataFile.SCAN_TYPE.MAX_SPEED, false, allow_for_1_event_per_seconds, null);
+
+                                if (data_file.IsValid)
+                                {
+                                    double max_speed =
+                                        Math.Max(
+                                            data_file.head_speed[event_index],
+                                            Math.Max(data_file.mid_speed[event_index], data_file.tail_speed[event_index]));
+
+                                    data_row.BeginEdit();
+
+                                    data_row.EVENT_MAX_SPEED = Speed.FromMetersPerSecond(max_speed).FeetPerSecond * 60;
+
+                                    data_row.EndEdit();
+                                    a.Update(simplotDatabaseDataSet);
+                                    simplotDatabaseDataSet.AcceptChanges();
+
+
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+            ignore_events = false;
 
         }
     }

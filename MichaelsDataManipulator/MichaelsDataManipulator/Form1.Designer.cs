@@ -59,6 +59,7 @@
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn7 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewTextBoxColumn gridViewTextBoxColumn8 = new Telerik.WinControls.UI.GridViewTextBoxColumn();
             Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn15 = new Telerik.WinControls.UI.GridViewDecimalColumn();
+            Telerik.WinControls.UI.GridViewDecimalColumn gridViewDecimalColumn16 = new Telerik.WinControls.UI.GridViewDecimalColumn();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
             this.radChartView_speed_over_time = new Telerik.WinControls.UI.RadChartView();
             this.radPageView1 = new Telerik.WinControls.UI.RadPageView();
@@ -102,6 +103,8 @@
             this.radCheckBox_low_pass_filter = new Telerik.WinControls.UI.RadCheckBox();
             this.radSpinEditor_low_pass_filter_frequency = new Telerik.WinControls.UI.RadSpinEditor();
             this.radLabel9 = new Telerik.WinControls.UI.RadLabel();
+            this.radLabel18 = new Telerik.WinControls.UI.RadLabel();
+            this.radDropDownList_scan_type_for_viewing = new Telerik.WinControls.UI.RadDropDownList();
             this.radCheckBox_jump_to_event = new Telerik.WinControls.UI.RadCheckBox();
             this.radDropDownButton_scans = new Telerik.WinControls.UI.RadDropDownButton();
             this.radSpinEditor_running_avr_decrease_trigger_value = new Telerik.WinControls.UI.RadSpinEditor();
@@ -119,15 +122,16 @@
             this.radSpinEditor_sampling_rate = new Telerik.WinControls.UI.RadSpinEditor();
             this.radLabel17 = new Telerik.WinControls.UI.RadLabel();
             this.radSpinEditor_allow_for_1_event_per_seconds = new Telerik.WinControls.UI.RadSpinEditor();
+            this.radButton_max_speed_script = new Telerik.WinControls.UI.RadButton();
             this.radProgressBar_ReadData = new Telerik.WinControls.UI.RadProgressBar();
             this.radDesktopAlert1 = new Telerik.WinControls.UI.RadDesktopAlert(this.components);
             this.radDock1 = new Telerik.WinControls.UI.Docking.RadDock();
-            this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
+            this.toolWindow2 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.documentContainer1 = new Telerik.WinControls.UI.Docking.DocumentContainer();
             this.documentTabStrip2 = new Telerik.WinControls.UI.Docking.DocumentTabStrip();
             this.documentWindow1 = new Telerik.WinControls.UI.Docking.DocumentWindow();
             this.userControl_Spectrum1 = new MichaelsDataManipulator.UserControl_Spectrum();
-            this.toolWindow2 = new Telerik.WinControls.UI.Docking.ToolWindow();
+            this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.eventsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolTabStrip3 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             ((System.ComponentModel.ISupportInitialize)(this.radChartView_speed_over_time)).BeginInit();
@@ -176,6 +180,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_low_pass_filter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_low_pass_filter_frequency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList_scan_type_for_viewing)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_jump_to_event)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDropDownButton_scans)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_decrease_trigger_value)).BeginInit();
@@ -193,16 +199,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_sampling_rate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel17)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_allow_for_1_event_per_seconds)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton_max_speed_script)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).BeginInit();
             this.radDock1.SuspendLayout();
-            this.toolWindow1.SuspendLayout();
+            this.toolWindow2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).BeginInit();
             this.documentContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).BeginInit();
             this.documentTabStrip2.SuspendLayout();
             this.documentWindow1.SuspendLayout();
-            this.toolWindow2.SuspendLayout();
+            this.toolWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip3)).BeginInit();
             this.SuspendLayout();
@@ -241,7 +248,6 @@
             // radPageViewPage1
             // 
             this.radPageViewPage1.Controls.Add(this.tableLayoutPanel2);
-            this.radPageViewPage1.ItemSize = new System.Drawing.SizeF(102F, 28F);
             this.radPageViewPage1.Location = new System.Drawing.Point(10, 37);
             this.radPageViewPage1.Name = "radPageViewPage1";
             this.radPageViewPage1.Size = new System.Drawing.Size(1665, 810);
@@ -339,7 +345,6 @@
             // radPageViewPage_video
             // 
             this.radPageViewPage_video.Controls.Add(this.tableLayoutPanel_video);
-            this.radPageViewPage_video.ItemSize = new System.Drawing.SizeF(45F, 28F);
             this.radPageViewPage_video.Location = new System.Drawing.Point(10, 37);
             this.radPageViewPage_video.Name = "radPageViewPage_video";
             this.radPageViewPage_video.Size = new System.Drawing.Size(1665, 810);
@@ -586,7 +591,6 @@
             // radPageViewPage_properties
             // 
             this.radPageViewPage_properties.Controls.Add(this.radPropertyGrid1);
-            this.radPageViewPage_properties.ItemSize = new System.Drawing.SizeF(67F, 28F);
             this.radPageViewPage_properties.Location = new System.Drawing.Point(10, 37);
             this.radPageViewPage_properties.Name = "radPageViewPage_properties";
             this.radPageViewPage_properties.Size = new System.Drawing.Size(1675, 284);
@@ -622,7 +626,7 @@
             // 
             this.radGridView_data.AutoSizeRows = true;
             this.radGridView_data.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radGridView_data.Location = new System.Drawing.Point(3, 89);
+            this.radGridView_data.Location = new System.Drawing.Point(3, 93);
             // 
             // 
             // 
@@ -634,135 +638,142 @@
             gridViewDecimalColumn1.HeaderText = "ID";
             gridViewDecimalColumn1.IsAutoGenerated = true;
             gridViewDecimalColumn1.Name = "ID";
-            gridViewDecimalColumn1.Width = 77;
+            gridViewDecimalColumn1.Width = 308;
             gridViewTextBoxColumn1.FieldName = "FILENAME";
             gridViewTextBoxColumn1.HeaderText = "FILENAME";
             gridViewTextBoxColumn1.IsAutoGenerated = true;
             gridViewTextBoxColumn1.Name = "FILENAME";
-            gridViewTextBoxColumn1.Width = 77;
+            gridViewTextBoxColumn1.Width = 57;
             gridViewTextBoxColumn2.FieldName = "DATA_FILENAME";
             gridViewTextBoxColumn2.HeaderText = "DATA_FILENAME";
             gridViewTextBoxColumn2.IsAutoGenerated = true;
             gridViewTextBoxColumn2.Name = "DATA_FILENAME";
-            gridViewTextBoxColumn2.Width = 77;
+            gridViewTextBoxColumn2.Width = 57;
             gridViewTextBoxColumn3.FieldName = "VIDEO_FILENAME";
             gridViewTextBoxColumn3.HeaderText = "VIDEO_FILENAME";
             gridViewTextBoxColumn3.IsAutoGenerated = true;
             gridViewTextBoxColumn3.Name = "VIDEO_FILENAME";
-            gridViewTextBoxColumn3.Width = 77;
+            gridViewTextBoxColumn3.Width = 57;
             gridViewTextBoxColumn4.FieldName = "CONVEYOR";
             gridViewTextBoxColumn4.HeaderText = "CONVEYOR";
             gridViewTextBoxColumn4.IsAutoGenerated = true;
             gridViewTextBoxColumn4.Name = "CONVEYOR";
-            gridViewTextBoxColumn4.Width = 77;
+            gridViewTextBoxColumn4.Width = 57;
             gridViewDecimalColumn2.DataType = typeof(int);
             gridViewDecimalColumn2.FieldName = "EVENT_INDEX";
             gridViewDecimalColumn2.HeaderText = "EVENT_INDEX";
             gridViewDecimalColumn2.IsAutoGenerated = true;
             gridViewDecimalColumn2.Name = "EVENT_INDEX";
-            gridViewDecimalColumn2.Width = 77;
+            gridViewDecimalColumn2.Width = 57;
             gridViewDateTimeColumn1.FieldName = "EVENT_TIME_STAMP";
             gridViewDateTimeColumn1.HeaderText = "EVENT_TIME_STAMP";
             gridViewDateTimeColumn1.IsAutoGenerated = true;
             gridViewDateTimeColumn1.Name = "EVENT_TIME_STAMP";
-            gridViewDateTimeColumn1.Width = 77;
+            gridViewDateTimeColumn1.Width = 57;
             gridViewDecimalColumn3.DataType = typeof(double);
             gridViewDecimalColumn3.FieldName = "EVENT_TIME";
             gridViewDecimalColumn3.HeaderText = "EVENT_TIME";
             gridViewDecimalColumn3.IsAutoGenerated = true;
             gridViewDecimalColumn3.Name = "EVENT_TIME";
-            gridViewDecimalColumn3.Width = 77;
+            gridViewDecimalColumn3.Width = 57;
             gridViewTextBoxColumn5.FieldName = "EVENT_TYPE";
             gridViewTextBoxColumn5.HeaderText = "EVENT_TYPE";
             gridViewTextBoxColumn5.IsAutoGenerated = true;
             gridViewTextBoxColumn5.Name = "EVENT_TYPE";
-            gridViewTextBoxColumn5.Width = 77;
+            gridViewTextBoxColumn5.Width = 57;
             gridViewDecimalColumn4.DataType = typeof(double);
             gridViewDecimalColumn4.FieldName = "EVENT_WINDOW_MIN";
             gridViewDecimalColumn4.HeaderText = "EVENT_WINDOW_MIN";
             gridViewDecimalColumn4.IsAutoGenerated = true;
             gridViewDecimalColumn4.Name = "EVENT_WINDOW_MIN";
-            gridViewDecimalColumn4.Width = 77;
+            gridViewDecimalColumn4.Width = 57;
             gridViewDecimalColumn5.DataType = typeof(double);
             gridViewDecimalColumn5.FieldName = "EVENT_WINDOW_MAX";
             gridViewDecimalColumn5.HeaderText = "EVENT_WINDOW_MAX";
             gridViewDecimalColumn5.IsAutoGenerated = true;
             gridViewDecimalColumn5.Name = "EVENT_WINDOW_MAX";
-            gridViewDecimalColumn5.Width = 77;
+            gridViewDecimalColumn5.Width = 57;
             gridViewDecimalColumn6.DataType = typeof(double);
             gridViewDecimalColumn6.FieldName = "EVENT_WINDOW_AVERAGE";
             gridViewDecimalColumn6.HeaderText = "EVENT_WINDOW_AVERAGE";
             gridViewDecimalColumn6.IsAutoGenerated = true;
             gridViewDecimalColumn6.Name = "EVENT_WINDOW_AVERAGE";
-            gridViewDecimalColumn6.Width = 77;
+            gridViewDecimalColumn6.Width = 57;
             gridViewDecimalColumn7.DataType = typeof(double);
             gridViewDecimalColumn7.FieldName = "EVENT_LOCAL_STD_DEV_MAX";
             gridViewDecimalColumn7.HeaderText = "EVENT_LOCAL_STD_DEV_MAX";
             gridViewDecimalColumn7.IsAutoGenerated = true;
             gridViewDecimalColumn7.Name = "EVENT_LOCAL_STD_DEV_MAX";
-            gridViewDecimalColumn7.Width = 77;
+            gridViewDecimalColumn7.Width = 57;
             gridViewDecimalColumn8.DataType = typeof(double);
             gridViewDecimalColumn8.FieldName = "FILE_MIN";
             gridViewDecimalColumn8.HeaderText = "FILE_MIN";
             gridViewDecimalColumn8.IsAutoGenerated = true;
             gridViewDecimalColumn8.Name = "FILE_MIN";
-            gridViewDecimalColumn8.Width = 77;
+            gridViewDecimalColumn8.Width = 57;
             gridViewDecimalColumn9.DataType = typeof(double);
             gridViewDecimalColumn9.FieldName = "FILE_MAX";
             gridViewDecimalColumn9.HeaderText = "FILE_MAX";
             gridViewDecimalColumn9.IsAutoGenerated = true;
             gridViewDecimalColumn9.Name = "FILE_MAX";
-            gridViewDecimalColumn9.Width = 77;
+            gridViewDecimalColumn9.Width = 57;
             gridViewDecimalColumn10.DataType = typeof(double);
             gridViewDecimalColumn10.FieldName = "FILE_AVERAGE";
             gridViewDecimalColumn10.HeaderText = "FILE_AVERAGE";
             gridViewDecimalColumn10.IsAutoGenerated = true;
             gridViewDecimalColumn10.Name = "FILE_AVERAGE";
-            gridViewDecimalColumn10.Width = 77;
+            gridViewDecimalColumn10.Width = 57;
             gridViewDecimalColumn11.DataType = typeof(double);
             gridViewDecimalColumn11.FieldName = "FILE_STD_DEV";
             gridViewDecimalColumn11.HeaderText = "FILE_STD_DEV";
             gridViewDecimalColumn11.IsAutoGenerated = true;
             gridViewDecimalColumn11.Name = "FILE_STD_DEV";
-            gridViewDecimalColumn11.Width = 77;
+            gridViewDecimalColumn11.Width = 57;
             gridViewDecimalColumn12.DataType = typeof(int);
             gridViewDecimalColumn12.FieldName = "FILE_GOOD_COUNT";
             gridViewDecimalColumn12.HeaderText = "FILE_GOOD_COUNT";
             gridViewDecimalColumn12.IsAutoGenerated = true;
             gridViewDecimalColumn12.Name = "FILE_GOOD_COUNT";
-            gridViewDecimalColumn12.Width = 77;
+            gridViewDecimalColumn12.Width = 57;
             gridViewDecimalColumn13.DataType = typeof(int);
             gridViewDecimalColumn13.FieldName = "FILE_TOTAL_COUNT";
             gridViewDecimalColumn13.HeaderText = "FILE_TOTAL_COUNT";
             gridViewDecimalColumn13.IsAutoGenerated = true;
             gridViewDecimalColumn13.Name = "FILE_TOTAL_COUNT";
-            gridViewDecimalColumn13.Width = 74;
+            gridViewDecimalColumn13.Width = 57;
             gridViewTextBoxColumn6.FieldName = "SCAN_TYPE";
             gridViewTextBoxColumn6.HeaderText = "SCAN_TYPE";
             gridViewTextBoxColumn6.IsAutoGenerated = true;
             gridViewTextBoxColumn6.Name = "SCAN_TYPE";
+            gridViewTextBoxColumn6.Width = 57;
             gridViewDecimalColumn14.DataType = typeof(double);
             gridViewDecimalColumn14.FieldName = "DOMINANT_FREQUENCY";
             gridViewDecimalColumn14.HeaderText = "DOMINANT_FREQUENCY";
             gridViewDecimalColumn14.IsAutoGenerated = true;
             gridViewDecimalColumn14.Name = "DOMINANT_FREQUENCY";
-            gridViewDecimalColumn14.Width = 45;
+            gridViewDecimalColumn14.Width = 57;
             gridViewTextBoxColumn7.FieldName = "FREQUENCY_LIST";
             gridViewTextBoxColumn7.HeaderText = "FREQUENCY_LIST";
             gridViewTextBoxColumn7.IsAutoGenerated = true;
             gridViewTextBoxColumn7.Name = "FREQUENCY_LIST";
-            gridViewTextBoxColumn7.Width = 45;
+            gridViewTextBoxColumn7.Width = 57;
             gridViewTextBoxColumn8.FieldName = "SPECTRUM";
             gridViewTextBoxColumn8.HeaderText = "SPECTRUM";
             gridViewTextBoxColumn8.IsAutoGenerated = true;
             gridViewTextBoxColumn8.Name = "SPECTRUM";
-            gridViewTextBoxColumn8.Width = 45;
+            gridViewTextBoxColumn8.Width = 57;
             gridViewDecimalColumn15.DataType = typeof(double);
             gridViewDecimalColumn15.FieldName = "EVENT_INCLINE";
             gridViewDecimalColumn15.HeaderText = "EVENT_INCLINE";
             gridViewDecimalColumn15.IsAutoGenerated = true;
             gridViewDecimalColumn15.Name = "EVENT_INCLINE";
-            gridViewDecimalColumn15.Width = 37;
+            gridViewDecimalColumn15.Width = 57;
+            gridViewDecimalColumn16.DataType = typeof(double);
+            gridViewDecimalColumn16.FieldName = "EVENT_MAX_SPEED";
+            gridViewDecimalColumn16.HeaderText = "EVENT_MAX_SPEED";
+            gridViewDecimalColumn16.IsAutoGenerated = true;
+            gridViewDecimalColumn16.Name = "EVENT_MAX_SPEED";
+            gridViewDecimalColumn16.Width = 64;
             this.radGridView_data.MasterTemplate.Columns.AddRange(new Telerik.WinControls.UI.GridViewDataColumn[] {
             gridViewDecimalColumn1,
             gridViewTextBoxColumn1,
@@ -787,14 +798,14 @@
             gridViewDecimalColumn14,
             gridViewTextBoxColumn7,
             gridViewTextBoxColumn8,
-            gridViewDecimalColumn15});
+            gridViewDecimalColumn15,
+            gridViewDecimalColumn16});
             this.radGridView_data.MasterTemplate.DataMember = "data";
             this.radGridView_data.MasterTemplate.DataSource = this.simplotDatabaseDataSetBindingSource;
             this.radGridView_data.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.radGridView_data.Name = "radGridView_data";
-            this.radGridView_data.Size = new System.Drawing.Size(1680, 766);
+            this.radGridView_data.Size = new System.Drawing.Size(1680, 762);
             this.radGridView_data.TabIndex = 7;
-            this.radGridView_data.Text = "radGridView1";
             this.radGridView_data.SelectionChanged += new System.EventHandler(this.radGridView_data_SelectionChanged);
             this.radGridView_data.CellValueChanged += new Telerik.WinControls.UI.GridViewCellEventHandler(this.radGridView_data_CellValueChanged);
             // 
@@ -820,6 +831,8 @@
             this.flowLayoutPanel2.Controls.Add(this.radCheckBox_low_pass_filter);
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_low_pass_filter_frequency);
             this.flowLayoutPanel2.Controls.Add(this.radLabel9);
+            this.flowLayoutPanel2.Controls.Add(this.radLabel18);
+            this.flowLayoutPanel2.Controls.Add(this.radDropDownList_scan_type_for_viewing);
             this.flowLayoutPanel2.Controls.Add(this.radCheckBox_jump_to_event);
             this.flowLayoutPanel2.Controls.Add(this.radDropDownButton_scans);
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_running_avr_decrease_trigger_value);
@@ -837,10 +850,11 @@
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_sampling_rate);
             this.flowLayoutPanel2.Controls.Add(this.radLabel17);
             this.flowLayoutPanel2.Controls.Add(this.radSpinEditor_allow_for_1_event_per_seconds);
+            this.flowLayoutPanel2.Controls.Add(this.radButton_max_speed_script);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(1680, 56);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(1680, 60);
             this.flowLayoutPanel2.TabIndex = 7;
             // 
             // radLabel7
@@ -952,10 +966,25 @@
             this.radLabel9.TabIndex = 0;
             this.radLabel9.Text = "[Hz]";
             // 
+            // radLabel18
+            // 
+            this.radLabel18.Location = new System.Drawing.Point(738, 3);
+            this.radLabel18.Name = "radLabel18";
+            this.radLabel18.Size = new System.Drawing.Size(117, 18);
+            this.radLabel18.TabIndex = 19;
+            this.radLabel18.Text = "Scan Type for Viewing";
+            // 
+            // radDropDownList_scan_type_for_viewing
+            // 
+            this.radDropDownList_scan_type_for_viewing.Location = new System.Drawing.Point(861, 3);
+            this.radDropDownList_scan_type_for_viewing.Name = "radDropDownList_scan_type_for_viewing";
+            this.radDropDownList_scan_type_for_viewing.Size = new System.Drawing.Size(125, 20);
+            this.radDropDownList_scan_type_for_viewing.TabIndex = 18;
+            // 
             // radCheckBox_jump_to_event
             // 
             this.radCheckBox_jump_to_event.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.radCheckBox_jump_to_event.Location = new System.Drawing.Point(738, 3);
+            this.radCheckBox_jump_to_event.Location = new System.Drawing.Point(992, 3);
             this.radCheckBox_jump_to_event.Name = "radCheckBox_jump_to_event";
             this.radCheckBox_jump_to_event.Size = new System.Drawing.Size(124, 18);
             this.radCheckBox_jump_to_event.TabIndex = 10;
@@ -964,7 +993,7 @@
             // 
             // radDropDownButton_scans
             // 
-            this.radDropDownButton_scans.Location = new System.Drawing.Point(868, 3);
+            this.radDropDownButton_scans.Location = new System.Drawing.Point(1122, 3);
             this.radDropDownButton_scans.Name = "radDropDownButton_scans";
             this.radDropDownButton_scans.Size = new System.Drawing.Size(140, 24);
             this.radDropDownButton_scans.TabIndex = 11;
@@ -973,7 +1002,7 @@
             // radSpinEditor_running_avr_decrease_trigger_value
             // 
             this.radSpinEditor_running_avr_decrease_trigger_value.DecimalPlaces = 2;
-            this.radSpinEditor_running_avr_decrease_trigger_value.Location = new System.Drawing.Point(1014, 3);
+            this.radSpinEditor_running_avr_decrease_trigger_value.Location = new System.Drawing.Point(1268, 3);
             this.radSpinEditor_running_avr_decrease_trigger_value.Minimum = new decimal(new int[] {
             1,
             0,
@@ -998,7 +1027,7 @@
             // radLabel10
             // 
             this.radLabel10.Enabled = false;
-            this.radLabel10.Location = new System.Drawing.Point(1084, 3);
+            this.radLabel10.Location = new System.Drawing.Point(1338, 3);
             this.radLabel10.Name = "radLabel10";
             this.radLabel10.Size = new System.Drawing.Size(22, 18);
             this.radLabel10.TabIndex = 0;
@@ -1007,7 +1036,7 @@
             // radLabel13
             // 
             this.radLabel13.Enabled = false;
-            this.radLabel13.Location = new System.Drawing.Point(1112, 3);
+            this.radLabel13.Location = new System.Drawing.Point(1366, 3);
             this.radLabel13.Name = "radLabel13";
             this.radLabel13.Size = new System.Drawing.Size(145, 18);
             this.radLabel13.TabIndex = 0;
@@ -1016,7 +1045,7 @@
             // radSpinEditor_running_avr_size
             // 
             this.radSpinEditor_running_avr_size.DecimalPlaces = 2;
-            this.radSpinEditor_running_avr_size.Location = new System.Drawing.Point(1263, 3);
+            this.radSpinEditor_running_avr_size.Location = new System.Drawing.Point(1517, 3);
             this.radSpinEditor_running_avr_size.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -1040,7 +1069,7 @@
             // radLabel14
             // 
             this.radLabel14.Enabled = false;
-            this.radLabel14.Location = new System.Drawing.Point(1369, 3);
+            this.radLabel14.Location = new System.Drawing.Point(3, 33);
             this.radLabel14.Name = "radLabel14";
             this.radLabel14.Size = new System.Drawing.Size(131, 18);
             this.radLabel14.TabIndex = 0;
@@ -1049,7 +1078,7 @@
             // radSpinEditor_local_standard_deviation_size
             // 
             this.radSpinEditor_local_standard_deviation_size.DecimalPlaces = 2;
-            this.radSpinEditor_local_standard_deviation_size.Location = new System.Drawing.Point(1506, 3);
+            this.radSpinEditor_local_standard_deviation_size.Location = new System.Drawing.Point(140, 33);
             this.radSpinEditor_local_standard_deviation_size.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -1073,7 +1102,7 @@
             // radLabel16
             // 
             this.radLabel16.Enabled = false;
-            this.radLabel16.Location = new System.Drawing.Point(3, 33);
+            this.radLabel16.Location = new System.Drawing.Point(246, 33);
             this.radLabel16.Name = "radLabel16";
             this.radLabel16.Size = new System.Drawing.Size(118, 18);
             this.radLabel16.TabIndex = 0;
@@ -1087,7 +1116,7 @@
             0,
             0,
             65536});
-            this.radSpinEditor_local_std_dev_trigger.Location = new System.Drawing.Point(127, 33);
+            this.radSpinEditor_local_std_dev_trigger.Location = new System.Drawing.Point(370, 33);
             this.radSpinEditor_local_std_dev_trigger.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -1111,7 +1140,7 @@
             // radLabel15
             // 
             this.radLabel15.Enabled = false;
-            this.radLabel15.Location = new System.Drawing.Point(233, 33);
+            this.radLabel15.Location = new System.Drawing.Point(476, 33);
             this.radLabel15.Name = "radLabel15";
             this.radLabel15.Size = new System.Drawing.Size(101, 18);
             this.radLabel15.TabIndex = 0;
@@ -1120,7 +1149,7 @@
             // radDateTimePicker_ignore_before_date
             // 
             this.radDateTimePicker_ignore_before_date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.radDateTimePicker_ignore_before_date.Location = new System.Drawing.Point(340, 33);
+            this.radDateTimePicker_ignore_before_date.Location = new System.Drawing.Point(583, 33);
             this.radDateTimePicker_ignore_before_date.Name = "radDateTimePicker_ignore_before_date";
             this.radDateTimePicker_ignore_before_date.Size = new System.Drawing.Size(164, 20);
             this.radDateTimePicker_ignore_before_date.TabIndex = 14;
@@ -1130,7 +1159,7 @@
             // 
             // radCheckBox_do_fft
             // 
-            this.radCheckBox_do_fft.Location = new System.Drawing.Point(510, 33);
+            this.radCheckBox_do_fft.Location = new System.Drawing.Point(753, 33);
             this.radCheckBox_do_fft.Name = "radCheckBox_do_fft";
             this.radCheckBox_do_fft.Size = new System.Drawing.Size(55, 18);
             this.radCheckBox_do_fft.TabIndex = 15;
@@ -1139,7 +1168,7 @@
             // radLabel11
             // 
             this.radLabel11.Enabled = false;
-            this.radLabel11.Location = new System.Drawing.Point(571, 33);
+            this.radLabel11.Location = new System.Drawing.Point(814, 33);
             this.radLabel11.Name = "radLabel11";
             this.radLabel11.Size = new System.Drawing.Size(101, 18);
             this.radLabel11.TabIndex = 0;
@@ -1147,7 +1176,7 @@
             // 
             // radSpinEditor_sampling_rate
             // 
-            this.radSpinEditor_sampling_rate.Location = new System.Drawing.Point(678, 33);
+            this.radSpinEditor_sampling_rate.Location = new System.Drawing.Point(921, 33);
             this.radSpinEditor_sampling_rate.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1176,7 +1205,7 @@
             // radLabel17
             // 
             this.radLabel17.Enabled = false;
-            this.radLabel17.Location = new System.Drawing.Point(784, 33);
+            this.radLabel17.Location = new System.Drawing.Point(1027, 33);
             this.radLabel17.Name = "radLabel17";
             this.radLabel17.Size = new System.Drawing.Size(113, 18);
             this.radLabel17.TabIndex = 0;
@@ -1189,7 +1218,7 @@
             0,
             0,
             0});
-            this.radSpinEditor_allow_for_1_event_per_seconds.Location = new System.Drawing.Point(903, 33);
+            this.radSpinEditor_allow_for_1_event_per_seconds.Location = new System.Drawing.Point(1146, 33);
             this.radSpinEditor_allow_for_1_event_per_seconds.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -1210,10 +1239,19 @@
             0,
             0});
             // 
+            // radButton_max_speed_script
+            // 
+            this.radButton_max_speed_script.Location = new System.Drawing.Point(1252, 33);
+            this.radButton_max_speed_script.Name = "radButton_max_speed_script";
+            this.radButton_max_speed_script.Size = new System.Drawing.Size(110, 24);
+            this.radButton_max_speed_script.TabIndex = 20;
+            this.radButton_max_speed_script.Text = "Max Speed Script";
+            this.radButton_max_speed_script.Click += new System.EventHandler(this.radButton_max_speed_script_Click);
+            // 
             // radProgressBar_ReadData
             // 
             this.radProgressBar_ReadData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 65);
+            this.radProgressBar_ReadData.Location = new System.Drawing.Point(3, 69);
             this.radProgressBar_ReadData.Name = "radProgressBar_ReadData";
             this.radProgressBar_ReadData.Size = new System.Drawing.Size(1680, 18);
             this.radProgressBar_ReadData.TabIndex = 5;
@@ -1247,16 +1285,16 @@
             this.radDock1.TabStop = false;
             this.radDock1.Text = "radDock1";
             // 
-            // toolWindow1
+            // toolWindow2
             // 
-            this.toolWindow1.Caption = null;
-            this.toolWindow1.Controls.Add(this.radPageView1);
-            this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolWindow1.Location = new System.Drawing.Point(6, 29);
-            this.toolWindow1.Name = "toolWindow1";
-            this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.toolWindow1.Size = new System.Drawing.Size(1686, 858);
-            this.toolWindow1.Text = "Viewer";
+            this.toolWindow2.Caption = null;
+            this.toolWindow2.Controls.Add(this.tableLayoutPanel3);
+            this.toolWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolWindow2.Location = new System.Drawing.Point(6, 29);
+            this.toolWindow2.Name = "toolWindow2";
+            this.toolWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.toolWindow2.Size = new System.Drawing.Size(1686, 858);
+            this.toolWindow2.Text = "Database";
             // 
             // documentContainer1
             // 
@@ -1312,16 +1350,16 @@
             this.userControl_Spectrum1.Size = new System.Drawing.Size(1686, 858);
             this.userControl_Spectrum1.TabIndex = 0;
             // 
-            // toolWindow2
+            // toolWindow1
             // 
-            this.toolWindow2.Caption = null;
-            this.toolWindow2.Controls.Add(this.tableLayoutPanel3);
-            this.toolWindow2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolWindow2.Location = new System.Drawing.Point(6, 29);
-            this.toolWindow2.Name = "toolWindow2";
-            this.toolWindow2.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
-            this.toolWindow2.Size = new System.Drawing.Size(1686, 858);
-            this.toolWindow2.Text = "Database";
+            this.toolWindow1.Caption = null;
+            this.toolWindow1.Controls.Add(this.radPageView1);
+            this.toolWindow1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolWindow1.Location = new System.Drawing.Point(6, 29);
+            this.toolWindow1.Name = "toolWindow1";
+            this.toolWindow1.PreviousDockState = Telerik.WinControls.UI.Docking.DockState.TabbedDocument;
+            this.toolWindow1.Size = new System.Drawing.Size(1686, 858);
+            this.toolWindow1.Text = "Viewer";
             // 
             // toolTabStrip3
             // 
@@ -1401,6 +1439,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_low_pass_filter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_low_pass_filter_frequency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radDropDownList_scan_type_for_viewing)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radCheckBox_jump_to_event)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDropDownButton_scans)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_running_avr_decrease_trigger_value)).EndInit();
@@ -1418,16 +1458,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_sampling_rate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel17)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radSpinEditor_allow_for_1_event_per_seconds)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radButton_max_speed_script)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radProgressBar_ReadData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).EndInit();
             this.radDock1.ResumeLayout(false);
-            this.toolWindow1.ResumeLayout(false);
+            this.toolWindow2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentContainer1)).EndInit();
             this.documentContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.documentTabStrip2)).EndInit();
             this.documentTabStrip2.ResumeLayout(false);
             this.documentWindow1.ResumeLayout(false);
-            this.toolWindow2.ResumeLayout(false);
+            this.toolWindow1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.eventsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip3)).EndInit();
             this.ResumeLayout(false);
@@ -1510,6 +1551,9 @@
         private Telerik.WinControls.UI.RadSpinEditor radSpinEditor_local_std_dev_trigger;
         private Telerik.WinControls.UI.RadLabel radLabel17;
         private Telerik.WinControls.UI.RadSpinEditor radSpinEditor_allow_for_1_event_per_seconds;
+        private Telerik.WinControls.UI.RadLabel radLabel18;
+        private Telerik.WinControls.UI.RadDropDownList radDropDownList_scan_type_for_viewing;
+        private Telerik.WinControls.UI.RadButton radButton_max_speed_script;
     }
 }
 

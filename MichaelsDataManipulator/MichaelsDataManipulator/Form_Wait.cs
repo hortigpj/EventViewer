@@ -16,5 +16,13 @@ namespace MichaelsDataManipulator
         {
             InitializeComponent();
         }
+
+        public void SetMessage(string t)
+        {
+            radTextBox_Message.Text = t;
+            Application.DoEvents();
+        }
+
     }
+
 }

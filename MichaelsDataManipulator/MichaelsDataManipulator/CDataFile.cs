@@ -47,6 +47,11 @@ namespace MichaelsDataManipulator
         public List<double> event_incline_list
         { get; set; } = new List<double>();
 
+        public List<double> event_max_speed
+        {
+            get; set;
+        } = new List<double>();
+
 
         public int running_avr_event_index
         {
@@ -382,7 +387,8 @@ namespace MichaelsDataManipulator
             string logfile,
             SCAN_TYPE scan_type,
             bool do_fft, 
-            int allow_1_event_per_seconds
+            int allow_1_event_per_seconds,
+            Action<string> update_message_action
             )
         {
             this.filename = file_name;
@@ -394,6 +400,9 @@ namespace MichaelsDataManipulator
             this.scan_type = scan_type;
 
             this.allow_1_event_per_seconds = allow_1_event_per_seconds;
+
+            update_message_action?.Invoke("Reading file");
+
 
             Read(this.filename, logfile);
 
@@ -410,16 +419,20 @@ namespace MichaelsDataManipulator
 
                 if (spike_filter)
                 {
+                    update_message_action?.Invoke("applying spike filter");
                     SpikeFilterData(accel_trigger);
                 }
 
                 if (low_pass_filter)
                 {
+                    update_message_action?.Invoke("applying low pass filter");
                     LowPassFilterData(100, low_pass_frequency, 100);
                 }
 
                 if (n_of_good_data_points > 0)
                 {
+                    update_message_action?.Invoke("creating derived data for scan type:"+scan_type.ToString());
+
                     switch (scan_type)
                     {
                         case SCAN_TYPE.MULTIPLE_RUNNING_AVR:
@@ -468,8 +481,6 @@ namespace MichaelsDataManipulator
 
         void Read(string f_name, string logfile)
         {
-            using (StreamWriter log = File.AppendText(logfile))
-            {
                 using (StreamReader sr = new StreamReader(f_name))
                 {
                     string line;
@@ -543,7 +554,7 @@ namespace MichaelsDataManipulator
                                     }
                                     catch (Exception ex)
                                     {
-                                        log.WriteLine("datafile:" + f_name + " bad speed data -> ex = "+ex.ToString() );
+                                        //log.WriteLine("datafile:" + f_name + " bad speed data -> ex = "+ex.ToString() );
                                     }
                                 }
 
@@ -557,12 +568,11 @@ namespace MichaelsDataManipulator
 
                             catch (Exception ex)
                             {
-                                log.WriteLine("datafile:" + f_name + " error -> ex = " + ex.ToString());
+                                //log.WriteLine("datafile:" + f_name + " error -> ex = " + ex.ToString());
                             }
                         }
                     }
                 }
-            }
         }
 
 
@@ -1674,6 +1684,7 @@ namespace MichaelsDataManipulator
             {
                 event_index_list.Add(file_maximum_speed_index);
                 event_time_list.Add(relative_time_data[file_maximum_speed_index]);
+                event_max_speed.Add(file_maximum_speed);
             }
 
 
